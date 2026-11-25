@@ -47,7 +47,7 @@ def add_to_playlist(vid: str, tok: str) -> None:
     """Every episode lands in its storyline's playlist (owner approved, and
     the OAuth token now carries youtube.force-ssl). A new storyline (state.story
     changed) gets a fresh playlist named after the story."""
-    state_path = ROOT / "story_state.json"
+    state_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
     state = json.loads(state_path.read_text()) if state_path.exists() else {}
     pl = state.get("playlist_id")
     story = state.get("story")

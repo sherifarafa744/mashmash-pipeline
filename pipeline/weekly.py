@@ -99,8 +99,9 @@ def ts(sec: float) -> str:
 def main() -> None:
     # 1. Which episodes are new since the last compilation?
     wstate = json.loads((ROOT / "weekly_state.json").read_text()) if (ROOT / "weekly_state.json").exists() else {}
-    done_upto = wstate.get("compiled_upto", 0)
-    eps = sorted((ROOT / "episodes").glob("ep*.json"),
+    done_upto = wstate.get("compiled_upto_" + arc_dir.name + "", 0)
+    arc_dir = ROOT / "episodes" / os.environ.get("ARC_DIR", "arc1")
+    eps = sorted(arc_dir.glob("ep*.json"),
                  key=lambda p: json.loads(p.read_text()).get("part", 0))
     eps = [json.loads(p.read_text()) for p in eps]
     new = [e for e in eps if e.get("part", 0) > done_upto]
@@ -217,7 +218,7 @@ def main() -> None:
     print("uploaded public long-form:", f"https://youtu.be/{vid}")
 
     (ROOT / "weekly_state.json").write_text(json.dumps(
-        {"compiled_upto": max(parts), "video": vid}, ensure_ascii=False, indent=2))
+        {"compiled_upto_" + arc_dir.name + "": max(parts), "video": vid}, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

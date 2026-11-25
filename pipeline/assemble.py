@@ -75,7 +75,7 @@ def main() -> None:
     subprocess.run(cmd, check=True)
     ep["duration_s"] = round(total, 1)
     (ROOT / "episode.json").write_text(json.dumps(ep, ensure_ascii=False, indent=2))
-    st_path = ROOT / "story_state.json"
+    st_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
     if st_path.exists():
         st = json.loads(st_path.read_text())
         st["last_duration_s"] = ep["duration_s"]

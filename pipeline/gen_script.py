@@ -51,13 +51,18 @@ scene (no text in image). The LAST scene narration must close with a spoken clif
 
 
 def main() -> None:
-    state_path = ROOT / "story_state.json"
+    state_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
     state = json.loads(state_path.read_text()) if state_path.exists() else None
     ords = ["التاني","التالت","الرابع","الخامس","السادس","السابع","التامن","التاسع","العاشر",
             "الحادي عشر","التاني عشر","التالت عشر","الرابع عشر","الخامس عشر"]
     part = (state or {}).get("episode", 0) + 1
     nxt = ords[part - 1] if part - 1 < len(ords) else str(part + 1)
-    user = ("Continue the story. Current state: " + json.dumps(state, ensure_ascii=False)) if state else "Write episode 1: Basbusa finds a treasure map in the fish market."
+    if state:
+        user = "Continue the story. Current state: " + json.dumps(state, ensure_ascii=False)
+    elif os.environ.get("ARC_DIR") == "arc2":
+        user = ("Write episode 1 of a NEW, different storyline (not a treasure map): "
+                "Basbusa finds a mysterious old brass lamp in her grandmother's attic in old Cairo. "
+                "Start a fresh serialized arc.")
     user += f"\nThis is part {part}. The closing line MUST name the next part: \"انتظروا الجزء {nxt}!\""
     body = json.dumps({
         "system_instruction": {"parts": [{"text": SYSTEM}]},

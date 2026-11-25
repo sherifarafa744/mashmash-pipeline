@@ -1,23 +1,40 @@
 name: daily-episode
 on:
   schedule:
-    # GitHub's scheduler is best-effort and delays or drops single cron fires.
-    # Fire 4 times per slot; the guard below lets only the first one through.
-    # 13:00 + 18:00 UTC = 15:00 + 20:00 Africa/Cairo (winter)
-    - cron: '0,15,30,45 13,18 * * *'
-  workflow_dispatch: {}
-permissions:
-  contents: write
-  actions: read
+    # 4 slots/day: 11:00, 14:00, 17:00, 20:00 Africa/Cairo (= 9,12,15,18 UTC).
+    # GitHub's scheduler delays/drops single fires: 4 fires per slot, the guard
+    # lets only the first through (slots are 3h apart, guard window is 2.5h).
+    - cron: '0,15,30,45 9,12,15,18 * * *'
+  workflow_dispatch:
+    inputs:
+      arc:
+        description: 'Which story arc to run (1 or 2)'
+        default: '1'
 concurrency:
   group: daily-episode
   cancel-in-progress: false
+permissions:
+  contents: write
+  actions: read
 jobs:
   episode:
     runs-on: ubuntu-latest
+    env:
+      # 2 parallel story arcs alternate by slot: arc1 at 9+15 UTC, arc2 at 12+18 UTC.
+      # Exception 2026-11-25: the 18:00 UTC run is arc1 part 3 (user-confirmed plan).
+      ARC: ${{ github.event.inputs.arc || '' }}
     steps:
+      - id: arc
+        run: |
+          if [ -n "$ARC" ]; then arc="$ARC"; else
+            H=$(date -u +%H); D=$(date -u +%F)
+            case $H in 09|15) arc=1;; 12|18) arc=2;; *) arc=1;; esac
+            if [ "$D" = "2026-11-25" ] && [ "$H" = "18" ]; then arc=1; fi
+          fi
+          echo "arc=$arc" >> "$GITHUB_OUTPUT"
+          echo "story_state=story_state_arc${arc}.json" >> "$GITHUB_OUTPUT"
+          echo "Running arc $arc"
       - uses: actions/checkout@v4
-        with: { fetch-depth: 50 }
       - id: guard
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -25,8 +42,8 @@ jobs:
           last=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/daily.yml/runs?status=completed&per_page=10" \
             | jq -r '[(.workflow_runs // [])[] | select(.conclusion=="success" and .id != '"$GITHUB_RUN_ID"')] | .[0].created_at // ""')
-          if [ -n "$last" ] && [ $(( $(date -u +%s) - $(date -u -d "$last" +%s) )) -lt 10800 ]; then
-            echo "a run already succeeded at $last (<3h ago); skipping" 
+          if [ -n "$last" ] && [ $(( $(date -u +%s) - $(date -u -d "$last" +%s) )) -lt 9000 ]; then
+            echo "a run already succeeded at $last (<2.5h ago); skipping"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
       - uses: actions/setup-python@v5
@@ -37,6 +54,8 @@ jobs:
       - if: steps.guard.outputs.skip != 'true'
         run: python pipeline/main.py
         env:
+          STORY_STATE: ${{ steps.arc.outputs.story_state }}
+          ARC_DIR: arc${{ steps.arc.outputs.arc }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -44,12 +63,15 @@ jobs:
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
       - if: steps.guard.outputs.skip != 'true'
+        env:
+          ARC_DIR: arc${{ steps.arc.outputs.arc }}
+          STORY_STATE: ${{ steps.arc.outputs.story_state }}
         run: |
           git config user.name "mashmash-bot"
           git config user.email "bot@users.noreply.github.com"
-          mkdir -p episodes
-          cp episode.json "episodes/ep$(python3 -c "import json;print(json.load(open('episode.json'))['part'])").json"
-          git add story_state.json episode.json episodes/
-          git commit -m "episode state $(date -u +%F)" || true
+          mkdir -p "episodes/$ARC_DIR"
+          cp episode.json "episodes/$ARC_DIR/ep$(python3 -c "import json;print(json.load(open('episode.json'))['part'])").json"
+          git add "$STORY_STATE" episode.json episodes/
+          git commit -m "episode state $ARC_DIR $(date -u +%F-%H%M)" || true
           git pull --rebase --autostash
           git push
