@@ -11,6 +11,8 @@ import datetime as dt, json, os, sys, urllib.request
 
 SLOT_HOURS = (9, 12, 15, 18)
 BUFFER = 12 * 60
+# Runs before the build-ahead switch served slots in the old way; ignore them.
+SINCE = "2026-11-25T23:08:00Z"
 
 def target(now: dt.datetime) -> dt.datetime:
     earliest = now + dt.timedelta(seconds=BUFFER)
@@ -42,7 +44,7 @@ def main() -> None:
             headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"]})
         runs = json.load(urllib.request.urlopen(req, timeout=60)).get("workflow_runs", [])
         for r in runs:
-            if r["conclusion"] == "success" and r["id"] != me and target(parse(r["created_at"])) == want:
+            if r["conclusion"] == "success" and r["id"] != me and parse(r["created_at"]) >= parse(SINCE) and target(parse(r["created_at"])) == want:
                 print("skip")
                 return
         print("run")
