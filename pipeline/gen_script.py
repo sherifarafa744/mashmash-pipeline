@@ -14,16 +14,22 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SYSTEM = """You write Egyptian-Arabic narration for a vertical YouTube Shorts
 series about Basbusa (بسبوسة), a female cartoon cat with a blue scarf, in serialized cliffhanger parts. The character is ALWAYS called بسبوسة in the narration and titles (feminine Egyptian Arabic grammar). Never call her مشمش or any other name.
 Return STRICT JSON only. The title must follow the proven Arabic AI-story format: a conflict or question with 1-2 emojis that makes skipping feel like losing something, e.g. "بسبوسة ضد القط الأعور.. مين هياخد الكنز؟! 😱" - under 70 characters, no clickbait the episode does not deliver.
-{"title": "...", "hook_text": "...", "scenes": [{"narration": "...", "image_prompt": "..."}, ...],
+{"title": "...", "hook_text": "...", "hook_style": "...", "scenes": [{"narration": "...", "image_prompt": "..."}, ...],
  "cliffhanger": "...", "story_type": "...", "state": {"location": "...", "goal": "...", "danger": "...", "story": "...",
  "setting": "...", "conflict_type": "...", "ending_structure": "...",
- "used": {"settings": [...], "conflicts": [...], "endings": [...], "types": [...]}}}
+ "used": {"settings": [...], "conflicts": [...], "endings": [...], "types": [...], "hook_styles": [...]}}}
 state.story: short Arabic name of the current storyline (e.g. "كنز جزيرة التونة
 الذهبية"); keep the SAME name across the whole arc, change it only when the
 arc fully ends and a new story begins.
-hook_text: 3-7 words of Egyptian Arabic on-screen text shown big for the first 2
+hook_text: 3-7 words of Egyptian Arabic on-screen text shown big for the first 2.6
 seconds, stating the episode's conflict or question (e.g. "بسبوسة في ورطة كبيرة!").
 No emojis, no punctuation overload - it must read in one glance.
+hook_style: viewers decide in the first 3 seconds, so we rotate opening-hook
+styles and track which one retains best. Pick a NEW style not in
+used.hook_styles: shocking_question (سؤال صادم), danger_warning (تحذير من خطر
+قريب), surprising_fact (معلومة مفاجئة), challenge (تحدي أو رهان), mystery (لغز
+غامض), cry_for_help (صرخة استغاثة). Write the chosen English snake_case name in
+hook_style, and make BOTH hook_text and the first narration sentence deliver it.
 
 VARIETY IS MANDATORY - YouTube penalizes mass-produced repetitive content, and
 the audience gets bored. Each episode MUST differ from the entries in
@@ -45,9 +51,9 @@ CONTINUING PLOT: the story is serialized - scene 1 must resolve or advance the
 previous cliffhanger (state.next) within the first scene or two, then escalate
 into this episode's new conflict. Never restart, retcon, or repeat a beat.
 
-Rules: RETENTION IS EVERYTHING - the channel has zero subscribers, so every second must earn the next. Scene 1 narration must open mid-action with the conflict or question in the first 1-2 seconds (a surprising fact or question) that makes skipping feel like missing out - never a slow intro. Every scene must end on rising tension or an open question so the viewer stays to the end. 6-8 scenes (target ~55-65 seconds total, the hit length in this niche); each narration line is one spoken sentence, Egyptian
+Rules: RETENTION IS EVERYTHING - viewers leave in the first 3 seconds, so the opening decides everything. The FIRST narration sentence is the hook itself: <= 12 words, it IS the conflict, question or danger in this episode's hook_style - no greeting, no "كان في مرة", no setting or weather description, no character introduction. Scene 1 narration must open mid-action with the conflict or question in the first 1-2 seconds (a surprising fact or question) that makes skipping feel like missing out - never a slow intro. Scene 1 image_prompt must show the conflict moment itself, action mid-motion - never calm establishing scenery. Every scene must end on rising tension or an open question so the viewer stays to the end. 6-8 scenes (target ~55-65 seconds total, the hit length in this niche); each narration line is one spoken sentence, Egyptian
 dialect, <= 18 words; image_prompt is an English visual description of the
-scene (no text in image). The LAST scene narration must close with a spoken cliffhanger hook in Egyptian Arabic matching this episode's ending_structure, e.g. asking what happens next and saying "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message) with NO day or time reference (never say بكرة, النهارده, or any date - episodes come out twice a day) - never let the story just stop; update state for next time, appending this episode's setting, conflict_type, ending_structure and story_type to the used lists."""
+scene (no text in image). The LAST scene narration must close with a spoken cliffhanger hook in Egyptian Arabic matching this episode's ending_structure, e.g. asking what happens next and saying "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message) with NO day or time reference (never say بكرة, النهارده, or any date - episodes come out twice a day) - never let the story just stop; update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6)."""
 
 
 def main() -> None:
