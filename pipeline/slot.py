@@ -12,7 +12,7 @@ import datetime as dt, json, os, sys, urllib.request
 SLOT_HOURS = (9, 12, 15, 18)
 BUFFER = 12 * 60
 # Runs before the build-ahead switch served slots in the old way; ignore them.
-SINCE = "2026-11-25T23:08:00Z"
+SINCE = "2026-11-25T23:11:00Z"
 
 def target(now: dt.datetime) -> dt.datetime:
     earliest = now + dt.timedelta(seconds=BUFFER)
