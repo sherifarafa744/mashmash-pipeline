@@ -83,6 +83,20 @@ jobs:
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
       - if: steps.guard.outputs.skip != 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Cross-post kit: final mp4 + caption as a public Release (the video
+          # is already public on YouTube). Keep the 20 newest, delete the rest.
+          python pipeline/social.py
+          TAG="reel-$(date -u +%F-%H%M)"
+          cp episode_final.mp4 /tmp/reel.mp4
+          gh release create "$TAG" /tmp/reel.mp4 social/caption.txt \
+            --title "$TAG" --notes "cross-post kit" --target "$GITHUB_SHA"
+          gh release list --limit 100 --json tagName --jq '.[20:][].tagName' \
+            | while read t; do gh release delete "$t" --cleanup-tag -y; done
+      - if: steps.guard.outputs.skip != 'true'
         env:
           ARC_DIR: arc${{ steps.arc.outputs.arc }}
           STORY_STATE: ${{ steps.arc.outputs.story_state }}
