@@ -80,6 +80,16 @@ def post_comment(vid: str, tok: str, ep: dict) -> None:
                 f"{vote.get('option_a', '')} ولا {vote.get('option_b', '')}")
     else:
         text = "تحبوا بسبوسة تعمل إيه في الجزء الجاي؟ قولولنا في الكومنتات!"
+    state_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
+    if os.environ.get("PUBLISH_AT") and not ep.get("celebration") and state_path.exists():
+        # YouTube refuses comments on a not-yet-public (scheduled) video (403).
+        # Park it; pipeline/post_pending.py (comment.yml) posts it right after
+        # the video goes public.
+        st = json.loads(state_path.read_text())
+        st["pending_comment"] = {"video_id": vid, "text": text, "publish_at": os.environ["PUBLISH_AT"]}
+        state_path.write_text(json.dumps(st, ensure_ascii=False, indent=2))
+        print("channel comment parked until the video is public:", vid)
+        return
     try:
         body = json.dumps({"snippet": {"videoId": vid,
             "topLevelComment": {"snippet": {"textOriginal": text}}}}).encode()
