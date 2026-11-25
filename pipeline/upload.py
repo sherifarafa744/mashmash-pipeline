@@ -50,6 +50,38 @@ def main() -> None:
     print("uploaded video:", f"https://youtu.be/{vid}")
     if not ep.get("celebration"):
         add_to_playlist(vid, tok)
+        # vote.py needs the video id to count this episode's vote next run.
+        state_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
+        state = json.loads(state_path.read_text()) if state_path.exists() else {}
+        state["last_video_id"] = vid
+        state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2))
+    post_comment(vid, tok, ep)
+
+def post_comment(vid: str, tok: str, ep: dict) -> None:
+    """The channel asks a simple question under every new upload so viewers
+    have something easy to answer. Story episodes ask the vote question (the
+    answers decide the next part); celebrations ask what story viewers want.
+    commentThreads.insert is covered by the youtube.force-ssl scope. Pinning
+    has no API - a human pins it in Studio if wanted. Never fails the run."""
+    vote = ep.get("vote") or {}
+    if ep.get("celebration"):
+        text = "بسبوسة مبسوطة بيكم! 🎉 تحبوا الحكاية الجاية تكون عن إيه؟ قولولنا في الكومنتات!"
+    elif vote.get("question"):
+        text = (f"{vote['question']} ✍️ اكتبوا اختياركم في الكومنتات: "
+                f"{vote.get('option_a', '')} ولا {vote.get('option_b', '')}")
+    else:
+        text = "تحبوا بسبوسة تعمل إيه في الجزء الجاي؟ قولولنا في الكومنتات!"
+    try:
+        body = json.dumps({"snippet": {"videoId": vid,
+            "topLevelComment": {"snippet": {"textOriginal": text}}}}).encode()
+        req = urllib.request.Request(
+            "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet",
+            data=body, method="POST",
+            headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            print("posted channel comment:", json.load(r)["id"])
+    except Exception as e:
+        print(f"channel comment failed (video is live regardless): {e}")
 
 def add_to_playlist(vid: str, tok: str) -> None:
     """Every episode lands in its storyline's playlist (owner approved, and

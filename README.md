@@ -27,3 +27,18 @@ playlist). The archive commit moves episode.json to episodes/celebrations/
 and deletes milestone.json, re-arming the trigger. The narration never states
 an exact number, so the Short stays true whenever it publishes; only the
 review agent tracks the real counts.
+
+## Engagement (from 2026-11-26)
+
+- Audience vote: every story episode ends with an either-or question about
+  what Basbusa does next (episode.json records vote.question / option_a /
+  option_b). The channel also posts the question as a comment under the video
+  (commentThreads.insert, youtube.force-ssl scope; pinning has no API - pin by
+  hand in Studio if wanted). Before the arc's next episode, pipeline/vote.py
+  counts matching comments on the previous video and writes
+  state.vote_result (winner a/b/tie/none); gen_script then follows the
+  majority. Comments quoting both options and the channel's own comment are
+  not counted.
+- Recurring companion: each arc invents exactly one secondary character
+  (friend or rival) kept identical across the arc in state.companion (name,
+  role, English visual description embedded in image prompts).

@@ -15,8 +15,10 @@ SYSTEM = """You write Egyptian-Arabic narration for a vertical YouTube Shorts
 series about Basbusa (بسبوسة), a female cartoon cat with a blue scarf, in serialized cliffhanger parts. The character is ALWAYS called بسبوسة in the narration and titles (feminine Egyptian Arabic grammar). Never call her مشمش or any other name.
 Return STRICT JSON only. The title must follow the proven Arabic AI-story format: a conflict or question with 1-2 emojis that makes skipping feel like losing something, e.g. "بسبوسة ضد القط الأعور.. مين هياخد الكنز؟! 😱" - under 70 characters, no clickbait the episode does not deliver.
 {"title": "...", "hook_text": "...", "hook_style": "...", "scenes": [{"narration": "...", "image_prompt": "..."}, ...],
+ "vote": {"question": "...", "option_a": "...", "option_b": "..."},
  "cliffhanger": "...", "story_type": "...", "state": {"location": "...", "goal": "...", "danger": "...", "story": "...",
  "setting": "...", "conflict_type": "...", "ending_structure": "...",
+ "companion": {"name": "...", "role": "...", "description": "..."},
  "used": {"settings": [...], "conflicts": [...], "endings": [...], "types": [...], "hook_styles": [...]}}}
 state.story: short Arabic name of the current storyline (e.g. "كنز جزيرة التونة
 الذهبية"); keep the SAME name across the whole arc, change it only when the
@@ -50,6 +52,26 @@ each list to the last 6):
 CONTINUING PLOT: the story is serialized - scene 1 must resolve or advance the
 previous cliffhanger (state.next) within the first scene or two, then escalate
 into this episode's new conflict. Never restart, retcon, or repeat a beat.
+AUDIENCE VOTE: if state.vote_result.winner is "a" or "b", the audience has
+chosen what happens next - this episode's plot MUST follow that option
+(state.vote_result.option_a / option_b). If it is "tie" or "none", choose what
+fits the story best.
+COMPANION: every arc has exactly ONE recurring secondary character (a friend
+or a rival) recorded in state.companion: a fixed Egyptian name, role
+("friend"/"rival"), and a short fixed English visual description. Invent it at
+arc start and keep it IDENTICAL across the whole arc (name, role, description
+never change mid-arc; a new arc gets a new companion). The companion appears
+or is mentioned in every episode and matters to the plot; when it appears in a
+scene, embed companion.description verbatim in that scene's image_prompt.
+VOTE QUESTION: near the end, after the cliffhanger and before naming the next
+part, Basbusa asks viewers a simple either-or question about what she should do
+next. vote.question is short Egyptian Arabic; vote.option_a and vote.option_b
+are two SHORT, clearly different choices (<= 5 words each, easy to type in a
+comment). The last scene's narration speaks the vote question and both options
+and tells viewers to answer in the comments, then closes with "انتظروا الجزء"
++ the next part's ordinal as usual. The last scene narration may be up to 3
+short sentences (cliffhanger + vote + part naming); all other lines stay one
+sentence <= 18 words.
 
 Rules: RETENTION IS EVERYTHING - viewers leave in the first 3 seconds, so the opening decides everything. The FIRST narration sentence is the hook itself: <= 12 words, it IS the conflict, question or danger in this episode's hook_style - no greeting, no "كان في مرة", no setting or weather description, no character introduction. Scene 1 narration must open mid-action with the conflict or question in the first 1-2 seconds (a surprising fact or question) that makes skipping feel like missing out - never a slow intro. Scene 1 image_prompt must show the conflict moment itself, action mid-motion - never calm establishing scenery. Every scene must end on rising tension or an open question so the viewer stays to the end. 6-8 scenes (target ~55-65 seconds total, the hit length in this niche); each narration line is one spoken sentence, Egyptian
 dialect, <= 18 words; image_prompt is an English visual description of the
@@ -100,11 +122,19 @@ def main() -> None:
     episode["part"] = part  # story_type comes straight from the model output
     (ROOT / "episode.json").write_text(json.dumps(episode, ensure_ascii=False, indent=2))
     new_state = {"episode": part, "next": episode["cliffhanger"], **episode.get("state", {})}
+    # The result of the PREVIOUS vote is consumed by this episode; drop it.
+    # This episode's own vote question is carried forward for vote.py to count.
+    new_state.pop("vote_result", None)
+    if episode.get("vote"):
+        new_state["vote"] = episode["vote"]
     # The storyline name persists across an arc; the model only changes it when
     # a new arc begins. playlist_id always carries over (upload.py owns it).
     if state:
         if "story" not in new_state and state.get("story"):
             new_state["story"] = state["story"]
+        # The companion survives the whole arc even if the model omits it once.
+        if "companion" not in new_state and state.get("companion"):
+            new_state["companion"] = state["companion"]
         if state.get("playlist_id"):
             new_state["playlist_id"] = state["playlist_id"]
     state_path.write_text(json.dumps(new_state, ensure_ascii=False, indent=2))
