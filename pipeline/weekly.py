@@ -35,7 +35,7 @@ horizontal YouTube video retelling one week of the Basbusa (بسبوسة) Shorts
 series (a female cartoon cat with a blue scarf) as ONE continuous story.
 Always بسبوسة, feminine grammar, never مشمش.
 Input: the week's episode JSONs (Shorts parts). Output STRICT JSON:
-{"title": "...", "scenes": [{"narration": "...", "image_prompt": "..."}, ...],
+{"title": "...", "thumb_text": "...", "scenes": [{"narration": "...", "image_prompt": "..."}, ...],
  "cliffhanger": "..."}
 This must NOT reuse the Shorts' lines. Rewrite the arc as a cohesive tale:
 - scene 1: a cinematic intro hook that states the big question of the whole story.
@@ -47,7 +47,17 @@ This must NOT reuse the Shorts' lines. Rewrite the arc as a cohesive tale:
 20-24 scenes. Each narration is 2-3 spoken Egyptian-dialect sentences,
 35-50 words (target 950-1150 words total => ~8-10 min spoken). image_prompt
 is an English visual description (no text in image).
-The title: one gripping Arabic line with 1-2 emojis, no "الجزء" numbering."""
+The title: one gripping Arabic line, max 60 characters, 1-2 emojis, no "الجزء"
+numbering. It must open a curiosity gap: a specific stake, danger or question
+from the story (e.g. who/what/why), never a summary, never the resolution,
+never generic words like "حكاية" alone. Also output "thumb_text": 2-4 Arabic
+words (no emoji) that will be burned huge on the thumbnail - a punchy question
+or danger phrase, different wording from the title.
+ENDING: the last 2 scenes must be a CLEAR cliffhanger: the second-to-last scene
+ends on a sharp open question or a new danger appearing (concrete, in-story),
+the final scene says in one sentence what Basbusa must face next, then a short
+invitation to subscribe and comment what she should do. No day/time references.
+The JSON also has "cliffhanger": that same open question in one sentence."""
 
 
 def gemini_text(system: str, user: str) -> dict:
@@ -94,6 +104,26 @@ def cf_image(prompt: str) -> bytes:
 def ts(sec: float) -> str:
     m, s = divmod(sec, 60)
     return f"0:{int(m):02d}:{s:05.2f}"
+
+
+def make_thumb(ep: dict, arc: str) -> None:
+    """1280x720: first scene image, huge yellow Arabic hook text (libass shapes
+    Arabic; emoji stripped, they render as boxes)."""
+    import re
+    text = re.sub(r"[^0-9A-Za-z\u0600-\u06FF\s?!.\-]", "", ep.get("thumb_text") or ep["title"]).strip()
+    (ROOT / "weekly_thumb.ass").write_text("\n".join([
+        "[Script Info]", "ScriptType: v4.00+", "PlayResX: 1280", "PlayResY: 720", "WrapStyle: 0", "",
+        "[V4+ Styles]",
+        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
+        "Style: Default,Noto Naskh Arabic,120,&H0000F0FF,&H000000FF,&H00000000,&H96000000,-1,0,0,0,100,100,0,0,1,9,2,2,50,50,50,1",
+        "", "[Events]",
+        "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+        f"Dialogue: 0,0:00:00.00,0:00:01.00,Default,,0,0,0,,{text}"]))
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-loop", "1", "-t", "1",
+        "-i", str(ROOT / "weekly_scenes" / "w1.png"), "-vf",
+        "scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,"
+        f"eq=contrast=1.15:saturation=1.25,subtitles=weekly_thumb.ass:fontsdir={FONTDIR}",
+        "-frames:v", "1", "-q:v", "3", str(ROOT / "weekly_thumb.jpg")], cwd=ROOT, check=True)
 
 
 def main() -> None:
@@ -217,7 +247,18 @@ def main() -> None:
                                  headers={"Content-Type": "video/mp4"})
     with urllib.request.urlopen(put, timeout=1800) as r:
         vid = json.load(r)["id"]
-    print("uploaded public long-form:", f"https://youtu.be/{vid}")
+    print("uploaded long-form:", f"https://youtu.be/{vid}",
+          "scheduled for " + os.environ["PUBLISH_AT"] if os.environ.get("PUBLISH_AT") else "public")
+    try:
+        make_thumb(ep, arc_dir.name)
+        req = urllib.request.Request(
+            f"https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId={vid}",
+            data=(ROOT / "weekly_thumb.jpg").read_bytes(), method="POST",
+            headers={"Authorization": f"Bearer {tok}", "Content-Type": "image/jpeg"})
+        urllib.request.urlopen(req, timeout=120).read()
+        print("custom thumbnail set")
+    except Exception as e:
+        print("thumbnail failed (non-fatal):", e)
 
     wstate["compiled_upto_" + arc_dir.name] = max(parts)
     wstate["video_" + arc_dir.name] = vid
