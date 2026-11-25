@@ -1,0 +1,78 @@
+{
+  "title": "بسبوسة جوه المعبد.. الفخ هيقفل عليها؟! 😱",
+  "hook_text": "الفخ بيقفل على بسبوسة جوه المعبد!",
+  "hook_style": "surprising_fact",
+  "scenes": [
+    {
+      "narration": "بسبوسة رفضت عرض بندق ودخلت المعبد لوحدها ولقيت الباب بيتقفل!",
+      "image_prompt": "Basbusa the cute female cartoon cat wearing a blue scarf trapped inside an ancient Egyptian temple with a heavy stone door closing, dramatic lighting"
+    },
+    {
+      "narration": "الجدران بتتحرك والسهام السحرية بتطير في كل حتة حواليها.",
+      "image_prompt": "Basbusa wearing a blue scarf dodging magical flying arrows inside a dark pharaonic tomb with hieroglyphs on the walls"
+    },
+    {
+      "narration": "وفجأة ظهر بندق بيلعب بالجرس الفضي وعرض عليها يفتح الباب مقابل الخريطة.",
+      "image_prompt": "Basbusa wearing a blue scarf looking at a sly brown street cat with a black eye patch and a silver bell on his collar standing outside a barred window"
+    },
+    {
+      "narration": "بسبوسة قدامها اختيار واحد مرعب يا تضحي بالخريطة يا تفضل محبوسة للأبد.",
+      "image_prompt": "Basbusa wearing a blue scarf looking stressed holding an old map inside a crumbling temple room with a pit of fire"
+    },
+    {
+      "narration": "تفتكروا بسبوسة هتعمل إيه مع بندق؟ اكتبوا في التعليقات: (أ) تسلمه الخريطة ولا (ب) تهرب بطريقتها؟ انتظروا الجزء الخامس!",
+      "image_prompt": "Basbusa wearing a blue scarf looking determined with a glowing golden key in the distance behind a mysterious barrier"
+    }
+  ],
+  "vote": {
+    "question": "تفتكروا بسبوسة هتعمل إيه مع بندق؟",
+    "option_a": "تسلمه الخريطة",
+    "option_b": "تهرب بطريقتها"
+  },
+  "cliffhanger": "بسبوسة محتارة بين تسليم الخريطة أو الهروب بمفردها قبل فوات الأوان",
+  "story_type": "rival-conflict",
+  "state": {
+    "location": "معبد فرعوني قديم على شط النيل",
+    "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
+    "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
+    "story": "كنز جزيرة التونة الذهبية",
+    "setting": "معبد فرعوني قديم",
+    "conflict_type": "secret",
+    "ending_structure": "question cliffhanger",
+    "companion": {
+      "name": "بندق",
+      "role": "rival",
+      "description": "a sly brown street cat with a black eye patch and a silver bell on his collar"
+    },
+    "used": {
+      "settings": [
+        "سوق السمك القديم",
+        "النيل",
+        "معبد فرعوني قديم",
+        "سطح بيت قديم"
+      ],
+      "conflicts": [
+        "chase",
+        "bargain",
+        "secret"
+      ],
+      "endings": [
+        "danger revealed",
+        "choice forced",
+        "question cliffhanger"
+      ],
+      "types": [
+        "adventure",
+        "action-chase",
+        "mystery",
+        "rival-conflict"
+      ],
+      "hook_styles": [
+        "danger_warning",
+        "surprising_fact"
+      ]
+    }
+  },
+  "part": 4,
+  "duration_s": 38.1
+}

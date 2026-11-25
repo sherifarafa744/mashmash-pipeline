@@ -1,13 +1,13 @@
 {
-  "episode": 3,
-  "next": "بسبوسة محتارة بين دخول المعبد الخطر أو الثقة في قط منافس ممكن يخدعها",
+  "episode": 4,
+  "next": "بسبوسة محتارة بين تسليم الخريطة أو الهروب بمفردها قبل فوات الأوان",
   "location": "معبد فرعوني قديم على شط النيل",
   "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
-  "danger": "فخاخ المعبد الفرعوني وغدر القط بندق",
+  "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
   "story": "كنز جزيرة التونة الذهبية",
   "setting": "معبد فرعوني قديم",
-  "conflict_type": "bargain",
-  "ending_structure": "choice forced",
+  "conflict_type": "secret",
+  "ending_structure": "question cliffhanger",
   "companion": {
     "name": "بندق",
     "role": "rival",
@@ -17,33 +17,38 @@
     "settings": [
       "سوق السمك القديم",
       "النيل",
-      "معبد فرعوني قديم"
+      "معبد فرعوني قديم",
+      "سطح بيت قديم"
     ],
     "conflicts": [
       "chase",
-      "bargain"
+      "bargain",
+      "secret"
     ],
     "endings": [
       "danger revealed",
-      "choice forced"
+      "choice forced",
+      "question cliffhanger"
     ],
     "types": [
       "adventure",
       "action-chase",
-      "mystery"
+      "mystery",
+      "rival-conflict"
     ],
     "hook_styles": [
-      "danger_warning"
+      "danger_warning",
+      "surprising_fact"
     ]
   },
   "vote": {
-    "question": "تفتكروا بسبوسة تعمل إيه؟",
-    "option_a": "تدخل المعبد لوحدها",
-    "option_b": "تثق في بندق"
+    "question": "تفتكروا بسبوسة هتعمل إيه مع بندق؟",
+    "option_a": "تسلمه الخريطة",
+    "option_b": "تهرب بطريقتها"
   },
   "playlist_id": "PLFeKx89Tl-dg",
-  "last_duration_s": 48.0,
-  "last_story_type": "mystery",
-  "last_hook_style": "danger_warning",
-  "last_video_id": "9EJT3Wv6QWI"
+  "last_duration_s": 38.1,
+  "last_story_type": "rival-conflict",
+  "last_hook_style": "surprising_fact",
+  "last_video_id": "XKZ9ClfUeaU"
 }

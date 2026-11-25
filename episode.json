@@ -1,52 +1,44 @@
 {
-  "title": "بسبوسة والتمساح في النيل.. مين هياخد الخريطة؟! 🐊😱",
-  "hook_text": "بسبوسة في خطر شديد",
-  "hook_style": "danger_warning",
+  "title": "بسبوسة جوه المعبد.. الفخ هيقفل عليها؟! 😱",
+  "hook_text": "الفخ بيقفل على بسبوسة جوه المعبد!",
+  "hook_style": "surprising_fact",
   "scenes": [
     {
-      "narration": "حاسبي يا بسبوسة! التمساح فتح بقه وهيبلع الخريطة في ثانية!",
-      "image_prompt": "A cute female cartoon cat named Basbusa wearing a bright blue scarf, leaping off a wooden Nile boat into the river just as a green crocodile snaps its jaws close behind her."
+      "narration": "بسبوسة رفضت عرض بندق ودخلت المعبد لوحدها ولقيت الباب بيتقفل!",
+      "image_prompt": "Basbusa the cute female cartoon cat wearing a blue scarf trapped inside an ancient Egyptian temple with a heavy stone door closing, dramatic lighting"
     },
     {
-      "narration": "بسبوسة نطت في النيل وعامت بسرعة لغاية ما وصلت لشط معبد فرعوني قديم.",
-      "image_prompt": "Basbusa the cartoon cat with a blue scarf, dripping wet on the sandy bank of the Nile, looking up in awe at ancient Egyptian temple ruins under moonlight."
+      "narration": "الجدران بتتحرك والسهام السحرية بتطير في كل حتة حواليها.",
+      "image_prompt": "Basbusa wearing a blue scarf dodging magical flying arrows inside a dark pharaonic tomb with hieroglyphs on the walls"
     },
     {
-      "narration": "الخريطة المبلولة ظهر فيها رموز سرية بتلمع بلون دهبي غريب!",
-      "image_prompt": "Basbusa holding a wet ancient papyrus map that glows with glowing golden ancient cat hieroglyphics in front of large stone pillars."
+      "narration": "وفجأة ظهر بندق بيلعب بالجرس الفضي وعرض عليها يفتح الباب مقابل الخريطة.",
+      "image_prompt": "Basbusa wearing a blue scarf looking at a sly brown street cat with a black eye patch and a silver bell on his collar standing outside a barred window"
     },
     {
-      "narration": "وفجأة ظهر بندق القط المنافس وطالب ينصف معاها الكنز مقابل المساعدة.",
-      "image_prompt": "Basbusa standing defensively while a sly brown street cat with a black eye patch and a silver bell on his collar named Bondok grins slyly on ancient stone steps."
+      "narration": "بسبوسة قدامها اختيار واحد مرعب يا تضحي بالخريطة يا تفضل محبوسة للأبد.",
+      "image_prompt": "Basbusa wearing a blue scarf looking stressed holding an old map inside a crumbling temple room with a pit of fire"
     },
     {
-      "narration": "بسبوسة اكتشفت إن باب المعبد محتاج مفتاح على شكل سمكة دهبية.",
-      "image_prompt": "Basbusa examining a massive ancient stone temple door with a glowing fish-shaped keyhole in the wall."
-    },
-    {
-      "narration": "بندق شاور على تمثال قديم وقال إنه عارف مكان المفتاح المستخبي.",
-      "image_prompt": "a sly brown street cat with a black eye patch and a silver bell on his collar pointing his paw toward a dark carved stone pharaoh statue inside the ruins."
-    },
-    {
-      "narration": "لو دخلت المعبد ممكن تقع في فخ، ولو صدقت بندق ممكن يخدعها! تفتكروا بسبوسة تعمل إيه؟ أ: تدخل المعبد، ولا ب: تثق في بندق؟ اكتبوا في التعليقات وانتظروا الجزء الرابع!",
-      "image_prompt": "Basbusa standing between a dark shadowy temple doorway and a sly brown street cat with a black eye patch and a silver bell on his collar, looking undecided."
+      "narration": "تفتكروا بسبوسة هتعمل إيه مع بندق؟ اكتبوا في التعليقات: (أ) تسلمه الخريطة ولا (ب) تهرب بطريقتها؟ انتظروا الجزء الخامس!",
+      "image_prompt": "Basbusa wearing a blue scarf looking determined with a glowing golden key in the distance behind a mysterious barrier"
     }
   ],
   "vote": {
-    "question": "تفتكروا بسبوسة تعمل إيه؟",
-    "option_a": "تدخل المعبد لوحدها",
-    "option_b": "تثق في بندق"
+    "question": "تفتكروا بسبوسة هتعمل إيه مع بندق؟",
+    "option_a": "تسلمه الخريطة",
+    "option_b": "تهرب بطريقتها"
   },
-  "cliffhanger": "بسبوسة محتارة بين دخول المعبد الخطر أو الثقة في قط منافس ممكن يخدعها",
-  "story_type": "mystery",
+  "cliffhanger": "بسبوسة محتارة بين تسليم الخريطة أو الهروب بمفردها قبل فوات الأوان",
+  "story_type": "rival-conflict",
   "state": {
     "location": "معبد فرعوني قديم على شط النيل",
     "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
-    "danger": "فخاخ المعبد الفرعوني وغدر القط بندق",
+    "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
     "story": "كنز جزيرة التونة الذهبية",
     "setting": "معبد فرعوني قديم",
-    "conflict_type": "bargain",
-    "ending_structure": "choice forced",
+    "conflict_type": "secret",
+    "ending_structure": "question cliffhanger",
     "companion": {
       "name": "بندق",
       "role": "rival",
@@ -56,26 +48,31 @@
       "settings": [
         "سوق السمك القديم",
         "النيل",
-        "معبد فرعوني قديم"
+        "معبد فرعوني قديم",
+        "سطح بيت قديم"
       ],
       "conflicts": [
         "chase",
-        "bargain"
+        "bargain",
+        "secret"
       ],
       "endings": [
         "danger revealed",
-        "choice forced"
+        "choice forced",
+        "question cliffhanger"
       ],
       "types": [
         "adventure",
         "action-chase",
-        "mystery"
+        "mystery",
+        "rival-conflict"
       ],
       "hook_styles": [
-        "danger_warning"
+        "danger_warning",
+        "surprising_fact"
       ]
     }
   },
-  "part": 3,
-  "duration_s": 48.0
+  "part": 4,
+  "duration_s": 38.1
 }
