@@ -23,9 +23,16 @@ def access_token() -> str:
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
     video = (ROOT / "episode_final.mp4").read_bytes()
+    if ep.get("celebration"):
+        # Milestone Short: no part number, no cliffhanger, no story playlist.
+        title = f"{ep['title']} | بسبوسة"
+        desc = "بسبوسة بتحتفل معاكم وتشكركم على حبكم! 🎉\n"
+    else:
+        title = f"{ep['title']} | الجزء {ep.get('part', 1)} | بسبوسة"
+        desc = f"الجزء {ep.get('part', 1)} من حكايات بسبوسة\n" + ep.get("cliffhanger", "") + "\n"
     meta = json.dumps({"snippet": {
-            "title": f"{ep['title']} | الجزء {ep.get('part', 1)} | بسبوسة",
-            "description": f"الجزء {ep.get('part', 1)} من حكايات بسبوسة\n" + ep.get("cliffhanger", "") + "\n\nالموسيقى: Sneaky Snitch - Kevin MacLeod (incompetech.com)\nLicensed under Creative Commons: By Attribution 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n#بسبوسة #قصص_قطط #شورتس #قصص_حيوانات",
+            "title": title,
+            "description": desc + "\nالموسيقى: Sneaky Snitch - Kevin MacLeod (incompetech.com)\nLicensed under Creative Commons: By Attribution 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n#بسبوسة #قصص_قطط #شورتس #قصص_حيوانات",
             "categoryId": "24", "tags": ["بسبوسة","قصص قطط","حكايات بسبوسة","قطط","قصص اطفال","شورتس","Shorts","قصص مصورة"]},
         "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False}}).encode()
     tok = access_token()
@@ -41,7 +48,8 @@ def main() -> None:
     with urllib.request.urlopen(put, timeout=600) as r:
         vid = json.load(r)["id"]
     print("uploaded video:", f"https://youtu.be/{vid}")
-    add_to_playlist(vid, tok)
+    if not ep.get("celebration"):
+        add_to_playlist(vid, tok)
 
 def add_to_playlist(vid: str, tok: str) -> None:
     """Every episode lands in its storyline's playlist (owner approved, and

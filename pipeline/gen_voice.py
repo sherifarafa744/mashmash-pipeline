@@ -34,7 +34,10 @@ def synthesize(text: str) -> bytes:
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
     full = "\n".join(s["narration"] for s in ep["scenes"])
-    pcm = synthesize("ابدأ فوراً بأول جملة بدون أي مقدمة أو تردد، اقرأ كحكوتي بحماس عالي من أول كلمة، وقفة قصيرة بين كل جملة:\n" + full)
+    prefix = ("اقرأ بصوت فرحان ومحتفل، طاقة عيد من أول كلمة، وقفة قصيرة بين كل جملة:\n"
+              if ep.get("celebration") else
+              "ابدأ فوراً بأول جملة بدون أي مقدمة أو تردد، اقرأ كحكوتي بحماس عالي من أول كلمة، وقفة قصيرة بين كل جملة:\n")
+    pcm = synthesize(prefix + full)
     (ROOT / "voice_full.pcm").write_bytes(pcm)
     # Gemini returns raw 24kHz s16le mono PCM; wrap then split at silence.
     subprocess.run(["ffmpeg", "-y", "-f", "s16le", "-ar", "24000", "-ac", "1",

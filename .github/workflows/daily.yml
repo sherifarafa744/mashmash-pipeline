@@ -35,6 +35,15 @@ jobs:
           echo "story_state=story_state_arc${arc}.json" >> "$GITHUB_OUTPUT"
           echo "Running arc $arc"
       - uses: actions/checkout@v4
+      - id: milestone
+        # The review agent commits milestone.json (pending: true) when Studio
+        # crosses a milestone; this slot then runs the celebration Short
+        # instead of a story episode, and the archive step clears the flag.
+        run: |
+          if [ -f milestone.json ] && [ "$(jq -r '.pending // false' milestone.json)" = "true" ]; then
+            echo "milestone celebration pending: this slot runs the celebration Short"
+            echo "celebrate=true" >> "$GITHUB_OUTPUT"
+          fi
       - id: guard
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,7 +60,18 @@ jobs:
         with: { python-version: '3.12' }
       - if: steps.guard.outputs.skip != 'true'
         run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
-      - if: steps.guard.outputs.skip != 'true'
+      - if: steps.guard.outputs.skip != 'true' && steps.milestone.outputs.celebrate == 'true'
+        run: python pipeline/celebrate.py
+        env:
+          STORY_STATE: milestone_tmp.json
+          ARC_DIR: celebrations
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+      - if: steps.guard.outputs.skip != 'true' && steps.milestone.outputs.celebrate != 'true'
         run: python pipeline/main.py
         env:
           STORY_STATE: ${{ steps.arc.outputs.story_state }}
@@ -69,9 +89,17 @@ jobs:
         run: |
           git config user.name "mashmash-bot"
           git config user.email "bot@users.noreply.github.com"
-          mkdir -p "episodes/$ARC_DIR"
-          cp episode.json "episodes/$ARC_DIR/ep$(python3 -c "import json;print(json.load(open('episode.json'))['part'])").json"
-          git add "$STORY_STATE" episode.json episodes/
-          git commit -m "episode state $ARC_DIR $(date -u +%F-%H%M)" || true
+          if [ -f milestone.json ]; then
+            mkdir -p episodes/celebrations
+            cp episode.json "episodes/celebrations/$(date -u +%F-%H%M).json"
+            git rm -q milestone.json
+            git add -A episode.json episodes/ milestone.json
+            git commit -m "milestone celebration $(date -u +%F-%H%M)" || true
+          else
+            mkdir -p "episodes/$ARC_DIR"
+            cp episode.json "episodes/$ARC_DIR/ep$(python3 -c "import json;print(json.load(open('episode.json'))['part'])").json"
+            git add "$STORY_STATE" episode.json episodes/
+            git commit -m "episode state $ARC_DIR $(date -u +%F-%H%M)" || true
+          fi
           git pull --rebase --autostash
           git push
