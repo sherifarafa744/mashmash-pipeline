@@ -1,25 +1,49 @@
 {
-  "episode": 2,
-  "next": "يا ترى بسبوسة هتنط فالمية ولا التمساح هياخد الخريطة منها؟",
-  "location": "مركب صيد قديمة تايهة في النيل",
-  "goal": "الهروب بالخريطة من التمساح والوصول لجزيرة التونة الذهبية",
-  "danger": "التمساح الصغير اللي طالع من قاع المركب وجيش قطط الحارة",
+  "episode": 3,
+  "next": "بسبوسة محتارة بين دخول المعبد الخطر أو الثقة في قط منافس ممكن يخدعها",
+  "location": "معبد فرعوني قديم على شط النيل",
+  "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
+  "danger": "فخاخ المعبد الفرعوني وغدر القط بندق",
   "story": "كنز جزيرة التونة الذهبية",
-  "playlist_id": "PLFeKx89Tl-dg",
+  "setting": "معبد فرعوني قديم",
+  "conflict_type": "bargain",
+  "ending_structure": "choice forced",
+  "companion": {
+    "name": "بندق",
+    "role": "rival",
+    "description": "a sly brown street cat with a black eye patch and a silver bell on his collar"
+  },
   "used": {
     "settings": [
       "سوق السمك القديم",
-      "النيل"
+      "النيل",
+      "معبد فرعوني قديم"
     ],
     "conflicts": [
-      "chase"
+      "chase",
+      "bargain"
     ],
     "endings": [
-      "danger revealed"
+      "danger revealed",
+      "choice forced"
     ],
     "types": [
       "adventure",
-      "action-chase"
+      "action-chase",
+      "mystery"
+    ],
+    "hook_styles": [
+      "danger_warning"
     ]
-  }
+  },
+  "vote": {
+    "question": "تفتكروا بسبوسة تعمل إيه؟",
+    "option_a": "تدخل المعبد لوحدها",
+    "option_b": "تثق في بندق"
+  },
+  "playlist_id": "PLFeKx89Tl-dg",
+  "last_duration_s": 48.0,
+  "last_story_type": "mystery",
+  "last_hook_style": "danger_warning",
+  "last_video_id": "9EJT3Wv6QWI"
 }
