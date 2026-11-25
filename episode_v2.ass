@@ -1,0 +1,20 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Noto Naskh Arabic,72,&H00FFFFFF,&H000000FF,&H00141414,&H96000000,0,0,0,0,100,100,0,0,1,4,1,2,90,90,220,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.20,0:00:04.70,Default,,0,0,0,,خريطة كنز حقيقية في سوق السمك؟! مشمش مش هيصدق اللي حصل!
+Dialogue: 0,0:00:05.08,0:00:10.35,Default,,0,0,0,,عمنا مشمش نزل سوق السمك على أمل يلقطله سردينة تسند قلبه الجعان.
+Dialogue: 0,0:00:10.85,0:00:16.12,Default,,0,0,0,,وفجأة لمح لمعة غريبة جوه برميل خشبي قديم ورا فرشة المعلم سمكة.
+Dialogue: 0,0:00:16.62,0:00:21.89,Default,,0,0,0,,مد إيده وطلع ورقة قديمة ملفوفة عليها رسمة بحر وعلامة إكس حمرا.
+Dialogue: 0,0:00:22.39,0:00:27.65,Default,,0,0,0,,دي مش خريطة عادية، دي خريطة كنز جزيرة التونة الذهبية الأسطورية!
+Dialogue: 0,0:00:28.15,0:00:33.42,Default,,0,0,0,,وفرحته ما كملتش، لما حس فجأة بضل عملاق بيغطي عليه من وراه.
+Dialogue: 0,0:00:33.92,0:00:39.19,Default,,0,0,0,,التفت مشمش ولقى قط الحارة الشرير الأعور بيبتسم ابتسامة شريرة ومطلع مخالبه!
+Dialogue: 0,0:00:39.74,0:00:49.34,Default,,0,0,0,,يا ترى مشمش هيعرف يهرب بالخريطة ولا كنز التونة هيضيع منه؟ انتظروا الجزء التاني بكرة!

@@ -1,0 +1,55 @@
+name: daily-episode
+on:
+  schedule:
+    # GitHub's scheduler is best-effort and delays or drops single cron fires.
+    # Fire 4 times per slot; the guard below lets only the first one through.
+    # 13:00 + 18:00 UTC = 15:00 + 20:00 Africa/Cairo (winter)
+    - cron: '0,15,30,45 13,18 * * *'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: daily-episode
+  cancel-in-progress: false
+jobs:
+  episode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 50 }
+      - id: guard
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          last=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/daily.yml/runs?status=completed&per_page=10" \
+            | jq -r '[(.workflow_runs // [])[] | select(.conclusion=="success" and .id != '"$GITHUB_RUN_ID"')] | .[0].created_at // ""')
+          if [ -n "$last" ] && [ $(( $(date -u +%s) - $(date -u -d "$last" +%s) )) -lt 10800 ]; then
+            echo "a run already succeeded at $last (<3h ago); skipping" 
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        if: steps.guard.outputs.skip != 'true'
+        with: { python-version: '3.12' }
+      - if: steps.guard.outputs.skip != 'true'
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
+      - if: steps.guard.outputs.skip != 'true'
+        run: python pipeline/main.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+      - if: steps.guard.outputs.skip != 'true'
+        run: |
+          git config user.name "mashmash-bot"
+          git config user.email "bot@users.noreply.github.com"
+          mkdir -p episodes
+          cp episode.json "episodes/ep$(python3 -c "import json;print(json.load(open('episode.json'))['part'])").json"
+          git add story_state.json episode.json episodes/
+          git commit -m "episode state $(date -u +%F)" || true
+          git pull --rebase --autostash
+          git push

@@ -1,0 +1,36 @@
+{
+  "title": "بسبوسة لقت خريطة كنز في سوق السمك؟! 😱",
+  "scenes": [
+    {
+      "narration": "عمنا مشمش نزل سوق السمك على أمل يلقطله سردينة تسند قلبه الجعان.",
+      "image_prompt": "Vertical 9:16 cartoon illustration. A cute, expressive ginger cat named Mashmash sneaking under rustic wooden fish stalls in a bustling, vibrant Egyptian fish market with colorful umbrellas and hanging lanterns."
+    },
+    {
+      "narration": "وفجأة لمح لمعة غريبة جوه برميل خشبي قديم ورا فرشة المعلم سمكة.",
+      "image_prompt": "Vertical 9:16 cartoon illustration. The ginger cat Mashmash peeking curiously into an old weathered wooden barrel tucked between crates of ice, golden light reflecting in his large green eyes."
+    },
+    {
+      "narration": "مد إيده وطلع ورقة قديمة ملفوفة عليها رسمة بحر وعلامة إكس حمرا.",
+      "image_prompt": "Vertical 9:16 cartoon illustration. Mashmash holding an ancient, yellowed parchment map rolled open with his tiny paws, showing hand-drawn waves, palm trees, and a mysterious red X mark."
+    },
+    {
+      "narration": "دي مش خريطة عادية، دي خريطة كنز جزيرة التونة الذهبية الأسطورية!",
+      "image_prompt": "Vertical 9:16 cartoon illustration. Mashmash with sparkling stars in his eyes, grinning with delight, as cartoon thought bubbles of glowing golden fish surround his head."
+    },
+    {
+      "narration": "وفرحته ما كملتش، لما حس فجأة بضل عملاق بيغطي عليه من وراه.",
+      "image_prompt": "Vertical 9:16 cartoon illustration. Dramatic camera angle showing a huge, menacing shadow falling over the small ginger cat, who stiffens and hugs the parchment tightly against his chest."
+    },
+    {
+      "narration": "التفت مشمش ولقى قط الحارة الشرير الأعور بيبتسم ابتسامة شريرة ومطلع مخالبه!",
+      "image_prompt": "Vertical 9:16 cartoon illustration. A scarred, tough alley cat wearing a tattered eyepatch stepping menacingly out of the alley shadows, baring sharp claws at the frightened Mashmash."
+    }
+  ],
+  "cliffhanger": "يا ترى بسبوسة هتعرف تهرب بالخريطة ولا كنز التونة هيضيع منها؟",
+  "state": {
+    "location": "سوق السمك القديم",
+    "goal": "الهروب بالخريطة وحمايتها من قط الحارة",
+    "danger": "القط الأعور الشرير ومخالبه الحادة"
+  },
+  "part": 1
+}

@@ -1,0 +1,51 @@
+name: weekly-compilation
+on:
+  schedule:
+    # Same reliability trick as daily: 4 fires, guard lets only one through.
+    # 11:00 UTC = 13:00 Africa/Cairo (winter)
+    - cron: '0,15,30,45 11 * * 6'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: weekly-compilation
+  cancel-in-progress: false
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: guard
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          last=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/weekly.yml/runs?status=completed&per_page=10" \
+            | jq -r '[(.workflow_runs // [])[] | select(.conclusion=="success" and .id != '"$GITHUB_RUN_ID"')] | .[0].created_at // ""')
+          if [ -n "$last" ] && [ $(( $(date -u +%s) - $(date -u -d "$last" +%s) )) -lt 259200 ]; then
+            echo "a weekly run already succeeded at $last (<3d ago); skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        if: steps.guard.outputs.skip != 'true'
+        with: { python-version: '3.12' }
+      - if: steps.guard.outputs.skip != 'true'
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
+      - if: steps.guard.outputs.skip != 'true'
+        run: python pipeline/weekly.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+      - if: steps.guard.outputs.skip != 'true'
+        run: |
+          git config user.name "mashmash-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add weekly_state.json weekly_episode.json
+          git commit -m "weekly state $(date -u +%F)" || true
+          git pull --rebase --autostash
+          git push
