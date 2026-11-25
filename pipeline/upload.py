@@ -4,7 +4,7 @@ PUBLIC uploads approved by the channel owner (WhatsApp 2026-11-25).
 
 videos.insert has its own bucket: 100 uploads/day/project (post-Jun-2026).
 OAuth consent screen must be 'In production' or refresh tokens die in 7 days.
-Uploads as PRIVATE; publishing is a human decision.
+With PUBLISH_AT the video is uploaded private and scheduled (publishAt).
 """
 import json, os, pathlib, sys, urllib.parse, urllib.request
 
@@ -20,6 +20,15 @@ def access_token() -> str:
             "https://oauth2.googleapis.com/token", data=body), timeout=60) as r:
         return json.load(r)["access_token"]
 
+def status_block() -> dict:
+    """PUBLISH_AT (ISO UTC, set by the workflow) = build ahead, upload private
+    and let YouTube flip it public at exactly that time. Unset = public now."""
+    st = {"privacyStatus": "public", "selfDeclaredMadeForKids": False}
+    at = os.environ.get("PUBLISH_AT")
+    if at:
+        st = {"privacyStatus": "private", "publishAt": at, "selfDeclaredMadeForKids": False}
+    return st
+
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
     video = (ROOT / "episode_final.mp4").read_bytes()
@@ -34,7 +43,7 @@ def main() -> None:
             "title": title,
             "description": desc + "\nالموسيقى: Sneaky Snitch - Kevin MacLeod (incompetech.com)\nLicensed under Creative Commons: By Attribution 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n#بسبوسة #قصص_قطط #شورتس #قصص_حيوانات",
             "categoryId": "24", "tags": ["بسبوسة","قصص قطط","حكايات بسبوسة","قطط","قصص اطفال","شورتس","Shorts","قصص مصورة"]},
-        "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False}}).encode()
+        "status": status_block()}).encode()
     tok = access_token()
     init = urllib.request.Request(
         "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",

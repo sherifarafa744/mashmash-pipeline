@@ -1,9 +1,10 @@
 name: weekly-compilation
 on:
   schedule:
-    # Same reliability trick as daily: 4 fires, guard lets only one through.
-    # 11:00 UTC = 13:00 Africa/Cairo (winter)
-    - cron: '0,15,30,45 11 * * 6'
+    # Twice a week (Wed + Sat). Built early, scheduled on YouTube for
+    # 11:00 UTC (arc1) and 11:30 UTC (arc2) = 13:00 / 13:30 Africa/Cairo.
+    # 4 fires from 08:00 UTC, guard lets only one through per day.
+    - cron: '0,15,30,45 8 * * 3,6'
   workflow_dispatch: {}
 permissions:
   contents: write
@@ -16,6 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - id: when
+        run: |
+          echo "arc1=$(date -u +%Y-%m-%d)T11:00:00.000Z" >> "$GITHUB_OUTPUT"
+          echo "arc2=$(date -u +%Y-%m-%d)T11:30:00.000Z" >> "$GITHUB_OUTPUT"
       - id: guard
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -23,8 +28,8 @@ jobs:
           last=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/weekly.yml/runs?status=completed&per_page=10" \
             | jq -r '[(.workflow_runs // [])[] | select(.conclusion=="success" and .id != '"$GITHUB_RUN_ID"')] | .[0].created_at // ""')
-          if [ -n "$last" ] && [ $(( $(date -u +%s) - $(date -u -d "$last" +%s) )) -lt 259200 ]; then
-            echo "a weekly run already succeeded at $last (<3d ago); skipping"
+          if [ -n "$last" ] && [ $(( $(date -u +%s) - $(date -u -d "$last" +%s) )) -lt 86400 ]; then
+            echo "a weekly run already succeeded at $last (<1d ago); skipping"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
       - uses: actions/setup-python@v5
@@ -36,6 +41,7 @@ jobs:
         run: python pipeline/weekly.py
         env:
           ARC_DIR: arc1
+          PUBLISH_AT: ${{ steps.when.outputs.arc1 }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -46,6 +52,7 @@ jobs:
         run: python pipeline/weekly.py
         env:
           ARC_DIR: arc2
+          PUBLISH_AT: ${{ steps.when.outputs.arc2 }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -56,7 +63,7 @@ jobs:
         run: |
           git config user.name "mashmash-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add weekly_state.json weekly_episode.json
+          for f in weekly_state.json weekly_episode.json; do [ -f "$f" ] && git add "$f"; done
           git commit -m "weekly state $(date -u +%F)" || true
           git pull --rebase --autostash
           git push

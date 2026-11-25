@@ -6,9 +6,9 @@ Gemini TTS narrates -> Cloudflare Workers AI flux-1-schnell draws the scenes
 outro) -> YouTube Data API uploads public and adds the video to the current
 storyline's playlist.
 
-- 4 Shorts/day (11:00, 14:00, 17:00, 20:00 Africa/Cairo), 2 parallel story
+- 4 Shorts/day publish at 11:00, 14:00, 17:00, 20:00 Africa/Cairo (built ~1h earlier and scheduled on YouTube with publishAt, see "Scheduled publishing"), 2 parallel story
   arcs alternating (story_state_arc1.json / story_state_arc2.json).
-- Weekly long-form compilation on Saturdays (pipeline/weekly.py).
+- Long-form compilations twice a week (Wed + Sat, scheduled 13:00/13:30 Cairo) (pipeline/weekly.py).
 - Costs: $0. Licenses: flux-1-schnell Apache-2.0; music "Sneaky Snitch"
   Kevin MacLeod CC-BY 4.0 (attributed in every description); fonts Noto (OFL).
 
@@ -42,3 +42,15 @@ review agent tracks the real counts.
 - Recurring companion: each arc invents exactly one secondary character
   (friend or rival) kept identical across the arc in state.companion (name,
   role, English visual description embedded in image prompts).
+
+## Scheduled publishing (from 2026-11-26)
+
+GitHub's cron delays fires by up to ~40 min, so nothing publishes "when the
+workflow runs". Build fires start at 08/11/14/17 UTC; pipeline/slot.py picks the
+next slot (09/12/15/18 UTC, >=12 min ahead), the arc follows that slot, and
+upload.py sends the video PRIVATE with status.publishAt = slot. YouTube flips it
+public at exactly that time. The guard skips a fire if a successful run already
+served the same slot. Releases (cross-post kit) state the publish time in their
+notes: post to other platforms at/after it. Weekly compilations use the same
+mechanism (11:00 UTC arc1, 11:30 UTC arc2). Hook rotation (hook_style) is
+unchanged and recorded per episode in episode.json for the review agent.

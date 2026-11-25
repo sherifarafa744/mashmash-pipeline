@@ -99,8 +99,8 @@ def ts(sec: float) -> str:
 def main() -> None:
     # 1. Which episodes are new since the last compilation?
     wstate = json.loads((ROOT / "weekly_state.json").read_text()) if (ROOT / "weekly_state.json").exists() else {}
-    done_upto = wstate.get("compiled_upto_" + arc_dir.name + "", 0)
     arc_dir = ROOT / "episodes" / os.environ.get("ARC_DIR", "arc1")
+    done_upto = wstate.get("compiled_upto_" + arc_dir.name, 0)
     eps = sorted(arc_dir.glob("ep*.json"),
                  key=lambda p: json.loads(p.read_text()).get("part", 0))
     eps = [json.loads(p.read_text()) for p in eps]
@@ -203,7 +203,9 @@ def main() -> None:
                             "\n#بسبوسة #قصص_قطط #حكايات_بسبوسة #قصص_مصورة"),
             "categoryId": "24",
             "tags": ["بسبوسة", "حكايات بسبوسة", "قصص قطط", "قصص مصورة", "قصص اطفال", "حكايات"]},
-        "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False}}).encode()
+        "status": ({"privacyStatus": "private", "publishAt": os.environ["PUBLISH_AT"],
+                    "selfDeclaredMadeForKids": False} if os.environ.get("PUBLISH_AT")
+                   else {"privacyStatus": "public", "selfDeclaredMadeForKids": False})}).encode()
     init = urllib.request.Request(
         "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",
         data=meta, method="POST",
@@ -217,8 +219,9 @@ def main() -> None:
         vid = json.load(r)["id"]
     print("uploaded public long-form:", f"https://youtu.be/{vid}")
 
-    (ROOT / "weekly_state.json").write_text(json.dumps(
-        {"compiled_upto_" + arc_dir.name + "": max(parts), "video": vid}, ensure_ascii=False, indent=2))
+    wstate["compiled_upto_" + arc_dir.name] = max(parts)
+    wstate["video_" + arc_dir.name] = vid
+    (ROOT / "weekly_state.json").write_text(json.dumps(wstate, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
