@@ -1,6 +1,6 @@
 {
-  "episode": 4,
-  "next": "بسبوسة محتارة بين تسليم الخريطة أو الهروب بمفردها قبل فوات الأوان",
+  "episode": 5,
+  "next": "بسبوسة محتارة بين استعادة الخريطة من بندق أو فتح صندوق الكنز السري",
   "location": "معبد فرعوني قديم على شط النيل",
   "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
   "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
@@ -23,7 +23,8 @@
     "conflicts": [
       "chase",
       "bargain",
-      "secret"
+      "secret",
+      "rival"
     ],
     "endings": [
       "danger revealed",
@@ -38,17 +39,23 @@
     ],
     "hook_styles": [
       "danger_warning",
-      "surprising_fact"
+      "surprising_fact",
+      "surprise"
     ]
   },
   "vote": {
-    "question": "تفتكروا بسبوسة هتعمل إيه مع بندق؟",
-    "option_a": "تسلمه الخريطة",
-    "option_b": "تهرب بطريقتها"
+    "question": "تفتكروا بسبوسة هتعمل إيه جوه الغرفة السرية؟",
+    "option_a": "تحارب بندق",
+    "option_b": "تبحث عن المفتاح"
   },
   "playlist_id": "PLFeKx89Tl-dg",
-  "last_duration_s": 38.1,
+  "last_duration_s": 32.0,
   "last_story_type": "rival-conflict",
-  "last_hook_style": "surprising_fact",
-  "last_video_id": "XKZ9ClfUeaU"
+  "last_hook_style": "surprise",
+  "last_video_id": "BPIrGaXe_O4",
+  "pending_comment": {
+    "video_id": "BPIrGaXe_O4",
+    "text": "تفتكروا بسبوسة هتعمل إيه جوه الغرفة السرية؟ ✍️ اكتبوا اختياركم في الكومنتات: تحارب بندق ولا تبحث عن المفتاح",
+    "publish_at": "2026-11-26T15:00:00.000Z"
+  }
 }

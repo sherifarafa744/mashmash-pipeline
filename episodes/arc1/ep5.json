@@ -1,0 +1,85 @@
+{
+  "title": "بسبوسة وبندق في المعبد.. الخريطة هتضيع؟! 🗺️😱",
+  "hook_text": "الخريطة اتسرقت في ثانية!",
+  "hook_style": "surprise",
+  "opening_line": "الخريطة اتسرقت في ثانية",
+  "scenes": [
+    {
+      "narration": "الخريطة اتسرقت في ثانية!",
+      "image_prompt": "Basbusa the female cartoon cat with a blue scarf looking shocked as a sly brown street cat with a black eye patch and a silver bell on his collar named بندق grabs the map inside a dusty ancient Egyptian temple by the Nile at sunset"
+    },
+    {
+      "narration": "بسبوسة بصت لقت بندق بيجري بيها ناحية باب المعبد الكبير!",
+      "image_prompt": "Basbusa the female cartoon cat with a blue scarf chasing a sly brown street cat with a black eye patch and a silver bell on his collar through giant stone pillars in an ancient Egyptian temple"
+    },
+    {
+      "narration": "باب الفخ القديم بدأ يقفل ويقفل لحد ما منع أي حد يهرب.",
+      "image_prompt": "Huge heavy stone temple doors closing slowly with glowing hieroglyphs while Basbusa the female cartoon cat with a blue scarf stops right in front of them"
+    },
+    {
+      "narration": "فجأة ظهرت حجرة سرية منورة بذهب قديم بيلمع في الظلام.",
+      "image_prompt": "A hidden chamber inside an ancient Egyptian temple glowing with gold treasure chests and magical blue light, with Basbusa the female cartoon cat with a blue scarf watching in amazement"
+    },
+    {
+      "narration": "تفتكروا بسبوسة هتقدر تسترد الخريطة من بندق ولا تكتشف الكنز لوحدها؟ اكتبوا في التعليقات: أ) تحارب بندق، ب) تبحث عن المفتاح. انتظروا الجزء السادس! الخريطة اتسرقت في ثانية!",
+      "image_prompt": "Basbusa the female cartoon cat with a blue scarf standing bravely beside a glowing gold chest inside an ancient Egyptian temple with the sly brown street cat with a black eye patch and a silver bell on his collar nearby"
+    }
+  ],
+  "vote": {
+    "question": "تفتكروا بسبوسة هتعمل إيه جوه الغرفة السرية؟",
+    "option_a": "تحارب بندق",
+    "option_b": "تبحث عن المفتاح"
+  },
+  "cliffhanger": "بسبوسة محتارة بين استعادة الخريطة من بندق أو فتح صندوق الكنز السري",
+  "story_type": "rival-conflict",
+  "state": {
+    "location": "معبد فرعوني قديم على شط النيل",
+    "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
+    "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
+    "story": "كنز جزيرة التونة الذهبية",
+    "setting": "معبد فرعوني قديم",
+    "conflict_type": "secret",
+    "ending_structure": "question cliffhanger",
+    "companion": {
+      "name": "بندق",
+      "role": "rival",
+      "description": "a sly brown street cat with a black eye patch and a silver bell on his collar"
+    },
+    "used": {
+      "settings": [
+        "سوق السمك القديم",
+        "النيل",
+        "معبد فرعوني قديم",
+        "سطح بيت قديم"
+      ],
+      "conflicts": [
+        "chase",
+        "bargain",
+        "secret",
+        "rival"
+      ],
+      "endings": [
+        "danger revealed",
+        "choice forced",
+        "question cliffhanger"
+      ],
+      "types": [
+        "adventure",
+        "action-chase",
+        "mystery",
+        "rival-conflict"
+      ],
+      "hook_styles": [
+        "danger_warning",
+        "surprising_fact",
+        "surprise"
+      ]
+    }
+  },
+  "format_issues": [
+    "narration is 64 words, need 70-92"
+  ],
+  "part": 5,
+  "music": "Monkeys Spinning Monkeys",
+  "duration_s": 32.0
+}
