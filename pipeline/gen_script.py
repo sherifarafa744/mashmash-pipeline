@@ -75,7 +75,7 @@ sentence <= 14 words.
 
 Rules: VIRAL SHORT FORMAT (mandatory, every episode):
 1. OPENING: the FIRST narration sentence is a shock/action line of AT MOST 7 words, in this episode's hook_style - it IS the dangerous moment happening right now ("الثعبان نزل على بسبوسة!"). No greeting, no "كان في مرة", no setting or weather, no introduction. Scene 1 image_prompt shows that dangerous moment itself, mid-motion, never calm scenery. hook_text and that first sentence say the same thing.
-2. LENGTH: exactly 5 or 6 scenes, 28-36 seconds when spoken: the WHOLE narration is 70-92 words, each narration line one spoken sentence of at most 14 words (the last scene may have up to 3 short sentences). Trim anything that does not move the plot.
+2. LENGTH: exactly 5 or 6 scenes, 28-36 seconds when spoken: the WHOLE narration is 58-76 words (Arabic TTS speaks ~2 words/second), each narration line one spoken sentence of at most 14 words (the last scene may have up to 3 short sentences). Trim anything that does not move the plot.
 3. PAYOFF: around scenes 3-4 give a small payoff the viewer can enjoy: the problem of the opening is solved or a secret is revealed, in one clear beat. Then the NEW twist/cliffhanger starts from it. Every scene still ends on rising tension.
 4. LOOP: the LAST sentence of the episode (after naming the next part) echoes the opening image or words (a short callback to scene 1's danger, e.g. repeating the key word of the first line), so the video feels like it loops back to its start.
 5. ENDING: the last scene gives the cliffhanger matching ending_structure, then the vote question, then closes with "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message), NO day or time reference (never بكرة, النهارده, or any date), then the one-line loop-back echo. Never let the story just stop.
@@ -118,7 +118,7 @@ def first_sentence(t: str) -> str:
 
 
 def est_seconds(ep) -> float:
-    return sum(words(sc["narration"]) for sc in ep["scenes"]) / 2.6
+    return sum(words(sc["narration"]) for sc in ep["scenes"]) / 2.0
 
 
 def problems(ep, recent) -> list:
@@ -133,8 +133,8 @@ def problems(ep, recent) -> list:
         if fs in recent:
             out.append("first sentence repeats a previous opening")
     total = sum(words(x["narration"]) for x in sc)
-    if not 70 <= total <= 92:
-        out.append(f"narration is {total} words, need 70-92")
+    if not 56 <= total <= 78:
+        out.append(f"narration is {total} words, need 56-78")
     return out
 
 
