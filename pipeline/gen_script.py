@@ -71,11 +71,16 @@ comment). The last scene's narration speaks the vote question and both options
 and tells viewers to answer in the comments, then closes with "انتظروا الجزء"
 + the next part's ordinal as usual. The last scene narration may be up to 3
 short sentences (cliffhanger + vote + part naming); all other lines stay one
-sentence <= 18 words.
+sentence <= 14 words.
 
-Rules: RETENTION IS EVERYTHING - viewers leave in the first 3 seconds, so the opening decides everything. The FIRST narration sentence is the hook itself: <= 12 words, it IS the conflict, question or danger in this episode's hook_style - no greeting, no "كان في مرة", no setting or weather description, no character introduction. Scene 1 narration must open mid-action with the conflict or question in the first 1-2 seconds (a surprising fact or question) that makes skipping feel like missing out - never a slow intro. Scene 1 image_prompt must show the conflict moment itself, action mid-motion - never calm establishing scenery. Every scene must end on rising tension or an open question so the viewer stays to the end. 6-8 scenes (target ~55-65 seconds total, the hit length in this niche); each narration line is one spoken sentence, Egyptian
-dialect, <= 18 words; image_prompt is an English visual description of the
-scene (no text in image). The LAST scene narration must close with a spoken cliffhanger hook in Egyptian Arabic matching this episode's ending_structure, e.g. asking what happens next and saying "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message) with NO day or time reference (never say بكرة, النهارده, or any date - episodes come out twice a day) - never let the story just stop; update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6)."""
+Rules: VIRAL SHORT FORMAT (mandatory, every episode):
+1. OPENING: the FIRST narration sentence is a shock/action line of AT MOST 7 words, in this episode's hook_style - it IS the dangerous moment happening right now ("الثعبان نزل على بسبوسة!"). No greeting, no "كان في مرة", no setting or weather, no introduction. Scene 1 image_prompt shows that dangerous moment itself, mid-motion, never calm scenery. hook_text and that first sentence say the same thing.
+2. LENGTH: exactly 5 or 6 scenes, 28-36 seconds when spoken: the WHOLE narration is 70-92 words, each narration line one spoken sentence of at most 14 words (the last scene may have up to 3 short sentences). Trim anything that does not move the plot.
+3. PAYOFF: around scenes 3-4 give a small payoff the viewer can enjoy: the problem of the opening is solved or a secret is revealed, in one clear beat. Then the NEW twist/cliffhanger starts from it. Every scene still ends on rising tension.
+4. LOOP: the LAST sentence of the episode (after naming the next part) echoes the opening image or words (a short callback to scene 1's danger, e.g. repeating the key word of the first line), so the video feels like it loops back to its start.
+5. ENDING: the last scene gives the cliffhanger matching ending_structure, then the vote question, then closes with "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message), NO day or time reference (never بكرة, النهارده, or any date), then the one-line loop-back echo. Never let the story just stop.
+6. NO NEAR-DUPLICATES: the opening line, hook_text, title, and vote question must not repeat or closely paraphrase any previous episode of ANY arc (state.recent_openings lists them); change the verb, the danger and the structure.
+Egyptian dialect throughout; image_prompt is an English visual description of the scene (no text in image). Update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6). Also return "opening_line": the exact first narration sentence."""
 
 
 CF_MODELS = ["@cf/meta/llama-3.3-70b-instruct-fp8-fast", "@cf/meta/llama-3.1-70b-instruct"]
@@ -102,6 +107,43 @@ def _extract_json(txt: str):
             if depth == 0:
                 return txt[i:j + 1]
     return None
+
+
+def words(t: str) -> int:
+    return len(re.findall(r"\S+", t))
+
+
+def first_sentence(t: str) -> str:
+    return re.split(r"[.!؟?!…]+", t.strip(), 1)[0].strip()
+
+
+def est_seconds(ep) -> float:
+    return sum(words(sc["narration"]) for sc in ep["scenes"]) / 2.6
+
+
+def problems(ep, recent) -> list:
+    out = []
+    sc = ep.get("scenes", [])
+    if not 5 <= len(sc) <= 6:
+        out.append(f"need exactly 5-6 scenes, got {len(sc)}")
+    if sc:
+        fs = first_sentence(sc[0]["narration"])
+        if words(fs) > 7:
+            out.append(f"first sentence has {words(fs)} words, max 7: {fs}")
+        if fs in recent:
+            out.append("first sentence repeats a previous opening")
+    total = sum(words(x["narration"]) for x in sc)
+    if not 70 <= total <= 92:
+        out.append(f"narration is {total} words, need 70-92")
+    return out
+
+
+def trim_scenes(ep) -> None:
+    """Last resort: drop middle scenes (keep opening, payoff region, ending)."""
+    sc = ep["scenes"]
+    while len(sc) > 5 and est_seconds(ep) > 36:
+        del sc[len(sc) // 2 - 1]
+    ep["scenes"] = sc
 
 
 def cloudflare_script(system: str, user: str):
@@ -153,6 +195,16 @@ def main() -> None:
         user = ("Write episode 1 of a NEW, different storyline (not a treasure map): "
                 "Basbusa finds a mysterious old brass lamp in her grandmother's attic in old Cairo. "
                 "Start a fresh serialized arc.")
+    recent = []
+    for f in sorted(ROOT.glob("episodes/*/ep*.json")):
+        try:
+            e = json.loads(f.read_text())
+            recent.append(e.get("opening_line") or first_sentence(e["scenes"][0]["narration"]))
+            recent.append(e.get("title", ""))
+        except Exception:
+            pass
+    recent = [r for r in recent if r][-24:]
+    user += "\nstate.recent_openings (all arcs, do not repeat or paraphrase): " + json.dumps(recent, ensure_ascii=False)
     user += f"\nThis is part {part}. The closing line MUST name the next part: \"انتظروا الجزء {nxt}!\""
     body = json.dumps({
         "system_instruction": {"parts": [{"text": SYSTEM}]},
@@ -191,6 +243,25 @@ def main() -> None:
         if not text:
             raise
     episode = json.loads(text)
+    # Enforce the viral format: ask Gemini again with the exact problems (up to 3x).
+    for fix in range(3):
+        issues = problems(episode, recent)
+        if not issues:
+            break
+        print("format issues, regenerating:", issues, flush=True)
+        body = json.dumps({
+            "system_instruction": {"parts": [{"text": SYSTEM}]},
+            "contents": [{"role": "user", "parts": [{"text": user + "\nYour previous draft broke the format: " + "; ".join(issues) + ". Rewrite the whole episode fixing exactly this."}]}],
+            "generationConfig": {"response_mime_type": "application/json"}}).encode()
+        try:
+            episode = json.loads(retry.call(one_pass, "script-fix", reserve_s=1500, cap_s=1200, spacing_s=120))
+        except SystemExit:
+            break
+    if est_seconds(episode) > 36 or len(episode["scenes"]) > 6:
+        trim_scenes(episode)
+        print("trimmed scenes to fit 28-36s")
+    episode["format_issues"] = problems(episode, recent)
+    episode["opening_line"] = first_sentence(episode["scenes"][0]["narration"])
     if used_model:
         episode["script_model"] = "cloudflare:" + used_model
     episode["part"] = part  # story_type comes straight from the model output

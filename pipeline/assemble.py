@@ -28,12 +28,17 @@ def main() -> None:
     n = len(scenes)
     # Retention: scene 1 is SHORTER with a fast punch-in zoom - the first 3
     # seconds decide whether the viewer stays, so the opening moves fast.
-    seg, seg1, fade = 6.267, 4.5, 0.5
+    seg, seg1, fade = 6.267, 3.2, 0.5
     # The video must NEVER end before the voice: extend the last scene so the
     # final line finishes, then hold a beat with a soft fade-out.
     voice = ROOT / "voice_clean.wav"
     voice_dur = wav_duration(voice) if voice.exists() else 0.0
     durs = [seg1] + [seg] * (n - 1)
+    if voice_dur and n > 1:
+        # Viral Short length 28-36s: spread scenes evenly over the voice.
+        target = voice_dur + 1.2
+        rest = max(3.5, (target - seg1 + (n - 1) * fade) / (n - 1))
+        durs = [seg1] + [rest] * (n - 1)
     base = sum(durs) - (n - 1) * fade
     last_extra = max(0.0, voice_dur + 1.2 - base)  # 1.2s outro hold
     for i, img in enumerate(scenes, 1):

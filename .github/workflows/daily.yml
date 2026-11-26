@@ -127,7 +127,8 @@ jobs:
           else
             mkdir -p "episodes/$ARC_DIR"
             cp episode.json "episodes/$ARC_DIR/ep$(python3 -c "import json;print(json.load(open('episode.json'))['part'])").json"
-            git add "$STORY_STATE" episode.json episodes/
+            PUBLISH_AT="${{ steps.arc.outputs.publish_at }}" python3 pipeline/log_episode.py
+            git add "$STORY_STATE" episode.json episodes/ episode_log.jsonl
             git commit -m "episode state $ARC_DIR $(date -u +%F-%H%M)" || true
           fi
           git pull --rebase --autostash

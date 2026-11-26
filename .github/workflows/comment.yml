@@ -6,6 +6,8 @@ on:
     # so minutes are free: fire every 10 min from 09:00 to 20:59 UTC. The script
     # is idempotent: it posts only for a public video with a parked comment.
     - cron: '3,13,23,33,43,53 9-20 * * *'
+    # Extra fires right at each publish slot so the vote comment lands within minutes.
+    - cron: '1,6,11,16,21 9,11,12,15,18 * * *'
   workflow_dispatch: {}
 concurrency:
   group: post-pending-comment
