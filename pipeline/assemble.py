@@ -13,6 +13,10 @@ STYLE = ("Noto Naskh Arabic,72,&H00FFFFFF,&H000000FF,&H00141414,&H96000000,"
 HOOK_STYLE = ("Noto Naskh Arabic,130,&H0000D7FF,&H000000FF,&H00141414,&H96000000,"
               "1,0,0,0,100,100,0,0,1,5,2,8,60,60,300,1")
 
+# Karaoke caption line (3 words at a time, active word yellow): big, bold, thick outline.
+CAP_STYLE = ("Cap,Noto Naskh Arabic,104,&H00FFFFFF,&H000000FF,&H00141414,&H96000000,"
+             "1,0,0,0,100,100,0,0,1,7,2,2,60,60,330,1")
+
 def ts(sec: float) -> str:
     m, s = divmod(sec, 60)
     return f"0:{int(m):02d}:{s:05.2f}"
@@ -65,7 +69,21 @@ def main() -> None:
         out = f"x{i}"
         fx.append(f"[{prev}][{i}:v]xfade=transition=fade:duration={fade}:offset={off:.3f}[{out}]")
         prev = out
-    subs = build_ass(ep, durs, fade)
+    cap_events = None
+    ep["caption_style"] = "v1_sentence"
+    if voice_dur:
+        try:
+            sys.path.insert(0, str(pathlib.Path(__file__).parent))
+            import captions
+            cap_events = captions.build_events(ep, voice, voice_dur)
+            nwords = sum(len(x) for x in captions.sentences(ep))
+            if not cap_events or len(cap_events) < nwords:
+                raise RuntimeError(f"caption events {len(cap_events)} < words {nwords}")
+            ep["caption_style"] = "v2_karaoke_3w"
+        except Exception as e:  # never lose the episode over captions: old sentence captions
+            print("karaoke captions failed, using sentence captions:", e)
+            cap_events = None
+    subs = build_ass(ep, durs, fade, cap_events)
     fx.append(f"[{prev}]subtitles={subs}:fontsdir={FONTDIR},fade=t=out:st={total - 0.7:.2f}:d=0.7[vout]")
     cmd = ["ffmpeg", "-y", "-v", "error"]
     for i in range(1, n + 1):
@@ -104,19 +122,21 @@ def main() -> None:
         st_path.write_text(json.dumps(st, ensure_ascii=False, indent=2))
     print("built", ROOT / "episode_final.mp4", f"({total:.1f}s)")
 
-def build_ass(ep, durs, fade) -> str:
+def build_ass(ep, durs, fade, cap_events=None) -> str:
     lines = ["[Script Info]", "ScriptType: v4.00+", "PlayResX: 1080", "PlayResY: 1920", "WrapStyle: 0", "",
              "[V4+ Styles]",
              "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-             f"Style: Default,{STYLE}", f"Style: Hook,{HOOK_STYLE}", "",
+             f"Style: Default,{STYLE}", f"Style: Hook,{HOOK_STYLE}", f"Style: {CAP_STYLE}", "",
              "[Events]",
              "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
     hook = ep.get("hook_text")
     if hook:
         # On screen from frame 0 through the punch-in (the 3-second decision window).
         lines.append(f"Dialogue: 1,{ts(0.0)},{ts(2.60)},Hook,,0,0,0,,{hook}")
+    if cap_events:
+        lines.extend(cap_events)
     start = 0.0
-    for i, s in enumerate(ep["scenes"]):
+    for i, s in enumerate([] if cap_events else ep["scenes"]):
         end = start + durs[i] - (fade if i < len(durs) - 1 else 0.0)
         lines.append(f"Dialogue: 0,{ts(start + 0.25)},{ts(end - 0.25)},Default,,0,0,0,,{s['narration']}")
         start = end  # next scene starts where this one's crossfade ends
