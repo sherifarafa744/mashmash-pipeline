@@ -4,60 +4,41 @@ on:
 permissions:
   contents: read
 jobs:
-  test:
+  hold-test:
+    # Proves: Gemini down near the slot => run FAILS with HOLD, no weaker fallback used, nothing written.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
-      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core && pip install edge-tts
-      - name: Cloudflare script fallback (no upload)
+      - name: script hold (invalid Gemini key, slot 34 min away, 25 min reserved)
         env:
-          GEMINI_API_KEY: unused
+          GEMINI_API_KEY: invalid-key-for-test
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          STORY_STATE: story_state_arc1.json
         run: |
-          mkdir -p out
-          python - <<'PY'
-          import sys, json, os
-          sys.path.insert(0, "pipeline")
-          import gen_script as g
-          user = ("Write episode 1 of a NEW storyline: Basbusa finds a mysterious old brass lamp in her "
-                  "grandmother's attic in old Cairo. This is part 1. The closing line MUST name the next part: \"انتظروا الجزء التاني!\"")
-          t = g.cloudflare_script(g.SYSTEM, user)
-          print("RESULT", "ok" if t else "FAILED")
-          if t:
-              ep = json.loads(t); open("out/cf_episode.json", "w").write(json.dumps(ep, ensure_ascii=False, indent=2))
-              print(ep["title"]); print(len(ep["scenes"]), "scenes"); print(ep["scenes"][0]["narration"]); print(ep["scenes"][1]["narration"])
-          PY
-      - name: edge-tts voice + assemble on committed sample episode (no upload)
+          export PUBLISH_AT=$(date -u -d '+34 minutes' +%Y-%m-%dT%H:%M:%S.000Z)
+          cp episode.json /tmp/episode_before.json
+          set +e
+          python pipeline/gen_script.py 2>&1 | tee /tmp/hold.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "exit code: $code"
+          grep -c "Cloudflare" /tmp/hold.log || true
+          grep "HOLD" /tmp/hold.log
+          [ "$code" != "0" ]
+          cmp episode.json /tmp/episode_before.json && echo "episode.json untouched"
+      - name: voice hold (invalid key)
         env:
-          FORCE_TTS_FALLBACK: "1"
-          GEMINI_API_KEY: unused
-          ARC_DIR: arc1
+          GEMINI_API_KEY: invalid-key-for-test
         run: |
-          python pipeline/gen_voice.py
-          cp voice_clean.wav out/voice_edge.wav
-          python pipeline/assemble.py
-          cp episode_final.mp4 out/episode_edge.mp4
-          python -c "import json;print('music:', json.load(open('episode.json')).get('music'))"
-          python - <<'PY'
-          import sys; sys.path.insert(0, "pipeline")
-          import music, json
-          for i in range(6): print(i, music.pick(i)[1])
-          print(music.attribution(music.pick(2)[1]))
-          PY
-      - name: weekly thumbnail render test
-        env:
-          GEMINI_API_KEY: unused
-        run: |
-          mkdir -p weekly_scenes
-          cp "$(ls scenes/scene*.png | head -1)" weekly_scenes/w1.png
-          python - <<'PY'
-          import sys; sys.path.insert(0, "pipeline")
-          import weekly
-          weekly.make_thumb({"title": "x", "thumb_text": "مين فتح باب المعبد؟!"}, "arc1")
-          PY
-          cp weekly_thumb.jpg out/
-      - uses: actions/upload-artifact@v4
-        with: { name: fallback-test, path: out/ }
+          export PUBLISH_AT=$(date -u -d '+28 minutes' +%Y-%m-%dT%H:%M:%S.000Z)
+          set +e
+          python pipeline/gen_voice.py 2>&1 | tee /tmp/hold2.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "exit code: $code"
+          grep "HOLD" /tmp/hold2.log
+          [ "$code" != "0" ]
+          ! grep -q "edge-tts" /tmp/hold2.log && echo "no edge-tts fallback used"

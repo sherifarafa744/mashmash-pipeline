@@ -18,6 +18,7 @@ import base64, json, os, pathlib, subprocess, sys, time, urllib.parse, urllib.re
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from character import image_prompt
 import music as music_lib
+import retry
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 API_KEY = os.environ["GEMINI_API_KEY"]
@@ -146,7 +147,8 @@ def main() -> None:
     digest = [{"part": e["part"], "title": e["title"],
                "scenes": [s["narration"] for s in e["scenes"]],
                "cliffhanger": e.get("cliffhanger", "")} for e in new]
-    ep = gemini_text(SYSTEM, "This week's episodes:\n" + json.dumps(digest, ensure_ascii=False))
+    ep = retry.call(lambda: gemini_text(SYSTEM, "This week's episodes:\n" + json.dumps(digest, ensure_ascii=False)),
+                    "weekly script", reserve_s=3000, cap_s=7200, spacing_s=240)
     n = len(ep["scenes"])
     (ROOT / "weekly_episode.json").write_text(json.dumps(ep, ensure_ascii=False, indent=2))
     print("long-form script:", n, "scenes -", ep["title"])
@@ -156,7 +158,8 @@ def main() -> None:
     chunk = (len(lines) + 3) // 4
     pcm = b""
     for i in range(0, len(lines), chunk):
-        pcm += tts("اقرأ كحكوتي بحماس، وقفة واضحة بين كل جملة:\n" + "\n".join(lines[i:i + chunk]))
+        pcm += retry.call(lambda: tts("اقرأ كحكوتي بحماس، وقفة واضحة بين كل جملة:\n" + "\n".join(lines[i:i + chunk])),
+                          "weekly voice", reserve_s=2400, cap_s=7200, spacing_s=240)
         time.sleep(20)
     (ROOT / "weekly_voice.pcm").write_bytes(pcm)
     subprocess.run(["ffmpeg", "-y", "-f", "s16le", "-ar", "24000", "-ac", "1",

@@ -3,8 +3,8 @@ on:
   schedule:
     # Twice a week (Wed + Sat). Built early, scheduled on YouTube for
     # 11:00 UTC (arc1) and 11:30 UTC (arc2) = 13:00 / 13:30 Africa/Cairo.
-    # 4 fires from 08:00 UTC, guard lets only one through per day.
-    - cron: '0,15,30,45 8 * * 3,6'
+    # 4 fires from 07:00 UTC (3-4h lead), guard lets only one through per day.
+    - cron: '0,15,30,45 7 * * 3,6'
   workflow_dispatch: {}
 permissions:
   contents: write

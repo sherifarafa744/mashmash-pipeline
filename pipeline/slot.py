@@ -5,12 +5,12 @@ equal to the next slot, so GitHub scheduler delays never move the publish time.
   python pipeline/slot.py target [ISO_NOW]   -> prints target ISO (UTC, Z)
   python pipeline/slot.py guard              -> prints "skip" if a successful run
                                                 already served this target slot
-Build time budget: BUFFER seconds between 'now' and the earliest usable slot.
+Lead: build fires start 4h before a slot (05/08/11/14 UTC); a fire targets the first slot more than BUFFER away.
 """
 import datetime as dt, json, os, sys, urllib.request
 
 SLOT_HOURS = (9, 12, 15, 18)
-BUFFER = 12 * 60
+BUFFER = 2 * 3600  # target = first slot more than 2h away; builds start ~4h ahead
 # Runs before the build-ahead switch served slots in the old way; ignore them.
 SINCE = "2026-11-25T23:11:00Z"
 

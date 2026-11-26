@@ -78,7 +78,6 @@ dialect, <= 18 words; image_prompt is an English visual description of the
 scene (no text in image). The LAST scene narration must close with a spoken cliffhanger hook in Egyptian Arabic matching this episode's ending_structure, e.g. asking what happens next and saying "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message) with NO day or time reference (never say بكرة, النهارده, or any date - episodes come out twice a day) - never let the story just stop; update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6)."""
 
 
-GEMINI_BUDGET_S = int(os.environ.get("GEMINI_BUDGET_S", "300"))  # then fall back
 CF_MODELS = ["@cf/meta/llama-3.3-70b-instruct-fp8-fast", "@cf/meta/llama-3.1-70b-instruct"]
 
 
@@ -160,37 +159,37 @@ def main() -> None:
         "contents": [{"role": "user", "parts": [{"text": user}]}],
         "generationConfig": {"response_mime_type": "application/json"},
     }).encode()
-    text = None
-    last_err = None
-    t0 = time.time()
-    for model in MODELS:
-        if time.time() - t0 > GEMINI_BUDGET_S:
-            break
-        for attempt in range(3):
-            if time.time() - t0 > GEMINI_BUDGET_S:
-                break
+    import retry
+
+    def one_pass() -> str:
+        last = None
+        for model in MODELS:
             try:
                 req = urllib.request.Request(
                     f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={API_KEY}",
                     data=body, headers={"Content-Type": "application/json"})
-                with urllib.request.urlopen(req, timeout=120) as r:
+                with urllib.request.urlopen(req, timeout=90) as r:
                     out = json.load(r)
-                text = out["candidates"][0]["content"]["parts"][0]["text"]
                 print("script model:", model)
-                break
+                return out["candidates"][0]["content"]["parts"][0]["text"]
             except Exception as e:  # 503 high demand, 429 quota, etc.
-                last_err = e
-                print(f"{model} attempt {attempt + 1} failed: {e}")
-                time.sleep(20 * (attempt + 1))
-        if text:
-            break
+                last = e
+                print(f"{model} failed: {e}", flush=True)
+                time.sleep(15)
+        raise RuntimeError(f"all Gemini script models failed: {last}")
+
     used_model = None
-    if not text:
-        print(f"Gemini failed ({last_err}); trying Cloudflare Workers AI fallback")
+    try:
+        # Retry Gemini over a long window; leave ~25 min for voice, images, assembly.
+        text = retry.call(one_pass, "script", reserve_s=1500, cap_s=10800, spacing_s=240)
+    except SystemExit:
+        if os.environ.get("ALLOW_WEAK_FALLBACK") != "1":
+            raise
+        print("ALLOW_WEAK_FALLBACK=1: trying Cloudflare Workers AI")
         text = cloudflare_script(SYSTEM, user)
         used_model = CF_MODELS[0] if text else None
-    if not text:
-        raise RuntimeError(f"all script models failed: {last_err}")
+        if not text:
+            raise
     episode = json.loads(text)
     if used_model:
         episode["script_model"] = "cloudflare:" + used_model

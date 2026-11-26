@@ -3,10 +3,11 @@ on:
   schedule:
     # Episodes are BUILT ahead and scheduled on YouTube (publishAt) for the
     # 11:00, 14:00, 17:00, 20:00 Africa/Cairo slots (= 9,12,15,18 UTC).
-    # Build fires start 60 min before each slot (08/11/14/17 UTC). GitHub
-    # delays fires up to ~40 min and a build takes ~8 min, so there is room.
+    # Build fires start 4h before each slot (05/08/11/14 UTC), so Gemini can
+    # be retried for hours; it never ships a weaker episode to hit a slot
+    # (see pipeline/retry.py). GitHub delays fires up to ~40 min.
     # 4 fires per slot; pipeline/slot.py guard lets only the first through.
-    - cron: '0,15,30,45 8,11,14,17 * * *'
+    - cron: '0,15,30,45 5,8,11,14 * * *'
   workflow_dispatch:
     inputs:
       arc:
