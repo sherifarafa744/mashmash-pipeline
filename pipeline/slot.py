@@ -36,6 +36,9 @@ def main() -> None:
         now = parse(sys.argv[2]) if len(sys.argv) > 2 else dt.datetime.now(dt.timezone.utc)
         print(iso(target(now)))
     elif cmd == "guard":
+        if os.environ.get("FORCE") == "1":
+            print("run")
+            return
         wf = os.environ.get("WORKFLOW_FILE", "daily.yml")
         me = int(os.environ["GITHUB_RUN_ID"])
         want = target(dt.datetime.now(dt.timezone.utc))

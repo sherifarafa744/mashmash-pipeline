@@ -13,6 +13,9 @@ on:
       arc:
         description: 'Which story arc to run (1 or 2)'
         default: '1'
+      force:
+        description: 'Set 1 to rebuild a slot the guard already served'
+        default: ''
 concurrency:
   group: daily-episode
   cancel-in-progress: false
@@ -63,6 +66,7 @@ jobs:
       - id: guard
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE: ${{ github.event.inputs.force }}
         run: |
           if [ "$(python3 pipeline/slot.py guard)" = "skip" ]; then
             echo "a run already succeeded for slot ${{ steps.arc.outputs.publish_at }}; skipping"
