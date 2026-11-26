@@ -90,3 +90,15 @@ def build_events(ep, wav, dur, chunk=3):
         if i + len(grp) >= len(wt):
             break
     return ev
+
+
+def beat_time(ep, wav, dur):
+    """Start time (s) of the shock-beat scene's first word, or None."""
+    b = ep.get("beat_scene")
+    if not isinstance(b, int) or b < 2 or b > len(ep["scenes"]) or ep.get("celebration"):
+        return None
+    before = 0
+    for sc in ep["scenes"][:b - 1]:
+        before += len([w for w in (STRIP.sub("", x) for x in sc["narration"].split()) if w])
+    wt = word_times(ep, wav, dur)
+    return wt[before][1] if before < len(wt) else None

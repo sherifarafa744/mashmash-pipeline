@@ -32,7 +32,7 @@ def main() -> None:
     n = len(scenes)
     # Retention: scene 1 is SHORTER with a fast punch-in zoom - the first 3
     # seconds decide whether the viewer stays, so the opening moves fast.
-    seg, seg1, fade = 6.267, 3.2, 0.5
+    seg, seg1, fade = 6.267, 3.2, 0.3
     # The video must NEVER end before the voice: extend the last scene so the
     # final line finishes, then hold a beat with a soft fade-out.
     voice = ROOT / "voice_clean.wav"
@@ -47,20 +47,31 @@ def main() -> None:
     last_extra = max(0.0, voice_dur + 1.2 - base)  # 1.2s outro hold
     for i, img in enumerate(scenes, 1):
         d = durs[i - 1] + (last_extra if i == n else 0.0)
-        frames = int(round(d * 30)) + 1
+        total_frames = int(round(d * 30)) + 1
+        # Quick cuts: a hard cut every ~2-3s inside each scene (same image, alternating
+        # zoom-in and side pan), so the picture keeps moving like a viral Short.
+        k = 1 if d < 3.4 and i != 1 else (3 if d >= 7.4 else 2)
         if i == 1:
-            # Punch-in: start already zoomed, move fast (high energy opening).
-            zoom = "z='min(1.12+0.14*on/" + str(frames - 1) + ",1.26)'"
-        else:
-            zoom = "z='min(1+0.10*on/" + str(frames - 1) + ",1.10)'"
-        # Single input frame + zoompan d=<frames>: 'on' then counts 0..frames-1
-        # once, so the zoom never resets (looping input resets 'on' per frame).
-        subprocess.run(["ffmpeg", "-y", "-v", "error",
-            "-i", str(img), "-vf",
-            "scale=3840:3840:force_original_aspect_ratio=increase,crop=2160:3840,zoompan=" + zoom + ":x='iw/2-(iw/zoom/2)':"
-            f"y='ih/2-(ih/zoom/2)':d={frames}:s=1080x1920:fps=30,format=yuv420p",
-            "-c:v", "libx264", "-preset", "fast", "-crf", "18",
-            str(ROOT / f"seg{i}.mp4")], check=True)
+            k = 2
+        cuts = [int(total_frames * j / k) for j in range(k + 1)]
+        chains, labels = [], []
+        for j in range(k):
+            fr = max(8, cuts[j + 1] - cuts[j])
+            if i == 1 and j == 0:
+                zoom = f"z='min(1.12+0.14*on/{fr - 1},1.26)':x='iw/2-(iw/zoom/2)'"       # punch-in
+            elif (j + i) % 2 == 0:
+                zoom = f"z='min(1+0.12*on/{fr - 1},1.12)':x='iw/2-(iw/zoom/2)'"          # slow zoom-in
+            else:
+                frac = f"on/{fr - 1}" if i % 2 else f"(1-on/{fr - 1})"
+                zoom = f"z=1.22:x='(iw-iw/zoom)*{frac}'"                                  # side pan
+            chains.append(f"[s{j}]zoompan={zoom}:y='ih/2-(ih/zoom/2)':d={fr}:s=1080x1920:fps=30,format=yuv420p[c{j}]")
+            labels.append(f"[c{j}]")
+        fc = (f"[0:v]scale=3840:3840:force_original_aspect_ratio=increase,crop=2160:3840,split={k}"
+              + "".join(f"[s{j}]" for j in range(k)) + ";" + ";".join(chains) + ";"
+              + "".join(labels) + f"concat=n={k}:v=1:a=0[v]")
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(img), "-filter_complex", fc, "-map", "[v]",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "18", str(ROOT / f"seg{i}.mp4")], check=True)
+    ep["motion_style"] = "v2_cuts_pan_sfx"
     # Crossfade chain. The last segment's extra length only extends the tail.
     total = base + last_extra
     fx, prev, off = [], "0:v", 0.0
@@ -95,11 +106,31 @@ def main() -> None:
         music, ep["music"] = music_lib.pick(int(ep.get("part", 0)) + (3 if os.environ.get("ARC_DIR") == "arc2" else 0))
         if music is not None and music.exists():
             cmd += ["-stream_loop", "-1", "-i", str(music)]
+            # Short synthesized impact right at the shock beat (if the script marked one).
+            beat = None
+            try:
+                import captions, sfx
+                beat = captions.beat_time(ep, voice, voice_dur)
+                if beat is not None:
+                    sfx.make(ROOT / "sfx_hit.wav")
+                    cmd += ["-i", str(ROOT / "sfx_hit.wav")]
+            except Exception as e:
+                print("sfx skipped:", e)
+                beat = None
+            mix_sfx = ""
+            last = "[vo2][mduck]amix=inputs=2:duration=first:normalize=0:weights=1 1[mx]"
+            if beat is not None:
+                ms = max(0, int((beat - 0.3) * 1000))
+                last += f";[{n+2}:a]adelay={ms}|{ms},volume=0.4[sx];[mx][sx]amix=inputs=2:duration=first:normalize=0:weights=1 1[mx2]"
+                mx = "[mx2]"
+                ep["sfx_at_s"] = round(beat, 2)
+            else:
+                mx = "[mx]"
             # Music ducks under the voice (sidechain), lower base level than the
             # old constant 0.05 mix; music comes back up in the pauses.
             cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1][vo2];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume=0.045[mus];"
                     f"[mus][vo1]sidechaincompress=threshold=0.02:ratio=10:attack=15:release=400:makeup=1[mduck];"
-                    f"[vo2][mduck]amix=inputs=2:duration=first:normalize=0:weights=1 1,apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",
+                    f"{last};{mx}apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",
                     "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}"]
         else:
             cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",
