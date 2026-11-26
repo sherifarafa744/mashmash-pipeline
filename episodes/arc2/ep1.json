@@ -1,0 +1,76 @@
+{
+  "title": "مصباح بسبوسة السحري.. مين هيطلع منه؟! 🧞",
+  "hook_text": "مصباح سحري بيطلع منه دخان أزرق!",
+  "hook_style": "surprising_fact",
+  "scenes": [
+    {
+      "narration": "دخان أزرق مرعب بيطلع فجأة من المصباح القديم اللي بسبوسة لقته في العلية!",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, showing a shocked expression in a dusty attic, while thick blue smoke erupts from an old brass oil lamp on a wooden box, vibrant colors, cinematic lighting, 8k, vertical 9:16"
+    },
+    {
+      "narration": "بسبوسة رებطت سكارفها الأزرق كويس واستعدت لأي مفاجأة مرعبة طالعة من جوه المصباح.",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, bravely adjusting her blue scarf in a dusty attic filled with old furniture and cobwebs, staring nervously at the smoking brass lamp, vibrant colors, 8k, vertical 9:16"
+    },
+    {
+      "narration": "فجأة الدخان اتجمع وبقى قدامها قط ضخم بعين واحدة وجلابية بلدي واسعة!",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, stepping back in fear as the blue smoke forms into a large magical cat spirit with one eye wearing a traditional Egyptian galabiya, dusty attic background, vibrant colors, 8k, vertical 9:16"
+    },
+    {
+      "narration": "القط الغريب بص لبسبوسة بغرور وقال بصوت عميق يهز المكان: أخيرًا حد صحاني!",
+      "image_prompt": "A large magical one-eyed cat spirit in a traditional Egyptian galabiya crossing his arms proudly, looking down at a cute female cartoon cat with a blue scarf named Basbusa who looks amazed, dusty attic, vibrant colors, 8k, vertical 9:16"
+    },
+    {
+      "narration": "بسبوسة بلعت ريقها وسألته بصوت مرتعش: إنت مين وعايز مني إيه بالظبط؟",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, holding her paws together nervously and talking to the large magical one-eyed cat spirit in the dusty attic, vibrant colors, 8k, vertical 9:16"
+    },
+    {
+      "narration": "القط ضحك ضحكة شريرة وقالها: لكي تمنيات تلاتة، بس ثمنهم أغلى بكتير ما تتخيلي!",
+      "image_prompt": "The large magical one-eyed cat spirit laughing mischievously with glowing eyes, while a cute female cartoon cat with a blue scarf named Basbusa looks suspicious and worried, dusty attic, vibrant colors, 8k, vertical 9:16"
+    },
+    {
+      "narration": "يا ترى بسبوسة توافق على العرض الخطير ده ولا ترفضه؟ اكتبوا لي في الكومنتات.. هل تطلب أمنية ولا تقفل المصباح؟ انتظروا الجزء التاني!",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, looking directly at the viewer with a questioning expression next to the glowing magical brass lamp in the attic, vibrant colors, 8k, vertical 9:16"
+    }
+  ],
+  "vote": {
+    "question": "تعمل إيه بسبوسة مع العفريت؟",
+    "option_a": "تطلب أمنية فوراً",
+    "option_b": "تقفل المصباح وتهرب"
+  },
+  "cliffhanger": "القط المعجزة بيعرض عليها تلات تمنيات بثمن غامض ومخيف!",
+  "story_type": "superpower",
+  "state": {
+    "location": "علية البيت القديم",
+    "goal": "معرفة سر المصباح السحري",
+    "danger": "ظهور قط سحري بغرض غامض",
+    "story": "مصباح بسبوسة السحري",
+    "setting": "old Cairo attic",
+    "conflict_type": "mystery",
+    "ending_structure": "choice_forced",
+    "companion": {
+      "name": "القط زيكو",
+      "role": "rival",
+      "description": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya"
+    },
+    "used": {
+      "settings": [
+        "old Cairo attic"
+      ],
+      "conflicts": [
+        "mystery"
+      ],
+      "endings": [
+        "choice_forced"
+      ],
+      "types": [
+        "superpower"
+      ],
+      "hook_styles": [
+        "surprising_fact"
+      ]
+    }
+  },
+  "part": 1,
+  "music": "Scheming Weasel (faster)",
+  "duration_s": 49.1
+}

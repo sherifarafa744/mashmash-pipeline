@@ -1,0 +1,48 @@
+{
+  "episode": 1,
+  "next": "القط المعجزة بيعرض عليها تلات تمنيات بثمن غامض ومخيف!",
+  "location": "علية البيت القديم",
+  "goal": "معرفة سر المصباح السحري",
+  "danger": "ظهور قط سحري بغرض غامض",
+  "story": "مصباح بسبوسة السحري",
+  "setting": "old Cairo attic",
+  "conflict_type": "mystery",
+  "ending_structure": "choice_forced",
+  "companion": {
+    "name": "القط زيكو",
+    "role": "rival",
+    "description": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya"
+  },
+  "used": {
+    "settings": [
+      "old Cairo attic"
+    ],
+    "conflicts": [
+      "mystery"
+    ],
+    "endings": [
+      "choice_forced"
+    ],
+    "types": [
+      "superpower"
+    ],
+    "hook_styles": [
+      "surprising_fact"
+    ]
+  },
+  "vote": {
+    "question": "تعمل إيه بسبوسة مع العفريت؟",
+    "option_a": "تطلب أمنية فوراً",
+    "option_b": "تقفل المصباح وتهرب"
+  },
+  "last_duration_s": 49.1,
+  "last_story_type": "superpower",
+  "last_hook_style": "surprising_fact",
+  "playlist_id": "PLM9buLI-Epxo",
+  "last_video_id": "F8PpK5hzYmM",
+  "pending_comment": {
+    "video_id": "F8PpK5hzYmM",
+    "text": "تعمل إيه بسبوسة مع العفريت؟ ✍️ اكتبوا اختياركم في الكومنتات: تطلب أمنية فوراً ولا تقفل المصباح وتهرب",
+    "publish_at": "2026-11-26T12:00:00.000Z"
+  }
+}

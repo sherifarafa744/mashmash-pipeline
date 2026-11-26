@@ -1,78 +1,76 @@
 {
-  "title": "بسبوسة جوه المعبد.. الفخ هيقفل عليها؟! 😱",
-  "hook_text": "الفخ بيقفل على بسبوسة جوه المعبد!",
+  "title": "مصباح بسبوسة السحري.. مين هيطلع منه؟! 🧞",
+  "hook_text": "مصباح سحري بيطلع منه دخان أزرق!",
   "hook_style": "surprising_fact",
   "scenes": [
     {
-      "narration": "بسبوسة رفضت عرض بندق ودخلت المعبد لوحدها ولقيت الباب بيتقفل!",
-      "image_prompt": "Basbusa the cute female cartoon cat wearing a blue scarf trapped inside an ancient Egyptian temple with a heavy stone door closing, dramatic lighting"
+      "narration": "دخان أزرق مرعب بيطلع فجأة من المصباح القديم اللي بسبوسة لقته في العلية!",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, showing a shocked expression in a dusty attic, while thick blue smoke erupts from an old brass oil lamp on a wooden box, vibrant colors, cinematic lighting, 8k, vertical 9:16"
     },
     {
-      "narration": "الجدران بتتحرك والسهام السحرية بتطير في كل حتة حواليها.",
-      "image_prompt": "Basbusa wearing a blue scarf dodging magical flying arrows inside a dark pharaonic tomb with hieroglyphs on the walls"
+      "narration": "بسبوسة رებطت سكارفها الأزرق كويس واستعدت لأي مفاجأة مرعبة طالعة من جوه المصباح.",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, bravely adjusting her blue scarf in a dusty attic filled with old furniture and cobwebs, staring nervously at the smoking brass lamp, vibrant colors, 8k, vertical 9:16"
     },
     {
-      "narration": "وفجأة ظهر بندق بيلعب بالجرس الفضي وعرض عليها يفتح الباب مقابل الخريطة.",
-      "image_prompt": "Basbusa wearing a blue scarf looking at a sly brown street cat with a black eye patch and a silver bell on his collar standing outside a barred window"
+      "narration": "فجأة الدخان اتجمع وبقى قدامها قط ضخم بعين واحدة وجلابية بلدي واسعة!",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, stepping back in fear as the blue smoke forms into a large magical cat spirit with one eye wearing a traditional Egyptian galabiya, dusty attic background, vibrant colors, 8k, vertical 9:16"
     },
     {
-      "narration": "بسبوسة قدامها اختيار واحد مرعب يا تضحي بالخريطة يا تفضل محبوسة للأبد.",
-      "image_prompt": "Basbusa wearing a blue scarf looking stressed holding an old map inside a crumbling temple room with a pit of fire"
+      "narration": "القط الغريب بص لبسبوسة بغرور وقال بصوت عميق يهز المكان: أخيرًا حد صحاني!",
+      "image_prompt": "A large magical one-eyed cat spirit in a traditional Egyptian galabiya crossing his arms proudly, looking down at a cute female cartoon cat with a blue scarf named Basbusa who looks amazed, dusty attic, vibrant colors, 8k, vertical 9:16"
     },
     {
-      "narration": "تفتكروا بسبوسة هتعمل إيه مع بندق؟ اكتبوا في التعليقات: (أ) تسلمه الخريطة ولا (ب) تهرب بطريقتها؟ انتظروا الجزء الخامس!",
-      "image_prompt": "Basbusa wearing a blue scarf looking determined with a glowing golden key in the distance behind a mysterious barrier"
+      "narration": "بسبوسة بلعت ريقها وسألته بصوت مرتعش: إنت مين وعايز مني إيه بالظبط؟",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, holding her paws together nervously and talking to the large magical one-eyed cat spirit in the dusty attic, vibrant colors, 8k, vertical 9:16"
+    },
+    {
+      "narration": "القط ضحك ضحكة شريرة وقالها: لكي تمنيات تلاتة، بس ثمنهم أغلى بكتير ما تتخيلي!",
+      "image_prompt": "The large magical one-eyed cat spirit laughing mischievously with glowing eyes, while a cute female cartoon cat with a blue scarf named Basbusa looks suspicious and worried, dusty attic, vibrant colors, 8k, vertical 9:16"
+    },
+    {
+      "narration": "يا ترى بسبوسة توافق على العرض الخطير ده ولا ترفضه؟ اكتبوا لي في الكومنتات.. هل تطلب أمنية ولا تقفل المصباح؟ انتظروا الجزء التاني!",
+      "image_prompt": "A cute female cartoon cat with a blue scarf named Basbusa, looking directly at the viewer with a questioning expression next to the glowing magical brass lamp in the attic, vibrant colors, 8k, vertical 9:16"
     }
   ],
   "vote": {
-    "question": "تفتكروا بسبوسة هتعمل إيه مع بندق؟",
-    "option_a": "تسلمه الخريطة",
-    "option_b": "تهرب بطريقتها"
+    "question": "تعمل إيه بسبوسة مع العفريت؟",
+    "option_a": "تطلب أمنية فوراً",
+    "option_b": "تقفل المصباح وتهرب"
   },
-  "cliffhanger": "بسبوسة محتارة بين تسليم الخريطة أو الهروب بمفردها قبل فوات الأوان",
-  "story_type": "rival-conflict",
+  "cliffhanger": "القط المعجزة بيعرض عليها تلات تمنيات بثمن غامض ومخيف!",
+  "story_type": "superpower",
   "state": {
-    "location": "معبد فرعوني قديم على شط النيل",
-    "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
-    "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
-    "story": "كنز جزيرة التونة الذهبية",
-    "setting": "معبد فرعوني قديم",
-    "conflict_type": "secret",
-    "ending_structure": "question cliffhanger",
+    "location": "علية البيت القديم",
+    "goal": "معرفة سر المصباح السحري",
+    "danger": "ظهور قط سحري بغرض غامض",
+    "story": "مصباح بسبوسة السحري",
+    "setting": "old Cairo attic",
+    "conflict_type": "mystery",
+    "ending_structure": "choice_forced",
     "companion": {
-      "name": "بندق",
+      "name": "القط زيكو",
       "role": "rival",
-      "description": "a sly brown street cat with a black eye patch and a silver bell on his collar"
+      "description": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya"
     },
     "used": {
       "settings": [
-        "سوق السمك القديم",
-        "النيل",
-        "معبد فرعوني قديم",
-        "سطح بيت قديم"
+        "old Cairo attic"
       ],
       "conflicts": [
-        "chase",
-        "bargain",
-        "secret"
+        "mystery"
       ],
       "endings": [
-        "danger revealed",
-        "choice forced",
-        "question cliffhanger"
+        "choice_forced"
       ],
       "types": [
-        "adventure",
-        "action-chase",
-        "mystery",
-        "rival-conflict"
+        "superpower"
       ],
       "hook_styles": [
-        "danger_warning",
         "surprising_fact"
       ]
     }
   },
-  "part": 4,
-  "duration_s": 38.1
+  "part": 1,
+  "music": "Scheming Weasel (faster)",
+  "duration_s": 49.1
 }
