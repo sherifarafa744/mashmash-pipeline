@@ -1,13 +1,13 @@
 {
-  "episode": 1,
-  "next": "القط المعجزة بيعرض عليها تلات تمنيات بثمن غامض ومخيف!",
-  "location": "علية البيت القديم",
-  "goal": "معرفة سر المصباح السحري",
-  "danger": "ظهور قط سحري بغرض غامض",
+  "episode": 2,
+  "next": "انكشاف سر قديم من قاع المصباح المكسور بيهدد حارة بسبوسة كلها",
+  "location": "حارة قديمة بالقاهرة",
+  "goal": "النجاة من فخ زيكو وكشف سر المصباح",
+  "danger": "الدوامة السحرية للمصباح المكسور",
   "story": "مصباح بسبوسة السحري",
-  "setting": "old Cairo attic",
-  "conflict_type": "mystery",
-  "ending_structure": "choice_forced",
+  "setting": "old Cairo alley",
+  "conflict_type": "bargain",
+  "ending_structure": "twist_reveal",
   "companion": {
     "name": "القط زيكو",
     "role": "rival",
@@ -15,29 +15,29 @@
   },
   "used": {
     "settings": [
-      "old Cairo attic"
+      "old Cairo attic",
+      "old Cairo alley"
     ],
     "conflicts": [
-      "mystery"
+      "mystery",
+      "bargain"
     ],
     "endings": [
-      "choice_forced"
+      "choice_forced",
+      "twist_reveal"
     ],
     "types": [
-      "superpower"
+      "superpower",
+      "rival-conflict"
     ],
     "hook_styles": [
-      "surprising_fact"
+      "surprising_fact",
+      "danger_warning"
     ]
   },
-  "vote": {
-    "question": "تعمل إيه بسبوسة مع العفريت؟",
-    "option_a": "تطلب أمنية فوراً",
-    "option_b": "تقفل المصباح وتهرب"
-  },
-  "last_duration_s": 49.1,
-  "last_story_type": "superpower",
-  "last_hook_style": "surprising_fact",
   "playlist_id": "PLM9buLI-Epxo",
-  "last_video_id": "F8PpK5hzYmM"
+  "last_duration_s": 31.6,
+  "last_story_type": "rival-conflict",
+  "last_hook_style": "danger_warning",
+  "last_video_id": "M-sD5cW0zqI"
 }

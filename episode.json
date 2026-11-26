@@ -1,49 +1,44 @@
 {
-  "title": "بسبوسة والقط السحري.. تقبل التمنيات ولا تهرب؟! 🧞",
-  "hook_text": "القط السحري بيعرض تمنيات مرعبة!",
+  "title": "بسبوسة ضد القط زيكو.. سر المصباح المرعب! 🧞😱",
+  "hook_text": "الشرار بيطلع من عين زيكو",
   "hook_style": "danger_warning",
-  "opening_line": "القط السحري بيعرض تمنيات مرعبة دلوقتي",
+  "opening_line": "الشرار بيطلع من عين زيكو السحرية",
   "scenes": [
     {
-      "narration": "القط السحري بيعرض تمنيات مرعبة دلوقتي!",
-      "image_prompt": "Basbusa the cute female cartoon cat with a blue scarf standing frightened in an old Cairo attic, facing A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya who is pointing a glowing paw, cinematic lighting, vertical 9:16"
+      "narration": "الشرار بيطلع من عين زيكو السحرية!",
+      "image_prompt": "Action scene in a narrow dark old Cairo alley. Basbusa, a cute female cartoon cat wearing a blue scarf, steps back with wide terrified eyes. In front of her, A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya shoots glowing magical sparks from his single eye mid-animation."
     },
     {
-      "narration": "زيكو حذر بسبوسة وقاله تمنياته كلها شر ولها ثمن غالي.",
-      "image_prompt": "Basbusa looking confused in the dusty old Cairo attic while A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya floats nearby with glowing red eyes, vertical 9:16"
+      "narration": "القط زيكو اشترط على بسبوسة تفرط في حارتها مقابل الأمان.",
+      "image_prompt": "Close-up in the night alley. A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya smirks maliciously, pointing his glowing paw at Basbusa, a female cartoon cat with a blue scarf, offering a dangerous bargain."
     },
     {
-      "narration": "بسبوسة طماعة وفكرت تطلب سمك يملى العلية كلها من غير مجهود.",
-      "image_prompt": "Basbusa daydreaming with sparkling eyes in the old Cairo attic with flying fish illusions around A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya, vertical 9:16"
+      "narration": "بسبوسة رفضت بشجاعة ورمت عليه المصباح عشان تفرك السحر.",
+      "image_prompt": "Dynamic scene where Basbusa, a female cartoon cat with a blue scarf, courageously hurls a glowing brass magical lamp right at A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya."
     },
     {
-      "narration": "وفجأة المصباح بدا يهتز والنور اتحول للون أحمر مرعب ومخيف جداً.",
-      "image_prompt": "The magic lamp glowing violently red in the old Cairo attic, casting scary shadows on Basbusa and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya, vertical 9:16"
+      "narration": "زيكو اتعصب وفتح طاقة المصباح السودا تسحب كل حاجة.",
+      "image_prompt": "Dramatic view of the dark ancient Egyptian alley. The magic lamp bursts open on the cobblestones, unleashing a swirling dark magical vortex that pulls dust, crates, and shadows inward while A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya laughs furiously."
     },
     {
-      "narration": "القط السحري ضحك بصوت عالي وقال الثمن هيكون روحك يا بسبوسة!",
-      "image_prompt": "Basbusa gasping in extreme terror as A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya laughs evilly in the old Cairo attic, vertical 9:16"
+      "narration": "المصباح اتكسر وظهر جوا القاع سر خطير بيغير كل اللعبة.",
+      "image_prompt": "The magic lamp snaps open in half, emitting a blinding golden light from its deep core, revealing a mysterious ancient glowing cat seal glowing brilliantly on the ground."
     },
     {
-      "narration": "تطلب الأمنية ولا ترمي المصباح؟ اكتبوا في التعليقات! انتظروا الجزء التالت! القط السحري مرعب!",
-      "image_prompt": "Basbusa looking panicked between the glowing lamp and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya in the old Cairo attic, vertical 9:16"
+      "narration": "السر القديم اتكشف قدام عيون بسبوسة المصدومة. انتظروا الجزء التالت! ومين اللي يقدر ينقذها من الشرار ده؟",
+      "image_prompt": "Basbusa, the female cartoon cat wearing a blue scarf, stares in utter shock at the glowing revelation inside the broken lamp as magical sparks surround the dark alley. Dramatic atmospheric lighting."
     }
   ],
-  "vote": {
-    "question": "تعمل إيه بسبوسة مع القط?",
-    "option_a": "تطلب الأمنية",
-    "option_b": "ترمي المصباح"
-  },
-  "cliffhanger": "القط السحري بيطلب روح بسبوسة ثمن للتمنيات!",
+  "cliffhanger": "انكشاف سر قديم من قاع المصباح المكسور بيهدد حارة بسبوسة كلها",
   "story_type": "rival-conflict",
   "state": {
-    "location": "علية البيت القديم",
-    "goal": "معرفة سر المصباح السحري",
-    "danger": "القط السحري بيطلب روح بسبوسة",
+    "location": "حارة قديمة بالقاهرة",
+    "goal": "النجاة من فخ زيكو وكشف سر المصباح",
+    "danger": "الدوامة السحرية للمصباح المكسور",
     "story": "مصباح بسبوسة السحري",
-    "setting": "old Cairo attic",
+    "setting": "old Cairo alley",
     "conflict_type": "bargain",
-    "ending_structure": "choice_forced",
+    "ending_structure": "twist_reveal",
     "companion": {
       "name": "القط زيكو",
       "role": "rival",
@@ -51,14 +46,16 @@
     },
     "used": {
       "settings": [
-        "old Cairo attic"
+        "old Cairo attic",
+        "old Cairo alley"
       ],
       "conflicts": [
         "mystery",
         "bargain"
       ],
       "endings": [
-        "choice_forced"
+        "choice_forced",
+        "twist_reveal"
       ],
       "types": [
         "superpower",
@@ -73,5 +70,5 @@
   "format_issues": [],
   "part": 2,
   "music": "Monkeys Spinning Monkeys",
-  "duration_s": 37.5
+  "duration_s": 31.6
 }
