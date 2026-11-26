@@ -77,7 +77,11 @@ def main() -> None:
         music, ep["music"] = music_lib.pick(int(ep.get("part", 0)) + (3 if os.environ.get("ARC_DIR") == "arc2" else 0))
         if music is not None and music.exists():
             cmd += ["-stream_loop", "-1", "-i", str(music)]
-            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a][{n+1}:a]amix=inputs=2:duration=first:normalize=0:weights=1 0.05,apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",
+            # Music ducks under the voice (sidechain), lower base level than the
+            # old constant 0.05 mix; music comes back up in the pauses.
+            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1][vo2];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume=0.045[mus];"
+                    f"[mus][vo1]sidechaincompress=threshold=0.02:ratio=10:attack=15:release=400:makeup=1[mduck];"
+                    f"[vo2][mduck]amix=inputs=2:duration=first:normalize=0:weights=1 1,apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",
                     "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}"]
         else:
             cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",

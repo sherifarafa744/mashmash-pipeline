@@ -34,10 +34,20 @@ def synthesize(text: str) -> bytes:
 
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
-    full = "\n".join(s["narration"] for s in ep["scenes"])
+    beat = ep.get("beat_scene")  # 1-based scene holding the shock/twist beat
+    lines = []
+    for i, sc in enumerate(ep["scenes"], 1):
+        # A short dramatic beat right before the shock line (TTS honors "..." and line breaks).
+        lines.append(("...\n" if (not ep.get("celebration") and beat == i and i > 1) else "") + sc["narration"])
+    full = "\n".join(lines)
     prefix = ("اقرأ بصوت فرحان ومحتفل، طاقة عيد من أول كلمة، وقفة قصيرة بين كل جملة:\n"
               if ep.get("celebration") else
-              "ابدأ فوراً بأول جملة بدون أي مقدمة أو تردد، اقرأ كحكوتي بحماس عالي من أول كلمة، وقفة قصيرة بين كل جملة:\n")
+              "أنت حكواتي أطفال مصري بتحكي بحماس شديد وأداء تمثيلي: ابدأ فوراً بأول جملة بدون مقدمة وبنبرة صدمة وإثارة، "
+              "ارفع الطاقة في لحظات الخطر والمفاجأة، خفّض صوتك شوية وقت التشويق، واعمل وقفة قصيرة جداً (نص ثانية) قبل جملة الصدمة، "
+              "وخلّي الإيقاع سريع ومتنوع مش رتيب، وخلّي آخر جملة بنبرة سؤال مشوّق:\n")
+    ep["voice_style"] = "v2_expressive_ducked"
+    ep["voice_name"] = VOICE
+    (ROOT / "episode.json").write_text(json.dumps(ep, ensure_ascii=False, indent=2))
     sys.path.insert(0, str(pathlib.Path(__file__).parent))
     import retry
     pcm = None
@@ -66,7 +76,7 @@ def main() -> None:
     # (viewers decide in the first 3 seconds), then collapse long inner pauses.
     subprocess.run(["ffmpeg", "-y", "-i", "voice_full.wav", "-af",
                     "silenceremove=start_periods=1:start_duration=0.02:start_threshold=-45dB,"
-                    "silenceremove=stop_periods=-1:stop_duration=0.45:stop_threshold=-38dB",
+                    "silenceremove=stop_periods=-1:stop_duration=0.45:stop_threshold=-38dB:stop_silence=0.22",
                     "voice_clean.wav"], cwd=ROOT, check=True)
     print("voice ready:", ROOT / "voice_clean.wav")
 
