@@ -1,85 +1,77 @@
 {
-  "title": "بسبوسة وبندق في المعبد.. الخريطة هتضيع؟! 🗺️😱",
-  "hook_text": "الخريطة اتسرقت في ثانية!",
-  "hook_style": "surprise",
-  "opening_line": "الخريطة اتسرقت في ثانية",
+  "title": "بسبوسة والقط السحري.. تقبل التمنيات ولا تهرب؟! 🧞",
+  "hook_text": "القط السحري بيعرض تمنيات مرعبة!",
+  "hook_style": "danger_warning",
+  "opening_line": "القط السحري بيعرض تمنيات مرعبة دلوقتي",
   "scenes": [
     {
-      "narration": "الخريطة اتسرقت في ثانية!",
-      "image_prompt": "Basbusa the female cartoon cat with a blue scarf looking shocked as a sly brown street cat with a black eye patch and a silver bell on his collar named بندق grabs the map inside a dusty ancient Egyptian temple by the Nile at sunset"
+      "narration": "القط السحري بيعرض تمنيات مرعبة دلوقتي!",
+      "image_prompt": "Basbusa the cute female cartoon cat with a blue scarf standing frightened in an old Cairo attic, facing A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya who is pointing a glowing paw, cinematic lighting, vertical 9:16"
     },
     {
-      "narration": "بسبوسة بصت لقت بندق بيجري بيها ناحية باب المعبد الكبير!",
-      "image_prompt": "Basbusa the female cartoon cat with a blue scarf chasing a sly brown street cat with a black eye patch and a silver bell on his collar through giant stone pillars in an ancient Egyptian temple"
+      "narration": "زيكو حذر بسبوسة وقاله تمنياته كلها شر ولها ثمن غالي.",
+      "image_prompt": "Basbusa looking confused in the dusty old Cairo attic while A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya floats nearby with glowing red eyes, vertical 9:16"
     },
     {
-      "narration": "باب الفخ القديم بدأ يقفل ويقفل لحد ما منع أي حد يهرب.",
-      "image_prompt": "Huge heavy stone temple doors closing slowly with glowing hieroglyphs while Basbusa the female cartoon cat with a blue scarf stops right in front of them"
+      "narration": "بسبوسة طماعة وفكرت تطلب سمك يملى العلية كلها من غير مجهود.",
+      "image_prompt": "Basbusa daydreaming with sparkling eyes in the old Cairo attic with flying fish illusions around A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya, vertical 9:16"
     },
     {
-      "narration": "فجأة ظهرت حجرة سرية منورة بذهب قديم بيلمع في الظلام.",
-      "image_prompt": "A hidden chamber inside an ancient Egyptian temple glowing with gold treasure chests and magical blue light, with Basbusa the female cartoon cat with a blue scarf watching in amazement"
+      "narration": "وفجأة المصباح بدا يهتز والنور اتحول للون أحمر مرعب ومخيف جداً.",
+      "image_prompt": "The magic lamp glowing violently red in the old Cairo attic, casting scary shadows on Basbusa and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya, vertical 9:16"
     },
     {
-      "narration": "تفتكروا بسبوسة هتقدر تسترد الخريطة من بندق ولا تكتشف الكنز لوحدها؟ اكتبوا في التعليقات: أ) تحارب بندق، ب) تبحث عن المفتاح. انتظروا الجزء السادس! الخريطة اتسرقت في ثانية!",
-      "image_prompt": "Basbusa the female cartoon cat with a blue scarf standing bravely beside a glowing gold chest inside an ancient Egyptian temple with the sly brown street cat with a black eye patch and a silver bell on his collar nearby"
+      "narration": "القط السحري ضحك بصوت عالي وقال الثمن هيكون روحك يا بسبوسة!",
+      "image_prompt": "Basbusa gasping in extreme terror as A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya laughs evilly in the old Cairo attic, vertical 9:16"
+    },
+    {
+      "narration": "تطلب الأمنية ولا ترمي المصباح؟ اكتبوا في التعليقات! انتظروا الجزء التالت! القط السحري مرعب!",
+      "image_prompt": "Basbusa looking panicked between the glowing lamp and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya in the old Cairo attic, vertical 9:16"
     }
   ],
   "vote": {
-    "question": "تفتكروا بسبوسة هتعمل إيه جوه الغرفة السرية؟",
-    "option_a": "تحارب بندق",
-    "option_b": "تبحث عن المفتاح"
+    "question": "تعمل إيه بسبوسة مع القط?",
+    "option_a": "تطلب الأمنية",
+    "option_b": "ترمي المصباح"
   },
-  "cliffhanger": "بسبوسة محتارة بين استعادة الخريطة من بندق أو فتح صندوق الكنز السري",
+  "cliffhanger": "القط السحري بيطلب روح بسبوسة ثمن للتمنيات!",
   "story_type": "rival-conflict",
   "state": {
-    "location": "معبد فرعوني قديم على شط النيل",
-    "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
-    "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
-    "story": "كنز جزيرة التونة الذهبية",
-    "setting": "معبد فرعوني قديم",
-    "conflict_type": "secret",
-    "ending_structure": "question cliffhanger",
+    "location": "علية البيت القديم",
+    "goal": "معرفة سر المصباح السحري",
+    "danger": "القط السحري بيطلب روح بسبوسة",
+    "story": "مصباح بسبوسة السحري",
+    "setting": "old Cairo attic",
+    "conflict_type": "bargain",
+    "ending_structure": "choice_forced",
     "companion": {
-      "name": "بندق",
+      "name": "القط زيكو",
       "role": "rival",
-      "description": "a sly brown street cat with a black eye patch and a silver bell on his collar"
+      "description": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya"
     },
     "used": {
       "settings": [
-        "سوق السمك القديم",
-        "النيل",
-        "معبد فرعوني قديم",
-        "سطح بيت قديم"
+        "old Cairo attic"
       ],
       "conflicts": [
-        "chase",
-        "bargain",
-        "secret",
-        "rival"
+        "mystery",
+        "bargain"
       ],
       "endings": [
-        "danger revealed",
-        "choice forced",
-        "question cliffhanger"
+        "choice_forced"
       ],
       "types": [
-        "adventure",
-        "action-chase",
-        "mystery",
+        "superpower",
         "rival-conflict"
       ],
       "hook_styles": [
-        "danger_warning",
         "surprising_fact",
-        "surprise"
+        "danger_warning"
       ]
     }
   },
-  "format_issues": [
-    "narration is 64 words, need 70-92"
-  ],
-  "part": 5,
+  "format_issues": [],
+  "part": 2,
   "music": "Monkeys Spinning Monkeys",
-  "duration_s": 32.0
+  "duration_s": 37.5
 }
