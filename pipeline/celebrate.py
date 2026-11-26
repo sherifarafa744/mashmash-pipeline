@@ -20,9 +20,9 @@ MODELS = [os.environ["GEMINI_SCRIPT_MODEL"]] if os.environ.get("GEMINI_SCRIPT_MO
     "gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite"]
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-SYSTEM = """You write Egyptian-Arabic narration for a very short vertical YouTube
+SYSTEM = """You write simple, widely understood Arabic narration for a very short vertical YouTube
 celebration Short about Basbusa (بسبوسة), a female cartoon cat with a blue
-scarf (feminine Egyptian Arabic grammar; never any other name). This is NOT a
+scarf (feminine Arabic grammar; never any other name). This is NOT a
 story episode: Basbusa celebrates a channel milestone and thanks the viewers
 with joy and warmth.
 Return STRICT JSON only:
@@ -30,12 +30,12 @@ Return STRICT JSON only:
  "scenes": [{"narration": "...", "image_prompt": "..."}, ...],
  "cliffhanger": "", "story_type": "celebration"}
 Rules: EXACTLY 3 scenes; the whole Short is 20-30 seconds. Each narration line
-is one spoken sentence, Egyptian dialect, <= 15 words. Scene 1 opens
+is one spoken sentence, simple widely understood Arabic (audience in Iraq, Egypt, Syria, Algeria: no heavy Egyptian slang), <= 15 words. Scene 1 opens
 mid-celebration with the hook in the first second - no slow intro. Basbusa
 dances, celebrates, thanks the viewers for their love and asks them to keep
 watching and subscribe. NEVER state or hint an exact subscriber or view number.
 No cliffhanger, no "انتظروا الجزء", no story plot. Title: joyful celebration
-with 1-2 emojis, under 70 characters. hook_text: 3-6 Egyptian Arabic words for
+with 1-2 emojis, under 70 characters. hook_text: 3-6 simple Arabic words for
 the first 2.6 seconds, no emojis, reads in one glance. image_prompt: English
 visual description (no text in image): Basbusa dancing, confetti, balloons,
 party lights, fireworks over Cairo at night."""
@@ -73,6 +73,7 @@ def main() -> None:
         raise RuntimeError(f"all script models failed: {last_err}")
     episode = json.loads(text)
     episode["celebration"] = True
+    episode["language_style"] = "v2_simple_pan_arab"
     episode["scenes"] = episode["scenes"][:3]  # hard cap: 20-30s, never longer
     (ROOT / "episode.json").write_text(json.dumps(episode, ensure_ascii=False, indent=2))
     print("celebration:", episode["title"], "-", len(episode["scenes"]), "scenes")

@@ -15,8 +15,8 @@ try:
 except Exception:
     VOTE_ON = True
 
-SYSTEM = """You write Egyptian-Arabic narration for a vertical YouTube Shorts
-series about Basbusa (بسبوسة), a female cartoon cat with a blue scarf, in serialized cliffhanger parts. The character is ALWAYS called بسبوسة in the narration and titles (feminine Egyptian Arabic grammar). Never call her مشمش or any other name.
+SYSTEM = """You write simple, widely understood Arabic narration for a vertical YouTube Shorts
+series about Basbusa (بسبوسة), a female cartoon cat with a blue scarf, in serialized cliffhanger parts. The character is ALWAYS called بسبوسة in the narration and titles (feminine Arabic grammar). Never call her مشمش or any other name.
 Return STRICT JSON only. The title must follow the proven Arabic AI-story format: a conflict or question with 1-2 emojis that makes skipping feel like losing something, e.g. "بسبوسة ضد القط الأعور.. مين هياخد الكنز؟! 😱" - under 70 characters, no clickbait the episode does not deliver.
 {"title": "...", "hook_text": "...", "hook_style": "...", "scenes": [{"narration": "...", "image_prompt": "..."}, ...],
  "vote": {"question": "...", "option_a": "...", "option_b": "..."},
@@ -27,7 +27,7 @@ Return STRICT JSON only. The title must follow the proven Arabic AI-story format
 state.story: short Arabic name of the current storyline (e.g. "كنز جزيرة التونة
 الذهبية"); keep the SAME name across the whole arc, change it only when the
 arc fully ends and a new story begins.
-hook_text: 3-7 words of Egyptian Arabic on-screen text shown big for the first 2.6
+hook_text: 3-7 words of simple Arabic on-screen text shown big for the first 2.6
 seconds, stating the episode's conflict or question (e.g. "بسبوسة في ورطة كبيرة!").
 No emojis, no punctuation overload - it must read in one glance.
 hook_style: viewers decide in the first 3 seconds, so we rotate opening-hook
@@ -36,6 +36,8 @@ used.hook_styles: shocking_question (سؤال صادم), danger_warning (تحذ�
 قريب), surprising_fact (معلومة مفاجئة), challenge (تحدي أو رهان), mystery (لغز
 غامض), cry_for_help (صرخة استغاثة). Write the chosen English snake_case name in
 hook_style, and make BOTH hook_text and the first narration sentence deliver it.
+
+LANGUAGE (mandatory): the audience is spread across Iraq, Egypt, Syria and Algeria, so write SIMPLE, widely understood Arabic: plain simplified Arabic with at most a light Egyptian flavour (the character's warmth and humour stay). Prefer common words every Arab knows, e.g. neutral everyday phrasing such as "ما هذا؟", "ماذا حدث؟", "لا تهرب", "انظري", and short clear sentences. Avoid heavy Egyptian slang and regional idioms (examples to avoid: "ازاي", "ده/دي" heavy forms, "كده", "دلوقتي", "عشان", "فين", "إيه ده", "هتعمل إيه", street slang). Spoken, friendly, easy for children, no hard classical vocabulary either.
 
 VARIETY IS MANDATORY - YouTube penalizes mass-produced repetitive content, and
 the audience gets bored. Each episode MUST differ from the entries in
@@ -61,7 +63,7 @@ chosen what happens next - this episode's plot MUST follow that option
 (state.vote_result.option_a / option_b). If it is "tie" or "none", choose what
 fits the story best.
 COMPANION: every arc has exactly ONE recurring secondary character (a friend
-or a rival) recorded in state.companion: a fixed Egyptian name, role
+or a rival) recorded in state.companion: a fixed simple Arabic name, role
 ("friend"/"rival"), and a short fixed English visual description. Invent it at
 arc start and keep it IDENTICAL across the whole arc (name, role, description
 never change mid-arc; a new arc gets a new companion). The companion appears
@@ -69,7 +71,7 @@ or is mentioned in every episode and matters to the plot; when it appears in a
 scene, embed companion.description verbatim in that scene's image_prompt.
 VOTE QUESTION: near the end, after the cliffhanger and before naming the next
 part, Basbusa asks viewers a simple either-or question about what she should do
-next. vote.question is short Egyptian Arabic; vote.option_a and vote.option_b
+next. vote.question is short simple Arabic; vote.option_a and vote.option_b
 are two SHORT, clearly different choices (<= 5 words each, easy to type in a
 comment). The last scene's narration speaks the vote question and both options
 and tells viewers to answer in the comments, then closes with "انتظروا الجزء"
@@ -84,7 +86,7 @@ Rules: VIRAL SHORT FORMAT (mandatory, every episode):
 4. LOOP: after naming the next part, the LAST sentence echoes the OPENING IDEA in DIFFERENT words (same danger or image, new phrasing, e.g. opening "الثعبان نزل على بسبوسة!" -> ending "وفين الثعبان ده دلوقتي؟"). NEVER repeat the opening sentence or its key phrase verbatim.
 5. ENDING: the last scene gives the cliffhanger matching ending_structure, then the vote question, then closes with "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message), NO day or time reference (never بكرة, النهارده, or any date), then the one-line loop-back echo. Never let the story just stop.
 6. NO NEAR-DUPLICATES: the opening line, hook_text, title, and vote question must not repeat or closely paraphrase any previous episode of ANY arc (state.recent_openings lists them); change the verb, the danger and the structure.
-Egyptian dialect throughout; image_prompt is an English visual description of the scene (no text in image). Update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6). Also return "opening_line": the exact first narration sentence, and "beat_scene": the 1-based number of the scene whose first sentence is the shock/twist beat (usually 4 or 5; never 1)."""
+Simple widely understood Arabic throughout (see LANGUAGE); image_prompt is an English visual description of the scene (no text in image). Update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6). Also return "opening_line": the exact first narration sentence, and "beat_scene": the 1-based number of the scene whose first sentence is the shock/twist beat (usually 4 or 5; never 1)."""
 
 
 CF_MODELS = ["@cf/meta/llama-3.3-70b-instruct-fp8-fast", "@cf/meta/llama-3.1-70b-instruct"]
@@ -111,6 +113,9 @@ def _extract_json(txt: str):
             if depth == 0:
                 return txt[i:j + 1]
     return None
+
+
+SLANG = ["ازاي", "كده", "دلوقتي", "عشان", "فين ", "هتعمل", "إيه ده", "ايه ده", "ده ", "دي "]
 
 
 def words(t: str) -> int:
@@ -143,6 +148,9 @@ def problems(ep, recent) -> list:
             out.append("the ending repeats the opening sentence verbatim; echo it in different words")
         if not VOTE_ON and ("اكتبوا" in last or "التعليقات" in last or "الكومنتات" in last):
             out.append("voting is off: remove the vote question and any ask to comment")
+    slang = [w for w in SLANG if any(w in (x["narration"] + " ") for x in sc)]
+    if slang:
+        out.append("heavy Egyptian slang found (" + ", ".join(slang) + "): use simple widely understood Arabic instead")
     total = sum(words(x["narration"]) for x in sc)
     if not 56 <= total <= 78:
         out.append(f"narration is {total} words, need 56-78")
@@ -168,7 +176,7 @@ def cloudflare_script(system: str, user: str):
             try:
                 body = json.dumps({"messages": [
                     {"role": "system", "content": system},
-                    {"role": "user", "content": user + "\nWrite ALL Arabic in Egyptian colloquial dialect (عامية مصرية: مثل \"عملت\"، \"هتعمل إيه\"، \"فين\")، never Modern Standard (no \"ماذا\" / \"هل\"). Keep every rule above. Return ONLY the JSON object, no other text."}],
+                    {"role": "user", "content": user + "\nWrite ALL Arabic in simple widely understood Arabic (light Egyptian flavour at most; not Egyptian colloquial) (عامية مصرية: مثل \"عملت\"، \"هتعمل إيه\"، \"فين\")، never Modern Standard (no \"ماذا\" / \"هل\"). Keep every rule above. Return ONLY the JSON object, no other text."}],
                     "max_tokens": 4096, "temperature": 0.8}).encode()
                 req = urllib.request.Request(
                     f"https://api.cloudflare.com/client/v4/accounts/{acct}/ai/run/{model}",
@@ -275,6 +283,7 @@ def main() -> None:
         trim_scenes(episode)
         print("trimmed scenes to fit 28-36s")
     episode["format_issues"] = problems(episode, recent)
+    episode["language_style"] = "v2_simple_pan_arab"
     episode["opening_line"] = first_sentence(episode["scenes"][0]["narration"])
     if used_model:
         episode["script_model"] = "cloudflare:" + used_model
