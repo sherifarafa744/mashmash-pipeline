@@ -132,12 +132,20 @@ def add_to_playlist(vid: str, tok: str) -> None:
     req = urllib.request.Request("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet",
         data=body, method="POST",
         headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=60):
-            print("added to playlist:", pl)
-    except Exception as e:
-        # Never fail the episode over a playlist add; the reviewer can add it manually.
-        print("playlist add failed (non-fatal):", e)
+    import time
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(req, timeout=60):
+                print("added to playlist:", pl)
+            break
+        except Exception as e:
+            detail = e.read().decode()[:300] if hasattr(e, "read") else ""
+            print(f"playlist add attempt {attempt + 1} failed: {e} {detail}")
+            if attempt == 3:
+                print("playlist add failed (non-fatal)")
+            else:
+                time.sleep(20)
+                req = urllib.request.Request(req.full_url, data=req.data, method="POST", headers=dict(req.header_items()))
     thumb = ROOT / "thumb.jpg"
     if thumb.exists():
         req = urllib.request.Request(
