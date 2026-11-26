@@ -27,13 +27,22 @@ def status_block() -> dict:
     and let YouTube flip it public at exactly that time. Unset = public now."""
     st = {"privacyStatus": "public", "selfDeclaredMadeForKids": False}
     at = os.environ.get("PUBLISH_AT")
-    if at:
+    if at and os.environ.get("UPLOAD_MODE") != "direct":
         st = {"privacyStatus": "private", "publishAt": at, "selfDeclaredMadeForKids": False}
     return st
 
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
     video = (ROOT / "episode_final.mp4").read_bytes()
+    if os.environ.get("UPLOAD_MODE") == "direct" and os.environ.get("PUBLISH_AT"):
+        # Direct public upload at slot time: wait (video is built), then upload
+        # ~15s early so it is public right at the slot.
+        import time, datetime as dt
+        t = dt.datetime.fromisoformat(os.environ["PUBLISH_AT"].replace("Z", "+00:00")).timestamp() - 15
+        wait = t - time.time()
+        print(f"UPLOAD_MODE=direct: waiting {max(0, wait):.0f}s, then uploading PUBLIC", flush=True)
+        if wait > 0:
+            time.sleep(wait)
     if ep.get("celebration"):
         # Milestone Short: no part number, no cliffhanger, no story playlist.
         title = f"{ep['title']} | بسبوسة"
@@ -90,7 +99,7 @@ def post_comment(vid: str, tok: str, ep: dict) -> None:
     else:
         text = "تحبوا بسبوسة تعمل إيه في الجزء الجاي؟ قولولنا في الكومنتات!"
     state_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
-    if os.environ.get("PUBLISH_AT") and not ep.get("celebration") and state_path.exists():
+    if os.environ.get("PUBLISH_AT") and os.environ.get("UPLOAD_MODE") != "direct" and not ep.get("celebration") and state_path.exists():
         # YouTube refuses comments on a not-yet-public (scheduled) video (403).
         # Park it; pipeline/post_pending.py (comment.yml) posts it right after
         # the video goes public.
