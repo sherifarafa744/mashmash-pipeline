@@ -28,6 +28,18 @@ jobs:
       ARC: ${{ github.event.inputs.arc || '' }}
     steps:
       - uses: actions/checkout@v4
+      - name: post any parked vote comment whose video is public now
+        continue-on-error: true
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: |
+          python3 pipeline/post_pending.py
+          git config user.name "mashmash-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A story_state*.json
+          git diff --cached --quiet || { git commit -m "comment posted $(date -u +%F-%H%M)"; git pull --rebase --autostash; git push; }
       - id: arc
         run: |
           PUBLISH_AT=$(python3 pipeline/slot.py target)

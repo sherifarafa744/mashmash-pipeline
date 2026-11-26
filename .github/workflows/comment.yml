@@ -1,10 +1,11 @@
 name: post-pending-comment
 on:
   schedule:
-    # Just after each publish slot (09/12/15/18 UTC); repeated because GitHub
-    # delays fires. Idempotent: posts only for a public video that still has a
-    # parked comment.
-    - cron: '3,12,25,40 9,12,15,18 * * *'
+    # GitHub's scheduler is best-effort (fires arrive late or are dropped; the
+    # 09/12/15/18 UTC fires of the first version never ran). The repo is public,
+    # so minutes are free: fire every 10 min from 09:00 to 20:59 UTC. The script
+    # is idempotent: it posts only for a public video with a parked comment.
+    - cron: '3,13,23,33,43,53 9-20 * * *'
   workflow_dispatch: {}
 concurrency:
   group: post-pending-comment
