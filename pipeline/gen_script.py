@@ -78,6 +78,66 @@ dialect, <= 18 words; image_prompt is an English visual description of the
 scene (no text in image). The LAST scene narration must close with a spoken cliffhanger hook in Egyptian Arabic matching this episode's ending_structure, e.g. asking what happens next and saying "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message) with NO day or time reference (never say بكرة, النهارده, or any date - episodes come out twice a day) - never let the story just stop; update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6)."""
 
 
+GEMINI_BUDGET_S = int(os.environ.get("GEMINI_BUDGET_S", "300"))  # then fall back
+CF_MODELS = ["@cf/meta/llama-3.3-70b-instruct-fp8-fast", "@cf/meta/llama-3.1-70b-instruct"]
+
+
+def _extract_json(txt: str):
+    """First balanced JSON object in a model reply (may be fenced)."""
+    i = txt.find("{")
+    if i < 0:
+        return None
+    depth, in_str, esc = 0, False, False
+    for j in range(i, len(txt)):
+        c = txt[j]
+        if in_str:
+            esc = (c == "\\" and not esc)
+            if c == '"' and not esc:
+                in_str = False
+        elif c == '"':
+            in_str = True
+        elif c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                return txt[i:j + 1]
+    return None
+
+
+def cloudflare_script(system: str, user: str):
+    """Free Workers AI text model, used only when every Gemini model failed.
+    Returns episode JSON text or None. Validates the keys the pipeline needs."""
+    acct, tok = os.environ.get("CF_ACCOUNT_ID"), os.environ.get("CF_API_TOKEN")
+    if not (acct and tok):
+        return None
+    for model in CF_MODELS:
+        for attempt in range(2):
+            try:
+                body = json.dumps({"messages": [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user + "\nReturn ONLY the JSON object, no other text."}],
+                    "max_tokens": 4096, "temperature": 0.8}).encode()
+                req = urllib.request.Request(
+                    f"https://api.cloudflare.com/client/v4/accounts/{acct}/ai/run/{model}",
+                    data=body, headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"})
+                with urllib.request.urlopen(req, timeout=180) as r:
+                    out = json.load(r)
+                resp = out["result"]["response"]
+                txt = json.dumps(resp, ensure_ascii=False) if isinstance(resp, dict) else _extract_json(resp or "")
+                ep = json.loads(txt) if txt else None
+                if (ep and ep.get("title") and ep.get("cliffhanger")
+                        and 4 <= len(ep.get("scenes", [])) <= 12
+                        and all(sc.get("narration") and sc.get("image_prompt") for sc in ep["scenes"])):
+                    print("script model (fallback):", model)
+                    return json.dumps(ep, ensure_ascii=False)
+                print(f"{model} attempt {attempt + 1}: reply missing required fields")
+            except Exception as e:
+                print(f"{model} attempt {attempt + 1} failed: {e}")
+                time.sleep(5)
+    return None
+
+
 def main() -> None:
     state_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
     state = json.loads(state_path.read_text()) if state_path.exists() else None
@@ -99,8 +159,13 @@ def main() -> None:
     }).encode()
     text = None
     last_err = None
+    t0 = time.time()
     for model in MODELS:
+        if time.time() - t0 > GEMINI_BUDGET_S:
+            break
         for attempt in range(3):
+            if time.time() - t0 > GEMINI_BUDGET_S:
+                break
             try:
                 req = urllib.request.Request(
                     f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={API_KEY}",
@@ -116,9 +181,16 @@ def main() -> None:
                 time.sleep(20 * (attempt + 1))
         if text:
             break
+    used_model = None
+    if not text:
+        print(f"Gemini failed ({last_err}); trying Cloudflare Workers AI fallback")
+        text = cloudflare_script(SYSTEM, user)
+        used_model = CF_MODELS[0] if text else None
     if not text:
         raise RuntimeError(f"all script models failed: {last_err}")
     episode = json.loads(text)
+    if used_model:
+        episode["script_model"] = "cloudflare:" + used_model
     episode["part"] = part  # story_type comes straight from the model output
     (ROOT / "episode.json").write_text(json.dumps(episode, ensure_ascii=False, indent=2))
     new_state = {"episode": part, "next": episode["cliffhanger"], **episode.get("state", {})}

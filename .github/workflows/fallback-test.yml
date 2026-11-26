@@ -1,0 +1,51 @@
+name: fallback-test
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core && pip install edge-tts
+      - name: Cloudflare script fallback (no upload)
+        env:
+          GEMINI_API_KEY: unused
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          mkdir -p out
+          python - <<'PY'
+          import sys, json, os
+          sys.path.insert(0, "pipeline")
+          import gen_script as g
+          user = ("Write episode 1 of a NEW storyline: Basbusa finds a mysterious old brass lamp in her "
+                  "grandmother's attic in old Cairo. This is part 1. The closing line MUST name the next part: \"انتظروا الجزء التاني!\"")
+          t = g.cloudflare_script(g.SYSTEM, user)
+          print("RESULT", "ok" if t else "FAILED")
+          if t:
+              ep = json.loads(t); open("out/cf_episode.json", "w").write(json.dumps(ep, ensure_ascii=False, indent=2))
+              print(ep["title"]); print(len(ep["scenes"]), "scenes"); print(ep["scenes"][0]["narration"]); print(ep["scenes"][1]["narration"])
+          PY
+      - name: edge-tts voice + assemble on committed sample episode (no upload)
+        env:
+          FORCE_TTS_FALLBACK: "1"
+          GEMINI_API_KEY: unused
+          ARC_DIR: arc1
+        run: |
+          python pipeline/gen_voice.py
+          cp voice_clean.wav out/voice_edge.wav
+          python pipeline/assemble.py
+          cp episode_final.mp4 out/episode_edge.mp4
+          python -c "import json;print('music:', json.load(open('episode.json')).get('music'))"
+          python - <<'PY'
+          import sys; sys.path.insert(0, "pipeline")
+          import music, json
+          for i in range(6): print(i, music.pick(i)[1])
+          print(music.attribution(music.pick(2)[1]))
+          PY
+      - uses: actions/upload-artifact@v4
+        with: { name: fallback-test, path: out/ }

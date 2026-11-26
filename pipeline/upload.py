@@ -9,6 +9,8 @@ With PUBLISH_AT the video is uploaded private and scheduled (publishAt).
 import json, os, pathlib, sys, urllib.parse, urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+import music as music_lib
 
 def access_token() -> str:
     body = urllib.parse.urlencode({
@@ -41,7 +43,7 @@ def main() -> None:
         desc = f"الجزء {ep.get('part', 1)} من حكايات بسبوسة\n" + ep.get("cliffhanger", "") + "\n"
     meta = json.dumps({"snippet": {
             "title": title,
-            "description": desc + "\nالموسيقى: Sneaky Snitch - Kevin MacLeod (incompetech.com)\nLicensed under Creative Commons: By Attribution 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n#بسبوسة #قصص_قطط #شورتس #قصص_حيوانات",
+            "description": desc + music_lib.attribution(ep.get("music") or music_lib.DEFAULT_TITLE) + "\n#بسبوسة #قصص_قطط #شورتس #قصص_حيوانات",
             "categoryId": "24", "tags": ["بسبوسة","قصص قطط","حكايات بسبوسة","قطط","قصص اطفال","شورتس","Shorts","قصص مصورة"]},
         "status": status_block()}).encode()
     tok = access_token()

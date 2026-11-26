@@ -7,11 +7,12 @@ returned WAV at silence into per-scene lines.
 Free-tier content is used by Google to improve its products; our content is
 original fiction, no personal data.
 """
-import base64, json, os, pathlib, subprocess, sys, urllib.request
+import base64, json, os, pathlib, subprocess, sys, time, urllib.request
 
 API_KEY = os.environ["GEMINI_API_KEY"]
 MODEL = os.environ.get("GEMINI_TTS_MODEL", "gemini-2.5-flash-preview-tts")
 VOICE = os.environ.get("GEMINI_TTS_VOICE", "Charon")
+EDGE_VOICE = os.environ.get("EDGE_TTS_VOICE", "ar-EG-ShakirNeural")
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
@@ -37,11 +38,29 @@ def main() -> None:
     prefix = ("اقرأ بصوت فرحان ومحتفل، طاقة عيد من أول كلمة، وقفة قصيرة بين كل جملة:\n"
               if ep.get("celebration") else
               "ابدأ فوراً بأول جملة بدون أي مقدمة أو تردد، اقرأ كحكوتي بحماس عالي من أول كلمة، وقفة قصيرة بين كل جملة:\n")
-    pcm = synthesize(prefix + full)
-    (ROOT / "voice_full.pcm").write_bytes(pcm)
-    # Gemini returns raw 24kHz s16le mono PCM; wrap then split at silence.
-    subprocess.run(["ffmpeg", "-y", "-f", "s16le", "-ar", "24000", "-ac", "1",
-                    "-i", "voice_full.pcm", "voice_full.wav"], cwd=ROOT, check=True)
+    pcm = None
+    for attempt in range(0 if os.environ.get("FORCE_TTS_FALLBACK") else 2):
+        try:
+            pcm = synthesize(prefix + full)
+            break
+        except Exception as e:
+            print(f"Gemini TTS attempt {attempt + 1} failed: {e}")
+            time.sleep(15)
+    if pcm is not None:
+        (ROOT / "voice_full.pcm").write_bytes(pcm)
+        # Gemini returns raw 24kHz s16le mono PCM; wrap then split at silence.
+        subprocess.run(["ffmpeg", "-y", "-f", "s16le", "-ar", "24000", "-ac", "1",
+                        "-i", "voice_full.pcm", "voice_full.wav"], cwd=ROOT, check=True)
+    else:
+        # Fallback only when Gemini TTS is down: free Microsoft Edge neural
+        # Egyptian voice via the edge-tts package (no key, no account).
+        print("falling back to edge-tts (ar-EG)")
+        subprocess.run([sys.executable, "-m", "edge_tts", "--voice", EDGE_VOICE, "--rate=+8%",
+                        "--text", full, "--write-media", "voice_edge.mp3"], cwd=ROOT, check=True)
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", "voice_edge.mp3", "-ar", "24000", "-ac", "1",
+                        "voice_full.wav"], cwd=ROOT, check=True)
+        ep["voice"] = "edge-tts:" + EDGE_VOICE
+        (ROOT / "episode.json").write_text(json.dumps(ep, ensure_ascii=False, indent=2))
     # Retention: trim LEADING silence too, so the first word lands at ~0s
     # (viewers decide in the first 3 seconds), then collapse long inner pauses.
     subprocess.run(["ffmpeg", "-y", "-i", "voice_full.wav", "-af",

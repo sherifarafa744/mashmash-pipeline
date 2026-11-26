@@ -17,6 +17,7 @@ import base64, json, os, pathlib, subprocess, sys, time, urllib.parse, urllib.re
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from character import image_prompt
+import music as music_lib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 API_KEY = os.environ["GEMINI_API_KEY"]
@@ -26,9 +27,7 @@ TTS_VOICE = os.environ.get("GEMINI_TTS_VOICE", "Charon")
 FONTDIR = "/usr/share/fonts/truetype/noto"
 STYLE = ("Noto Naskh Arabic,44,&H00FFFFFF,&H000000FF,&H00141414,&H96000000,"
          "0,0,0,0,100,100,0,0,1,3,1,2,60,60,60,1")
-MUSIC_ATTR = ("\n\nالموسيقى: Sneaky Snitch - Kevin MacLeod (incompetech.com)\n"
-              "Licensed under Creative Commons: By Attribution 4.0\n"
-              "https://creativecommons.org/licenses/by/4.0/")
+MUSIC_ATTR = ""  # set per build from the picked track (see main)
 
 SYSTEM = """You write Egyptian-Arabic narration for a LONG-FORM (8-10 minute)
 horizontal YouTube video retelling one week of the Basbusa (بسبوسة) Shorts
@@ -205,8 +204,10 @@ def main() -> None:
     for i in range(1, n + 1):
         cmd += ["-i", str(ROOT / f"wseg{i}.mp4")]
     cmd += ["-i", str(ROOT / "weekly_voice_clean.wav")]
-    music = ROOT / "music.mp3"
-    if music.exists():
+    import datetime as _dt
+    music, music_title = music_lib.pick(_dt.date.today().isocalendar()[1] * 2 + (1 if arc_dir.name == "arc2" else 0))
+    print("music:", music_title)
+    if music is not None and music.exists():
         cmd += ["-stream_loop", "-1", "-i", str(music)]
         cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a][{n+1}:a]amix=inputs=2:duration=first:normalize=0:weights=1 0.05,loudnorm=I=-14:TP=-1.5[aout]",
                 "-map", "[vout]", "-map", "[aout]", "-shortest"]
@@ -229,7 +230,7 @@ def main() -> None:
     meta = json.dumps({"snippet": {
             "title": f"{ep['title']} | الحكاية الكاملة | حكايات بسبوسة",
             "description": (f"الحكاية الكاملة من حكايات بسبوسة (الأجزاء {parts[0]}-{parts[-1]})\n"
-                            + ep.get("cliffhanger", "") + MUSIC_ATTR +
+                            + ep.get("cliffhanger", "") + music_lib.attribution(music_title) +
                             "\n#بسبوسة #قصص_قطط #حكايات_بسبوسة #قصص_مصورة"),
             "categoryId": "24",
             "tags": ["بسبوسة", "حكايات بسبوسة", "قصص قطط", "قصص مصورة", "قصص اطفال", "حكايات"]},

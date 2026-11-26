@@ -67,8 +67,10 @@ def main() -> None:
         cmd += ["-i", str(ROOT / f"seg{i}.mp4")]
     if (ROOT / "voice_clean.wav").exists():
         cmd += ["-i", str(ROOT / "voice_clean.wav")]
-        music = ROOT / "music.mp3"
-        if music.exists():
+        sys.path.insert(0, str(pathlib.Path(__file__).parent))
+        import music as music_lib
+        music, ep["music"] = music_lib.pick(int(ep.get("part", 0)) + (3 if os.environ.get("ARC_DIR") == "arc2" else 0))
+        if music is not None and music.exists():
             cmd += ["-stream_loop", "-1", "-i", str(music)]
             cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a][{n+1}:a]amix=inputs=2:duration=first:normalize=0:weights=1 0.05,apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",
                     "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}"]
