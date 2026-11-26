@@ -10,6 +10,10 @@ API_KEY = os.environ["GEMINI_API_KEY"]
 MODELS = [os.environ["GEMINI_SCRIPT_MODEL"]] if os.environ.get("GEMINI_SCRIPT_MODEL") else [
     "gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite"]
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+try:
+    VOTE_ON = json.loads((ROOT / "config.json").read_text()).get("vote", True)
+except Exception:
+    VOTE_ON = True
 
 SYSTEM = """You write Egyptian-Arabic narration for a vertical YouTube Shorts
 series about Basbusa (بسبوسة), a female cartoon cat with a blue scarf, in serialized cliffhanger parts. The character is ALWAYS called بسبوسة in the narration and titles (feminine Egyptian Arabic grammar). Never call her مشمش or any other name.
@@ -77,7 +81,7 @@ Rules: VIRAL SHORT FORMAT (mandatory, every episode):
 1. OPENING: the FIRST narration sentence is a shock/action line of AT MOST 7 words, in this episode's hook_style - it IS the dangerous moment happening right now ("الثعبان نزل على بسبوسة!"). No greeting, no "كان في مرة", no setting or weather, no introduction. Scene 1 image_prompt shows that dangerous moment itself, mid-motion, never calm scenery. hook_text and that first sentence say the same thing.
 2. LENGTH: exactly 5 or 6 scenes, 28-36 seconds when spoken: the WHOLE narration is 58-76 words (Arabic TTS speaks ~2 words/second), each narration line one spoken sentence of at most 14 words (the last scene may have up to 3 short sentences). Trim anything that does not move the plot.
 3. PAYOFF: around scenes 3-4 give a small payoff the viewer can enjoy: the problem of the opening is solved or a secret is revealed, in one clear beat. Then the NEW twist/cliffhanger starts from it. Every scene still ends on rising tension.
-4. LOOP: the LAST sentence of the episode (after naming the next part) echoes the opening image or words (a short callback to scene 1's danger, e.g. repeating the key word of the first line), so the video feels like it loops back to its start.
+4. LOOP: after naming the next part, the LAST sentence echoes the OPENING IDEA in DIFFERENT words (same danger or image, new phrasing, e.g. opening "الثعبان نزل على بسبوسة!" -> ending "وفين الثعبان ده دلوقتي؟"). NEVER repeat the opening sentence or its key phrase verbatim.
 5. ENDING: the last scene gives the cliffhanger matching ending_structure, then the vote question, then closes with "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message), NO day or time reference (never بكرة, النهارده, or any date), then the one-line loop-back echo. Never let the story just stop.
 6. NO NEAR-DUPLICATES: the opening line, hook_text, title, and vote question must not repeat or closely paraphrase any previous episode of ANY arc (state.recent_openings lists them); change the verb, the danger and the structure.
 Egyptian dialect throughout; image_prompt is an English visual description of the scene (no text in image). Update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6). Also return "opening_line": the exact first narration sentence."""
@@ -132,6 +136,13 @@ def problems(ep, recent) -> list:
             out.append(f"first sentence has {words(fs)} words, max 7: {fs}")
         if fs in recent:
             out.append("first sentence repeats a previous opening")
+    if sc:
+        o = first_sentence(sc[0]["narration"])
+        last = sc[-1]["narration"]
+        if o and o in last:
+            out.append("the ending repeats the opening sentence verbatim; echo it in different words")
+        if not VOTE_ON and ("اكتبوا" in last or "التعليقات" in last or "الكومنتات" in last):
+            out.append("voting is off: remove the vote question and any ask to comment")
     total = sum(words(x["narration"]) for x in sc)
     if not 56 <= total <= 78:
         out.append(f"narration is {total} words, need 56-78")
@@ -205,6 +216,9 @@ def main() -> None:
             pass
     recent = [r for r in recent if r][-24:]
     user += "\nstate.recent_openings (all arcs, do not repeat or paraphrase): " + json.dumps(recent, ensure_ascii=False)
+    if not VOTE_ON:
+        user += ("\nVOTING IS OFF for this test: do NOT include any vote question, any options, any line asking viewers to answer or comment, "
+                 "and return NO vote object. Ignore every vote instruction above and state.vote_result. The last scene is: cliffhanger, then the next-part naming, then the different-words echo of the opening.")
     user += f"\nThis is part {part}. The closing line MUST name the next part: \"انتظروا الجزء {nxt}!\""
     body = json.dumps({
         "system_instruction": {"parts": [{"text": SYSTEM}]},
@@ -270,8 +284,12 @@ def main() -> None:
     # The result of the PREVIOUS vote is consumed by this episode; drop it.
     # This episode's own vote question is carried forward for vote.py to count.
     new_state.pop("vote_result", None)
-    if episode.get("vote"):
+    if VOTE_ON and episode.get("vote"):
         new_state["vote"] = episode["vote"]
+    if not VOTE_ON:
+        new_state.pop("vote", None)
+        episode.pop("vote", None)
+        (ROOT / "episode.json").write_text(json.dumps(episode, ensure_ascii=False, indent=2))
     # The storyline name persists across an arc; the model only changes it when
     # a new arc begins. playlist_id always carries over (upload.py owns it).
     if state:

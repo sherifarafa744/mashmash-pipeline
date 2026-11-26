@@ -75,6 +75,13 @@ def post_comment(vid: str, tok: str, ep: dict) -> None:
     commentThreads.insert is covered by the youtube.force-ssl scope. Pinning
     has no API - a human pins it in Studio if wanted. Never fails the run."""
     vote = ep.get("vote") or {}
+    try:
+        vote_on = json.loads((ROOT / "config.json").read_text()).get("vote", True)
+    except Exception:
+        vote_on = True
+    if not vote_on and not ep.get("celebration"):
+        print("voting is off (config.json): no vote comment")
+        return
     if ep.get("celebration"):
         text = "بسبوسة مبسوطة بيكم! 🎉 تحبوا الحكاية الجاية تكون عن إيه؟ قولولنا في الكومنتات!"
     elif vote.get("question"):
