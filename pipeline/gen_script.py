@@ -4,7 +4,7 @@ Outputs episode.json: {title, hook, scenes: [{narration, image_prompt}], outro}
 Story state (story_state.json) carries the cliffhanger into the next episode.
 Free tier: Flash ~20 req/day, Flash-Lite ~500 req/day; one call per episode.
 """
-import json, os, sys, pathlib, time, urllib.request
+import json, os, re, sys, pathlib, time, urllib.request
 
 API_KEY = os.environ["GEMINI_API_KEY"]
 MODELS = [os.environ["GEMINI_SCRIPT_MODEL"]] if os.environ.get("GEMINI_SCRIPT_MODEL") else [
@@ -126,6 +126,9 @@ def cloudflare_script(system: str, user: str):
                 resp = out["result"]["response"]
                 txt = json.dumps(resp, ensure_ascii=False) if isinstance(resp, dict) else _extract_json(resp or "")
                 ep = json.loads(txt) if txt else None
+                if ep and re.search(r"[\u0400-\u04FF\u0370-\u03FF\u3040-\u30FF\u4E00-\u9FFF\uAC00-\uD7AF]", json.dumps(ep, ensure_ascii=False)):
+                    print(f"{model} attempt {attempt + 1}: reply has non-Arabic/Latin letters (glitch), retrying")
+                    continue
                 if (ep and ep.get("title") and ep.get("cliffhanger")
                         and 4 <= len(ep.get("scenes", [])) <= 12
                         and all(sc.get("narration") and sc.get("image_prompt") for sc in ep["scenes"])):

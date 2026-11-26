@@ -109,7 +109,9 @@ def make_thumb(ep: dict, arc: str) -> None:
     """1280x720: first scene image, huge yellow Arabic hook text (libass shapes
     Arabic; emoji stripped, they render as boxes)."""
     import re
-    text = re.sub(r"[^0-9A-Za-z\u0600-\u06FF\s?!.\-]", "", ep.get("thumb_text") or ep["title"]).strip()
+    # "!" next to the Arabic question mark jumps to the wrong end under libass
+    # bidi, so keep only "؟"/"?" and drop "!".
+    text = re.sub(r"[^0-9A-Za-z\u0600-\u06FF\s?.\-]", "", ep.get("thumb_text") or ep["title"]).strip()
     (ROOT / "weekly_thumb.ass").write_text("\n".join([
         "[Script Info]", "ScriptType: v4.00+", "PlayResX: 1280", "PlayResY: 720", "WrapStyle: 0", "",
         "[V4+ Styles]",
