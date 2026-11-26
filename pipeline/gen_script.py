@@ -116,7 +116,7 @@ def cloudflare_script(system: str, user: str):
             try:
                 body = json.dumps({"messages": [
                     {"role": "system", "content": system},
-                    {"role": "user", "content": user + "\nReturn ONLY the JSON object, no other text."}],
+                    {"role": "user", "content": user + "\nWrite ALL Arabic in Egyptian colloquial dialect (عامية مصرية: مثل \"عملت\"، \"هتعمل إيه\"، \"فين\")، never Modern Standard (no \"ماذا\" / \"هل\"). Keep every rule above. Return ONLY the JSON object, no other text."}],
                     "max_tokens": 4096, "temperature": 0.8}).encode()
                 req = urllib.request.Request(
                     f"https://api.cloudflare.com/client/v4/accounts/{acct}/ai/run/{model}",

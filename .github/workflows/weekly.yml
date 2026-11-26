@@ -67,3 +67,9 @@ jobs:
           git commit -m "weekly state $(date -u +%F)" || true
           git pull --rebase --autostash
           git push
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-thumb
+          path: weekly_thumb*.jpg
+          if-no-files-found: ignore

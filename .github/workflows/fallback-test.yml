@@ -47,5 +47,17 @@ jobs:
           for i in range(6): print(i, music.pick(i)[1])
           print(music.attribution(music.pick(2)[1]))
           PY
+      - name: weekly thumbnail render test
+        env:
+          GEMINI_API_KEY: unused
+        run: |
+          mkdir -p weekly_scenes
+          cp "$(ls scenes/scene*.png | head -1)" weekly_scenes/w1.png
+          python - <<'PY'
+          import sys; sys.path.insert(0, "pipeline")
+          import weekly
+          weekly.make_thumb({"title": "x", "thumb_text": "مين فتح باب المعبد؟!"}, "arc1")
+          PY
+          cp weekly_thumb.jpg out/
       - uses: actions/upload-artifact@v4
         with: { name: fallback-test, path: out/ }
