@@ -11,9 +11,11 @@ MODELS = [os.environ["GEMINI_SCRIPT_MODEL"]] if os.environ.get("GEMINI_SCRIPT_MO
     "gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite"]
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 try:
-    VOTE_ON = json.loads((ROOT / "config.json").read_text()).get("vote", True)
+    _CFG = json.loads((ROOT / "config.json").read_text())
 except Exception:
-    VOTE_ON = True
+    _CFG = {}
+VOTE_ON = _CFG.get("vote", True)
+HOOK_Q = _CFG.get("hook_mode") == "known_char_question"  # experiment B (from 2026-11-28)
 
 SYSTEM = """You write Egyptian-Arabic narration for a vertical YouTube Shorts
 series about Basbusa (بسبوسة), a female cartoon cat with a blue scarf, in serialized cliffhanger parts. The character is ALWAYS called بسبوسة in the narration and titles (feminine Egyptian Arabic grammar). Never call her مشمش or any other name.
@@ -145,6 +147,10 @@ def problems(ep, recent) -> list:
             out.append("the ending repeats the opening sentence verbatim; echo it in different words")
         if not VOTE_ON and ("اكتبوا" in last or "التعليقات" in last or "الكومنتات" in last):
             out.append("voting is off: remove the vote question and any ask to comment")
+    if HOOK_Q and sc:
+        fs0 = first_sentence(sc[0]["narration"])
+        if "؟" not in fs0 and "?" not in fs0:
+            out.append("hook experiment: the first sentence must be a shocking question naming a known character")
     t = ep.get("title", "")
     def shape(x): return (".." in x, "؟" in x, "!" in x)
     try:
@@ -231,6 +237,10 @@ def main() -> None:
     if not VOTE_ON:
         user += ("\nVOTING IS OFF for this test: do NOT include any vote question, any options, any line asking viewers to answer or comment, "
                  "and return NO vote object. Ignore every vote instruction above and state.vote_result. The last scene is: cliffhanger, then the next-part naming, then the different-words echo of the opening.")
+    if HOOK_Q:
+        user += ("\nHOOK EXPERIMENT (overrides the hook-variety rules above for the hook only): the FIRST narration sentence MUST be a shocking QUESTION of at most 7 words, "
+                 "hook_style shocking_question, that names a KNOWN recurring character (بسبوسة or the companion in state.companion) and asks about something strange or dangerous happening to them right now, "
+                 "in the style of: \"ليه بندق طار في الهواء فجأة؟\". hook_text says the same question. Keep the title variety rule.")
     user += f"\nThis is part {part}. The closing line MUST name the next part: \"انتظروا الجزء {nxt}!\""
     body = json.dumps({
         "system_instruction": {"parts": [{"text": SYSTEM}]},
@@ -290,6 +300,7 @@ def main() -> None:
     episode["opening_line"] = first_sentence(episode["scenes"][0]["narration"])
     if used_model:
         episode["script_model"] = "cloudflare:" + used_model
+    episode["hook_mode"] = "known_char_question" if HOOK_Q else "default"
     episode["part"] = part  # story_type comes straight from the model output
     (ROOT / "episode.json").write_text(json.dumps(episode, ensure_ascii=False, indent=2))
     new_state = {"episode": part, "next": episode["cliffhanger"], **episode.get("state", {})}
