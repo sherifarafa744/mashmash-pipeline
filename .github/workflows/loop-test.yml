@@ -24,7 +24,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
       - name: test config, NON-PUBLISHING (no upload, no commit)
         run: |
-          jq '. + {danger_first:true, opening_sfx:true, tight_cut:true, no_top_hook:true, loop_end:true, music_gap:true, music_force:"Curse of the Scarab", build_tag:"loop_test"}' config.json > /tmp/c.json && cp /tmp/c.json config.json
+          jq '. + {danger_first:true, opening_sfx:true, tight_cut:true, no_top_hook:true, loop_end:true, loop_reuse_first:true, music_gap:true, music_force:"Curse of the Scarab", build_tag:"loop_test"}' config.json > /tmp/c.json && cp /tmp/c.json config.json
           cat config.json
       - run: |
           export PUBLISH_AT=$(date -u -d '+8 hours' +%Y-%m-%dT%H:%M:%S.000Z)
