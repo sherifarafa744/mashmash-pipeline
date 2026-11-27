@@ -62,7 +62,7 @@ def main() -> None:
     meta = json.dumps({"snippet": {
             "title": title,
             "description": desc + music_lib.attribution(ep.get("music") or music_lib.DEFAULT_TITLE) + "\n#حكايات_بسبوسة #كرتون_مصري #Shorts #رسوم_متحركة #قصص_بسبوسة",
-            "categoryId": "24", "tags": ["بسبوسة","قصص قطط","حكايات بسبوسة","قطط","حكايات","شورتس","Shorts","قصص مصورة"]},
+            "categoryId": "24", "tags": ["بسبوسة","بسبوس","قصص بسبوس","مسلسل بسبوس","قصص قطط","حكايات بسبوسة","قطط","حكايات","شورتس","Shorts"]},
         "status": status_block()}).encode()
     tok = access_token()
     init = urllib.request.Request(
