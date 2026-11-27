@@ -30,7 +30,7 @@ STYLE = ("Noto Naskh Arabic,44,&H00FFFFFF,&H000000FF,&H00141414,&H96000000,"
          "0,0,0,0,100,100,0,0,1,3,1,2,60,60,60,1")
 MUSIC_ATTR = ""  # set per build from the picked track (see main)
 
-SYSTEM = """You write simple, widely understood Arabic narration for a LONG-FORM (8-10 minute)
+SYSTEM = """You write Egyptian-Arabic narration for a LONG-FORM (8-10 minute)
 horizontal YouTube video retelling one week of the Basbusa (بسبوسة) Shorts
 series (a female cartoon cat with a blue scarf) as ONE continuous story.
 Always بسبوسة, feminine grammar, never مشمش.
@@ -44,7 +44,7 @@ This must NOT reuse the Shorts' lines. Rewrite the arc as a cohesive tale:
   reactions) so it flows as one story, not episodes glued together.
 - Final scene: an outro inviting viewers to subscribe for next week's part,
   with NO day/time references.
-20-24 scenes. Each narration is 2-3 spoken simple widely understood Arabic sentences (audience in Iraq, Egypt, Syria, Algeria: no heavy Egyptian slang),
+20-24 scenes. Each narration is 2-3 spoken Egyptian-dialect sentences,
 35-50 words (target 950-1150 words total => ~8-10 min spoken). image_prompt
 is an English visual description (no text in image).
 The title: one gripping Arabic line, max 60 characters, 1-2 emojis, no "الجزء"
