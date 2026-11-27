@@ -78,6 +78,24 @@ def main() -> None:
                     "silenceremove=start_periods=1:start_duration=0.02:start_threshold=-45dB,"
                     "silenceremove=stop_periods=-1:stop_duration=0.45:stop_threshold=-38dB:stop_silence=0.22",
                     "voice_clean.wav"], cwd=ROOT, check=True)
+    # Length control: the expressive voice runs ~1.85 words/s. If the clean voice is
+    # longer than 34.5s, time-stretch it (pitch kept) by at most 1.15x so the Short
+    # lands at 28-36s. Celebrations are exempt.
+    def dur(path):
+        r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
+                           capture_output=True, text=True, cwd=ROOT)
+        return float(r.stdout.strip())
+    d0 = dur(ROOT / "voice_clean.wav")
+    tempo = 1.0
+    if not ep.get("celebration") and d0 > 34.5:
+        tempo = min(1.15, d0 / 34.5)
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", "voice_clean.wav", "-af", f"atempo={tempo:.3f}", "voice_fast.wav"],
+                       cwd=ROOT, check=True)
+        (ROOT / "voice_fast.wav").replace(ROOT / "voice_clean.wav")
+        print(f"voice {d0:.1f}s too long: atempo {tempo:.3f} -> {dur(ROOT / 'voice_clean.wav'):.1f}s")
+    ep["voice_tempo"] = round(tempo, 3)
+    ep["voice_s"] = round(dur(ROOT / "voice_clean.wav"), 1)
+    (ROOT / "episode.json").write_text(json.dumps(ep, ensure_ascii=False, indent=2))
     print("voice ready:", ROOT / "voice_clean.wav")
 
 
