@@ -1,0 +1,24 @@
+{
+ "episode": 0,
+ "next": "بسبوسة بتشوف عصابة قطط الميناء بتسرق صندوق السمك بالليل على رصيف الميناء القديم في إسكندرية، والعصابة تلاحظها وتجري وراها!",
+ "location": "رصيف الميناء القديم في إسكندرية بالليل",
+ "goal": "استرجاع صندوق السمك المسروق قبل سوق الصبح، وفهم سر العصابة",
+ "danger": "عصابة قطط الميناء وزعيمها الريس سلطان",
+ "story": "عصابة قطط الميناء",
+ "setting": "old Alexandria port at night, wooden docks, fishing boats, cargo crates, lanterns",
+ "conflict_type": "chase",
+ "ending_structure": "danger_revealed",
+ "companion": {
+  "name": "الريس سلطان",
+  "role": "rival",
+  "description": "a big muscular grey-black tabby cat with one torn ear, a gold earring, a red captain's cap and a scar over the left eye, twice the size of Basbusa, no scarf"
+ },
+ "used": {
+  "settings": [],
+  "conflicts": [],
+  "endings": [],
+  "types": [],
+  "hook_styles": []
+ },
+ "arc_note": "Basbusa (small orange cat, blue scarf) vs the Port Cat Gang. Secret for later parts: the gang is hiding a lost tiny kitten in the crate to protect it from the real villain (the port guard dog). Keep goal/obstacle/reveal clear each part."
+}

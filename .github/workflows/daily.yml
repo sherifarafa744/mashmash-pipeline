@@ -59,6 +59,7 @@ jobs:
           H=$(date -u -d "$PUBLISH_AT" +%H)
           if [ -n "$ARC" ]; then arc="$ARC"; else
             case $H in 09|15) arc=1;; 12|18) arc=2;; *) arc=1;; esac
+            arc=$(python3 pipeline/slot.py arcfor $arc)
           fi
           echo "publish_at=$PUBLISH_AT" >> "$GITHUB_OUTPUT"
           echo "arc=$arc" >> "$GITHUB_OUTPUT"

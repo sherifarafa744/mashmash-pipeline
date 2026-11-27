@@ -36,11 +36,29 @@ def main() -> None:
     if cmd == "target":
         now = parse(sys.argv[2]) if len(sys.argv) > 2 else dt.datetime.now(dt.timezone.utc)
         print(iso(target(now)))
+    elif cmd == "arcfor":  # arcfor 2 -> 3 once the arc2 finale has run and arc3 is set up
+        arc = sys.argv[2]
+        try:
+            cfg = json.load(open("config.json"))
+            fin = (cfg.get("finale") or {}).get("arc" + arc)
+            ep = json.load(open(f"story_state_arc{arc}.json")).get("episode", 0)
+            nxt = cfg.get("successor", {}).get("arc" + arc)
+            if fin and ep >= fin and nxt:
+                arc = nxt
+        except Exception:
+            pass
+        print(arc)
     elif cmd == "guard":
         if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and dt.datetime.now(dt.timezone.utc) < parse(PAUSE_UNTIL):
             print("skip")  # scheduled builds paused until the Gemini/Cloudflare quotas reset (user decision)
             return
         arc = os.environ.get("ARC_NUM", "")
+        try:  # a new storyline stays off until the user approves it (config arc3_approved)
+            if arc == "3" and not json.load(open("config.json")).get("arc3_approved"):
+                print("skip")
+                return
+        except Exception:
+            pass
         try:  # a storyline whose finale already ran must not continue: its slots stay empty until a new story is set up
             fin = (json.load(open("config.json")).get("finale") or {}).get("arc" + arc)
             ep = json.load(open(f"story_state_arc{arc}.json")).get("episode", 0)
