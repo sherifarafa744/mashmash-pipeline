@@ -1,0 +1,30 @@
+name: extra-short
+on:
+  workflow_dispatch:
+    inputs:
+      publish_at:
+        default: '2026-11-28T16:30:00.000Z'
+permissions:
+  contents: read
+concurrency:
+  group: extra-short
+  cancel-in-progress: false
+jobs:
+  x:
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    env:
+      YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+      YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+      YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+      PUBLISH_AT: ${{ github.event.inputs.publish_at }}
+      VIDEO: extras/sad_rain_A.mp4
+      THUMB: extras/sad_rain_thumb.jpg
+      DESC_FILE: extras/sad_rain_desc.txt
+      TITLE: "قطة صغيرة وحيدة تحت المطر.. شوفوا بسبوسة عملت إيه 😢"
+      COMMENT: "لو شفتوا قطة صغيرة وحيدة في المطر هتعملوا إيه؟ 😢 قولولنا في الكومنتات!"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: python pipeline/upload_extra.py

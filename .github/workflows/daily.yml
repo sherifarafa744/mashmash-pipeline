@@ -77,6 +77,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FORCE: ${{ github.event.inputs.force }}
+          ARC_NUM: ${{ steps.arc.outputs.arc }}
         run: |
           if [ "$(python3 pipeline/slot.py guard)" = "skip" ]; then
             echo "a run already succeeded for slot ${{ steps.arc.outputs.publish_at }}; skipping"

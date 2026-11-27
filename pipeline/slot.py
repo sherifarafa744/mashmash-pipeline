@@ -40,6 +40,15 @@ def main() -> None:
         if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and dt.datetime.now(dt.timezone.utc) < parse(PAUSE_UNTIL):
             print("skip")  # scheduled builds paused until the Gemini/Cloudflare quotas reset (user decision)
             return
+        arc = os.environ.get("ARC_NUM", "")
+        try:  # a storyline whose finale already ran must not continue: its slots stay empty until a new story is set up
+            fin = (json.load(open("config.json")).get("finale") or {}).get("arc" + arc)
+            ep = json.load(open(f"story_state_arc{arc}.json")).get("episode", 0)
+            if fin and ep >= fin:
+                print("skip")
+                return
+        except Exception:
+            pass
         if os.environ.get("FORCE") == "1":
             print("run")
             return
