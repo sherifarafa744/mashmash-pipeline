@@ -158,7 +158,7 @@ def main() -> None:
                 mx = "[mx]"
             # Music ducks under the voice (sidechain), lower base level than the
             # old constant 0.05 mix; music comes back up in the pauses.
-            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1][vo2];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume=0.045[mus];"
+            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1][vo2];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume=0.062[mus];"
                     f"[mus][vo1]sidechaincompress=threshold=0.02:ratio=10:attack=15:release=400:makeup=1[mduck];"
                     f"{last};{mx}apad,atrim=0:{total:.2f},afade=t=out:st={total - FADE_A:.2f}:d={FADE_A},loudnorm=I=-14:TP=-1.5[aout]",
                     "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}"]
