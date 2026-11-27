@@ -54,10 +54,11 @@ def main() -> None:
         fmt = [f"{{t}} | الجزء {part} | بسبوسة", f"{{t}} | بسبوسة - ج{part}", f"{{t}} - الجزء {part}",
                f"بسبوسة | {{t}} | ج{part}", f"{{t}} | حكايات بسبوسة {part}"][key % 5]
         title = fmt.format(t=ep["title"])
-        desc = f"الجزء {ep.get('part', 1)} من حكايات بسبوسة\n" + ep.get("cliffhanger", "") + "\n"
+        desc = (f"كرتون عربي بالعامية المصرية، حكايات قطط: الجزء {ep.get('part', 1)} من حكايات بسبوسة\n"
+                + ep.get("cliffhanger", "") + "\n")
     meta = json.dumps({"snippet": {
             "title": title,
-            "description": desc + music_lib.attribution(ep.get("music") or music_lib.DEFAULT_TITLE) + "\n#Shorts #بسبوسة #قصص_قطط #شورتس #قصص_حيوانات",
+            "description": desc + music_lib.attribution(ep.get("music") or music_lib.DEFAULT_TITLE) + "\n#Shorts #كرتون_مصري #رسوم_متحركة #حكايات_بسبوسة",
             "categoryId": "24", "tags": ["بسبوسة","قصص قطط","حكايات بسبوسة","قطط","حكايات","شورتس","Shorts","قصص مصورة"]},
         "status": status_block()}).encode()
     tok = access_token()
