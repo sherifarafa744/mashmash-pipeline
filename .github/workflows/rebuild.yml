@@ -1,0 +1,69 @@
+name: rebuild-gated
+on:
+  workflow_dispatch:
+    inputs:
+      arc:
+        default: '2'
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: rebuild-gated
+jobs:
+  r:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      ARC_DIR: arc${{ github.event.inputs.arc }}
+      STORY_STATE: story_state_arc${{ github.event.inputs.arc }}.json
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+      YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+      YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
+      - name: restore arc2 state to part 3 and set flags
+        run: |
+          git show 49eb87e:story_state_arc2.json | jq '.companion.description="a very tall slim charcoal-black one-eyed cat spirit with one glowing green eye, twice Basbusa'"'"'s height, wearing a long white Egyptian galabiya, no scarf"' > story_state_arc2.json
+          jq '. + {hook_mode:"default", danger_first:true, opening_sfx:true, tight_cut:true, no_top_hook:true, loop_end:true, music_gap:true, music_force:"Curse of the Scarab", build_tag:"full_rebuild_2026-11-27"}' config.json > /tmp/c.json && cp /tmp/c.json config.json
+          jq -c '{episode,last_video_id}' story_state_arc2.json
+      - name: build (no upload)
+        run: |
+          export PUBLISH_AT=$(date -u -d '+3 hours' +%Y-%m-%dT%H:%M:%S.000Z)
+          for s in gen_script gen_voice gen_images assemble loop_check gen_thumbnail; do echo "== $s"; python pipeline/$s.py; done
+          jq '{title,part,music,loop_ok,loop_ssim,loop_luma_diff,loop_audio_end_db,duration_s,format_issues,scenes:(.scenes|length)}' episode.json
+      - name: preview release (draft) and wait for go/nogo tag
+        run: |
+          mkdir -p /tmp/pv && cp episode_final.mp4 episode.json /tmp/pv/ && cp loopcheck/*.png /tmp/pv/ && cp scenes/scene*.png /tmp/pv/ || true
+          gh release create "preview-${{ github.run_id }}" /tmp/pv/* --draft --title "preview-${{ github.run_id }}" --notes preview --target "$GITHUB_SHA"
+          echo "preview ready; waiting for go-${{ github.run_id }} / nogo-${{ github.run_id }}"
+          for i in $(seq 1 270); do
+            if gh api repos/${{ github.repository }}/git/ref/tags/go-${{ github.run_id }} >/dev/null 2>&1; then echo GO; exit 0; fi
+            if gh api repos/${{ github.repository }}/git/ref/tags/nogo-${{ github.run_id }} >/dev/null 2>&1; then echo NOGO; exit 1; fi
+            sleep 20
+          done
+          echo "no decision in time"; exit 1
+      - name: upload PUBLIC now (direct)
+        run: |
+          export PUBLISH_AT=$(date -u +%Y-%m-%dT%H:%M:%S.000Z) UPLOAD_MODE=direct
+          python pipeline/upload.py
+          jq -c '{episode,last_video_id}' "$STORY_STATE"
+      - name: release kit and commit state
+        run: |
+          git config user.name "mashmash-bot"; git config user.email "bot@users.noreply.github.com"
+          mkdir -p "episodes/$ARC_DIR"
+          cp episode.json "episodes/$ARC_DIR/ep$(jq -r .part episode.json).json"
+          grep -v '"arc": "arc2", "part": 4,' episode_log.jsonl > /tmp/log.jsonl || true; cp /tmp/log.jsonl episode_log.jsonl
+          PUBLISH_AT=$(date -u +%Y-%m-%dT%H:%M:%S.000Z) UPLOAD_MODE=direct python3 pipeline/log_episode.py
+          git add "$STORY_STATE" episode.json episodes/ episode_log.jsonl
+          git commit -m "episode state $ARC_DIR full rebuild part 4" || true
+          git pull --rebase --autostash && git push
+          python pipeline/social.py || true
+          TAG="reel-$(date -u +%F-%H%M)"; cp episode_final.mp4 /tmp/reel.mp4
+          gh release create "$TAG" /tmp/reel.mp4 social/caption.txt --title "$TAG" --notes "cross-post kit. Published directly (public) at $(date -u +%FT%TZ)." --target "$GITHUB_SHA" || true
