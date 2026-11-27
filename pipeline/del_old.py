@@ -1,32 +1,25 @@
-import json, sys, urllib.request, urllib.error, urllib.parse
+import json, sys, urllib.request, urllib.error
 sys.path.insert(0, "pipeline")
 from upload import access_token
 h = {"Authorization": f"Bearer {access_token()}"}
-def get(u): return json.load(urllib.request.urlopen(urllib.request.Request(u, headers=h), timeout=60))
 B = "https://www.googleapis.com/youtube/v3/"
-up = get(B + "channels?part=contentDetails&mine=true")["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
-ids, tok = [], None
-while True:
-    d = get(B + f"playlistItems?part=contentDetails&maxResults=50&playlistId={up}" + (f"&pageToken={tok}" if tok else ""))
-    ids += [i["contentDetails"]["videoId"] for i in d["items"]]
-    tok = d.get("nextPageToken")
-    if not tok: break
-print("TOTAL", len(ids))
-import time; time.sleep(20)
-BAD = "قصص اطفال"
-for i in range(0, len(ids), 50):
-    for v in get(B + "videos?part=snippet,status&id=" + ",".join(ids[i:i+50]))["items"]:
-        sn = v["snippet"]; tags = sn.get("tags", [])
-        if BAD not in tags:
-            print("OK-NOTAG", v["id"], v["status"]["privacyStatus"]); continue
-        print("STILL", v["id"]); continue
-        sn["tags"] = [t for t in tags if t != BAD] + ([] if "حكايات" in tags else ["حكايات"])
-        body = json.dumps({"id": v["id"], "snippet": {k: sn[k] for k in ("title", "description", "categoryId", "tags", "defaultLanguage", "defaultAudioLanguage") if k in sn}}).encode()
-        try:
-            r = urllib.request.urlopen(urllib.request.Request(B + "videos?part=snippet", data=body, method="PUT", headers={**h, "Content-Type": "application/json"}), timeout=60)
-            print("FIXED", v["id"], v["status"]["privacyStatus"], r.status)
-        except urllib.error.HTTPError as e:
-            print("ERR", v["id"], e.code, e.read().decode()[:200])
-for i in range(0, len(ids), 50):
-    for v in get(B + "videos?part=snippet,status&id=" + ",".join(ids[i:i+50]))["items"]:
-        print("CHECK", v["id"], v["status"]["privacyStatus"], BAD in v["snippet"].get("tags", []), v["snippet"]["title"][:40])
+def get(u): return json.load(urllib.request.urlopen(urllib.request.Request(u, headers=h), timeout=60))
+def put(u, body):
+    return urllib.request.urlopen(urllib.request.Request(B + u, data=json.dumps(body).encode(), method="PUT", headers={**h, "Content-Type": "application/json"}), timeout=60).status
+VID = "tyxgV1mJmP0"
+ep = json.load(open("episodes/arc2/ep4.json"))
+v = get(B + "videos?part=snippet,status&id=" + VID)["items"][0]
+sn = v["snippet"]; lines = sn["description"].split("\n")
+print("BEFOREDESC", repr(sn["description"][:300]))
+lines[0] = "كرتون عربي بالعامية المصرية، حكايات قطط: الجزء 4 من حكايات بسبوسة"
+lines[-1] = "#Shorts #كرتون_مصري #رسوم_متحركة #حكايات_بسبوسة"
+sn["description"] = "\n".join(lines)
+print("UPD", put("videos?part=snippet", {"id": VID, "snippet": {k: sn[k] for k in ("title", "description", "categoryId", "tags") if k in sn}}))
+print("UPD2", put("videos?part=status", {"id": VID, "status": {"privacyStatus": "private", "publishAt": "2026-11-27T18:00:00.000Z", "selfDeclaredMadeForKids": False}}))
+v = get(B + "videos?part=snippet,status&id=" + VID)["items"][0]
+print("AFTER", v["status"]["privacyStatus"], v["status"].get("publishAt"), v["snippet"]["title"], v["snippet"]["tags"]); print("DESC", repr(v["snippet"]["description"]))
+pls = get(B + "playlists?part=snippet,contentDetails&mine=true&maxResults=50")["items"]
+for p in pls:
+    print("PL", p["id"], p["snippet"]["title"], p["contentDetails"]["itemCount"])
+    items = get(B + "playlistItems?part=snippet&maxResults=50&playlistId=" + p["id"])["items"]
+    for i in items: print("  ITEM", i["snippet"]["position"], i["snippet"]["resourceId"]["videoId"], i["snippet"]["title"][:50])
