@@ -27,7 +27,10 @@ def status_block() -> dict:
     and let YouTube flip it public at exactly that time. Unset = public now."""
     st = {"privacyStatus": "public", "selfDeclaredMadeForKids": False}
     at = os.environ.get("PUBLISH_AT")
-    if at and os.environ.get("UPLOAD_MODE") != "direct":
+    mode = os.environ.get("UPLOAD_MODE")
+    if mode == "hold":  # private, NO YouTube schedule; this job flips it public at the slot
+        st = {"privacyStatus": "private", "selfDeclaredMadeForKids": False}
+    elif at and mode != "direct":
         st = {"privacyStatus": "private", "publishAt": at, "selfDeclaredMadeForKids": False}
     return st
 
@@ -82,6 +85,32 @@ def main() -> None:
         state["last_video_id"] = vid
         state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2))
     post_comment(vid, tok, ep)
+    if os.environ.get("UPLOAD_MODE") == "hold" and os.environ.get("PUBLISH_AT"):
+        flip_public(vid, os.environ["PUBLISH_AT"])
+
+def flip_public(vid: str, at: str) -> None:
+    """Hold-and-flip (the way part 6 went out): sleep to the slot, set public, verify."""
+    import time, datetime as dt
+    t = dt.datetime.fromisoformat(at.replace("Z", "+00:00")).timestamp() - 6
+    wait = t - time.time()
+    print(f"HOLD: video {vid} stays private, flipping public in {max(0, wait):.0f}s", flush=True)
+    if wait > 0:
+        time.sleep(wait)
+    for attempt in range(5):
+        try:
+            tok = access_token()
+            body = json.dumps({"id": vid, "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False, "embeddable": True, "publicStatsViewable": True, "license": "youtube"}}).encode()
+            req = urllib.request.Request("https://www.googleapis.com/youtube/v3/videos?part=status", data=body, method="PUT",
+                headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                print("FLIPPED public", r.status, dt.datetime.now(dt.timezone.utc).isoformat(), flush=True)
+            time.sleep(5)
+            chk = urllib.request.Request(f"https://www.googleapis.com/youtube/v3/videos?part=status&id={vid}", headers={"Authorization": f"Bearer {tok}"})
+            print("STATUS", json.load(urllib.request.urlopen(chk, timeout=60))["items"][0]["status"]["privacyStatus"], flush=True)
+            return
+        except Exception as e:
+            print("flip retry", attempt, e, flush=True); time.sleep(10)
+    raise SystemExit("FLIP FAILED: video left private")
 
 def post_comment(vid: str, tok: str, ep: dict) -> None:
     """The channel asks a simple question under every new upload so viewers

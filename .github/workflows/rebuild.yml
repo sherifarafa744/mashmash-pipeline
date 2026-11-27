@@ -25,6 +25,7 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
@@ -55,9 +56,9 @@ jobs:
             sleep 20
           done
           echo "no decision in time"; exit 1
-      - name: upload PUBLIC now (direct)
+      - name: upload private (hold, no schedule) then flip public at the slot
         run: |
-          export PUBLISH_AT=$(date -u +%Y-%m-%dT%H:%M:%S.000Z) UPLOAD_MODE=direct
+          export PUBLISH_AT=2026-11-27T18:00:00.000Z UPLOAD_MODE=hold
           python pipeline/upload.py
           jq -c '{episode,last_video_id}' "$STORY_STATE"
       - name: release kit and commit state
@@ -66,7 +67,7 @@ jobs:
           mkdir -p "episodes/$ARC_DIR"
           cp episode.json "episodes/$ARC_DIR/ep$(jq -r .part episode.json).json"
           grep -v '"arc": "arc2", "part": 4,' episode_log.jsonl > /tmp/log.jsonl || true; cp /tmp/log.jsonl episode_log.jsonl
-          PUBLISH_AT=$(date -u +%Y-%m-%dT%H:%M:%S.000Z) UPLOAD_MODE=direct python3 pipeline/log_episode.py
+          PUBLISH_AT=2026-11-27T18:00:00.000Z UPLOAD_MODE=hold python3 pipeline/log_episode.py
           git add "$STORY_STATE" episode.json episodes/ episode_log.jsonl
           git commit -m "episode state $ARC_DIR full rebuild part 4" || true
           git pull --rebase --autostash && git push

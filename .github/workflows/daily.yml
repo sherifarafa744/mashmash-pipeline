@@ -14,7 +14,7 @@ on:
         description: 'Which story arc to run (1 or 2)'
         default: '1'
       upload_mode:
-        description: 'direct = wait for the slot and upload PUBLIC at publish time (no private/scheduled step); empty = direct (default); scheduled = upload private with publishAt'
+        description: 'hold (default) = upload PRIVATE with no schedule right after the build, a job in the run flips it public at the slot (same as part 6); direct = wait for the slot then upload public; scheduled = YouTube publishAt'
         default: ''
       force:
         description: 'Set 1 to rebuild a slot the guard already served'
@@ -98,7 +98,7 @@ jobs:
           STORY_STATE: ${{ steps.arc.outputs.story_state }}
           ARC_DIR: arc${{ steps.arc.outputs.arc }}
           PUBLISH_AT: ${{ steps.arc.outputs.publish_at }}
-          UPLOAD_MODE: ${{ github.event.inputs.upload_mode || 'direct' }}
+          UPLOAD_MODE: ${{ github.event.inputs.upload_mode || 'hold' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -135,13 +135,13 @@ jobs:
           else
             mkdir -p "episodes/$ARC_DIR"
             cp episode.json "episodes/$ARC_DIR/ep$(python3 -c "import json;print(json.load(open('episode.json'))['part'])").json"
-            PUBLISH_AT="${{ steps.arc.outputs.publish_at }}" UPLOAD_MODE="${{ github.event.inputs.upload_mode || 'direct' }}" python3 pipeline/log_episode.py
+            PUBLISH_AT="${{ steps.arc.outputs.publish_at }}" UPLOAD_MODE="${{ github.event.inputs.upload_mode || 'hold' }}" python3 pipeline/log_episode.py
             git add "$STORY_STATE" episode.json episodes/ episode_log.jsonl
             git commit -m "episode state $ARC_DIR $(date -u +%F-%H%M)" || true
           fi
           git pull --rebase --autostash
           git push
-      - if: steps.guard.outputs.skip != 'true' && (github.event.inputs.upload_mode || 'direct') != 'direct'
+      - if: steps.guard.outputs.skip != 'true' && (github.event.inputs.upload_mode || 'hold') == 'scheduled'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
