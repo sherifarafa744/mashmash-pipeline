@@ -1,13 +1,13 @@
 {
-  "episode": 6,
-  "next": "بسبوسة محاصرة داخل سرداب المعبد المغلق بعد أن سرق بندق المفتاح الذهبي",
-  "location": "سرداب المعبد الفرعوني القديم",
-  "goal": "الخروج من السرداب المغلق واستعادة المفتاح من بندق",
-  "danger": "انهيار السرداب واختفاء بندق بالمفتاح",
+  "episode": 5,
+  "next": "بسبوسة محتارة بين استعادة الخريطة من بندق أو فتح صندوق الكنز السري",
+  "location": "معبد فرعوني قديم على شط النيل",
+  "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
+  "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
   "story": "كنز جزيرة التونة الذهبية",
-  "setting": "سرداب المعبد القديم",
-  "conflict_type": "theft",
-  "ending_structure": "twist reveal",
+  "setting": "معبد فرعوني قديم",
+  "conflict_type": "secret",
+  "ending_structure": "question cliffhanger",
   "companion": {
     "name": "بندق",
     "role": "rival",
@@ -18,39 +18,39 @@
       "سوق السمك القديم",
       "النيل",
       "معبد فرعوني قديم",
-      "سطح بيت قديم",
-      "سرداب المعبد القديم"
+      "سطح بيت قديم"
     ],
     "conflicts": [
       "chase",
       "bargain",
       "secret",
-      "rival",
-      "theft"
+      "rival"
     ],
     "endings": [
       "danger revealed",
       "choice forced",
-      "question cliffhanger",
-      "twist reveal"
+      "question cliffhanger"
     ],
     "types": [
       "adventure",
       "action-chase",
       "mystery",
-      "rival-conflict",
-      "superpower"
+      "rival-conflict"
     ],
     "hook_styles": [
       "danger_warning",
       "surprising_fact",
-      "surprise",
-      "mystery"
+      "surprise"
     ]
   },
+  "vote": {
+    "question": "تفتكروا بسبوسة هتعمل إيه جوه الغرفة السرية؟",
+    "option_a": "تحارب بندق",
+    "option_b": "تبحث عن المفتاح"
+  },
   "playlist_id": "PLFeKx89Tl-dg",
-  "last_duration_s": 33.5,
-  "last_story_type": "superpower",
-  "last_hook_style": "mystery",
-  "last_video_id": "aq4mFe844F0"
+  "last_duration_s": 32.0,
+  "last_story_type": "rival-conflict",
+  "last_hook_style": "surprise",
+  "last_video_id": "BPIrGaXe_O4"
 }
