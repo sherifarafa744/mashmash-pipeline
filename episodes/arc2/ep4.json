@@ -1,0 +1,98 @@
+{
+  "title": "سر الصندوق الذهبي يهدد بسبوسة وزيكو! 🦂✨",
+  "hook_text": "مين يهرب من العقرب الذهبي",
+  "hook_style": "shocking_question",
+  "opening_line": "مين يقدر يهرب من العقرب الذهبي",
+  "beat_scene": 4,
+  "scenes": [
+    {
+      "narration": "مين يقدر يهرب من العقرب الذهبي؟",
+      "image_prompt": "A cartoon female Egyptian cat with a vibrant blue scarf around her neck and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya, panicking inside a dimly lit ancient Egyptian pharaoh tomb as a huge glowing golden scorpion lunges at them with its stinger raised."
+    },
+    {
+      "narration": "بسبوسة رشت شرار المصباح السحري في عين العقرب فعمته وجريت.",
+      "image_prompt": "A cartoon female Egyptian cat with a vibrant blue scarf around her neck shines a glowing magic lamp emitting brilliant blue sparks directly into the eyes of a gigantic glowing golden scorpion inside an ancient pharaoh tomb."
+    },
+    {
+      "narration": "القط زيكو انتهز الفرصة وخطف الصندوق الذهبي وركض بيه.",
+      "image_prompt": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya greedily snatches an ornate glowing golden treasure chest and runs through a dark ancient tomb corridor."
+    },
+    {
+      "narration": "فجأة الصندوق اتفتح وسمعوا همس غامض بيكشف سر المصباح المرعب!",
+      "image_prompt": "An ornate golden chest bursts open on a stone altar, revealing a glowing magical papyrus map emitting eerie purple smoke and spectral hieroglyphic symbols floating in the air."
+    },
+    {
+      "narration": "الصوت قال إن المصباح بيحمي العالم من وحش أكبر! انتظروا الجزء الخامس! ومين هيقدر يقف قدام العقرب المرعب ده؟",
+      "image_prompt": "A cartoon female Egyptian cat with a vibrant blue scarf around her neck and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya freeze in shock as a giant shadow with glowing red eyes looms behind the golden scorpion in the pharaoh tomb."
+    }
+  ],
+  "cliffhanger": "سماع همس مرعب يؤكد أن المصباح يحبس وحشًا أكبر تحت الأرض",
+  "story_type": "mystery",
+  "state": {
+    "location": "مقبرة فرعونية سحرية",
+    "goal": "فك لغز الخريطة المشعة داخل الصندوق",
+    "danger": "الهمس المرعب والوحش الأكبر المحبوس",
+    "story": "مصباح بسبوسة السحري",
+    "setting": "pharaoh's tomb",
+    "conflict_type": "theft",
+    "ending_structure": "secret_overheard",
+    "companion": {
+      "name": "القط زيكو",
+      "role": "rival",
+      "description": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya"
+    },
+    "used": {
+      "settings": [
+        "old Cairo attic",
+        "old Cairo alley",
+        "underground tunnel",
+        "pharaoh's tomb"
+      ],
+      "conflicts": [
+        "mystery",
+        "bargain",
+        "chase",
+        "theft"
+      ],
+      "endings": [
+        "choice_forced",
+        "twist_reveal",
+        "danger_revealed",
+        "secret_overheard"
+      ],
+      "types": [
+        "superpower",
+        "rival-conflict",
+        "action-chase",
+        "mystery"
+      ],
+      "hook_styles": [
+        "surprising_fact",
+        "danger_warning",
+        "cry_for_help",
+        "shocking_question"
+      ]
+    }
+  },
+  "format_issues": [],
+  "hook_mode": "default",
+  "part": 4,
+  "voice_style": "v1_plain_original",
+  "voice_name": "Charon",
+  "voice_tempo": 1.0,
+  "voice_s": 26.8,
+  "motion_style": "v2_cuts_pan_sfx",
+  "caption_style": "v3_sentence_timed",
+  "caption_sentence_starts": [
+    0.0,
+    3.14,
+    8.27,
+    12.62,
+    18.24,
+    22.52,
+    24.33
+  ],
+  "music": "Sneaky Adventure",
+  "sfx_at_s": 12.62,
+  "duration_s": 28.0
+}
