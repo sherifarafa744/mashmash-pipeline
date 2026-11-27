@@ -44,7 +44,8 @@ if LOOP_END:
 
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
-    scenes = sorted((ROOT / "scenes").glob("scene*.png"))
+    scenes = [ROOT / "scenes" / f"scene{i}.png" for i in range(1, len(ep["scenes"]) + 1)]  # exactly the episode's scenes, never stale extras
+    assert all(x.exists() for x in scenes), "missing scene image"
     n = len(scenes)
     # Retention: scene 1 is SHORTER with a fast punch-in zoom - the first 3
     # seconds decide whether the viewer stays, so the opening moves fast.

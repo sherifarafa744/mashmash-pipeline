@@ -18,6 +18,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
     (ROOT / "scenes").mkdir(exist_ok=True)
+    for old in (ROOT / "scenes").glob("scene*.png"):  # never reuse a stale image from an earlier build
+        old.unlink()
     for i, scene in enumerate(ep["scenes"], 1):
         body = json.dumps({"prompt": image_prompt(scene["image_prompt"]),
                            "steps": 4}).encode()
