@@ -30,7 +30,13 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
       - name: restore arc2 state to part 3 and set flags
         run: |
-          git show 49eb87e:story_state_arc2.json | jq '.companion.description="a very tall slim charcoal-black one-eyed cat spirit with one glowing green eye, twice Basbusa'"'"'s height, wearing a long white Egyptian galabiya, no scarf"' > story_state_arc2.json
+          git show 49eb87e:story_state_arc2.json > story_state_arc2.json
+          python3 - <<'PY'
+          import json
+          p="story_state_arc2.json"; d=json.load(open(p))
+          d["companion"]["description"]="a very tall slim charcoal-black one-eyed cat spirit with one glowing green eye, twice the height of Basbusa, wearing a long white Egyptian galabiya, no scarf"
+          json.dump(d,open(p,"w"),ensure_ascii=False,indent=1)
+          PY
           jq '. + {hook_mode:"default", danger_first:true, opening_sfx:true, tight_cut:true, no_top_hook:true, loop_end:true, music_gap:true, music_force:"Curse of the Scarab", build_tag:"full_rebuild_2026-11-27"}' config.json > /tmp/c.json && cp /tmp/c.json config.json
           jq -c '{episode,last_video_id}' story_state_arc2.json
       - name: build (no upload)
