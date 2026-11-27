@@ -46,7 +46,7 @@ def speech_span(wav, dur):
     return s0, e1, pauses
 
 
-def word_times(ep, wav, dur):
+def word_times(ep, wav, dur, sentence_bounds_out=None):
     sents = sentences(ep)
     s0, e1, pauses = speech_span(wav, dur)
     need = len(sents) - 1
@@ -63,6 +63,8 @@ def word_times(ep, wav, dur):
         for s in sents:
             d = (e1 - s0) * len("".join(s)) / tot
             bounds.append((a, a + d)); a += d
+    if sentence_bounds_out is not None:
+        sentence_bounds_out.extend((w, a, b) for w, (a, b) in zip(sents, bounds))
     out = []  # (word, start, end)
     for words, (a, b) in zip(sents, bounds):
         tot = sum(len(w) + 1 for w in words)
@@ -102,3 +104,17 @@ def beat_time(ep, wav, dur):
         before += len([w for w in (STRIP.sub("", x) for x in sc["narration"].split()) if w])
     wt = word_times(ep, wav, dur)
     return wt[before][1] if before < len(wt) else None
+
+
+def sentence_events(ep, wav, dur):
+    """One caption per spoken sentence, shown from its first word to the next sentence's
+    start. Sentence starts come from the real pauses in the voice (accurate to ~0.1s),
+    so there is no word-level guessing."""
+    sb = []
+    word_times(ep, wav, dur, sb)
+    ev = []
+    for k, (words, a, b) in enumerate(sb):
+        end = sb[k + 1][1] - 0.03 if k + 1 < len(sb) else min(dur, b + 0.6)
+        text = " ".join(words)
+        ev.append(f"Dialogue: 0,{ts(max(0, a - 0.05))},{ts(end)},Cap,,0,0,0,,{RLM}{text}{RLM}")
+    return ev, sb

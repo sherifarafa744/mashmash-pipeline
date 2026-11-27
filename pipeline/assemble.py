@@ -14,7 +14,7 @@ HOOK_STYLE = ("Noto Naskh Arabic,130,&H0000D7FF,&H000000FF,&H00141414,&H96000000
               "1,0,0,0,100,100,0,0,1,5,2,8,60,60,300,1")
 
 # Karaoke caption line (3 words at a time, active word yellow): big, bold, thick outline.
-CAP_STYLE = ("Cap,Noto Naskh Arabic,104,&H00FFFFFF,&H000000FF,&H00141414,&H96000000,"
+CAP_STYLE = ("Cap,Noto Naskh Arabic,92,&H00FFFFFF,&H000000FF,&H00141414,&H96000000,"
              "1,0,0,0,100,100,0,0,1,7,2,2,60,60,330,1")
 
 def ts(sec: float) -> str:
@@ -86,18 +86,26 @@ def main() -> None:
         cap_mode = json.loads((ROOT / "config.json").read_text()).get("captions", "sentence")
     except Exception:
         cap_mode = "sentence"
-    if voice_dur and cap_mode == "karaoke":
+    if voice_dur and cap_mode in ("karaoke", "sentence_timed"):
         try:
             sys.path.insert(0, str(pathlib.Path(__file__).parent))
             import captions
-            cap_events = captions.build_events(ep, voice, voice_dur)
-            nwords = sum(len(x) for x in captions.sentences(ep))
-            if not cap_events or len(cap_events) < nwords:
-                raise RuntimeError(f"caption events {len(cap_events)} < words {nwords}")
-            ep["caption_style"] = "v2_karaoke_3w"
+            if cap_mode == "karaoke":
+                cap_events = captions.build_events(ep, voice, voice_dur)
+                nwords = sum(len(x) for x in captions.sentences(ep))
+                if not cap_events or len(cap_events) < nwords:
+                    raise RuntimeError(f"caption events {len(cap_events)} < words {nwords}")
+                ep["caption_style"] = "v2_karaoke_3w"
+            else:
+                cap_events, sb = captions.sentence_events(ep, voice, voice_dur)
+                if not cap_events:
+                    raise RuntimeError("no caption events")
+                ep["caption_style"] = "v3_sentence_timed"
+                ep["caption_sentence_starts"] = [round(x[1], 2) for x in sb]
         except Exception as e:  # never lose the episode over captions: old sentence captions
-            print("karaoke captions failed, using sentence captions:", e)
+            print("timed captions failed, using per-scene sentence captions:", e)
             cap_events = None
+            ep["caption_style"] = "v1_sentence"
     subs = build_ass(ep, durs, fade, cap_events)
     fx.append(f"[{prev}]subtitles={subs}:fontsdir={FONTDIR},fade=t=out:st={total - 0.7:.2f}:d=0.7[vout]")
     cmd = ["ffmpeg", "-y", "-v", "error"]
