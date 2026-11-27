@@ -38,7 +38,7 @@ jobs:
           d["companion"]["description"]="a very tall slim charcoal-black one-eyed cat spirit with one glowing green eye, twice the height of Basbusa, wearing a long white Egyptian galabiya, no scarf"
           json.dump(d,open(p,"w"),ensure_ascii=False,indent=1)
           PY
-          jq '. + {hook_mode:"default", danger_first:true, opening_sfx:true, tight_cut:true, no_top_hook:true, loop_end:true, music_gap:true, music_force:"Curse of the Scarab", build_tag:"full_rebuild_2026-11-27"}' config.json > /tmp/c.json && cp /tmp/c.json config.json
+          jq '. + {hook_mode:"default", danger_first:true, opening_sfx:true, tight_cut:true, no_top_hook:true, loop_end:true, loop_reuse_first:true, music_gap:true, music_force:"Curse of the Scarab", build_tag:"full_rebuild_2026-11-27"}' config.json > /tmp/c.json && cp /tmp/c.json config.json
           jq -c '{episode,last_video_id}' story_state_arc2.json
       - name: build (no upload)
         run: |
@@ -48,7 +48,9 @@ jobs:
       - name: preview release (draft) and wait for go/nogo tag
         run: |
           mkdir -p /tmp/pv && cp episode_final.mp4 episode.json /tmp/pv/ && cp loopcheck/*.png /tmp/pv/ && cp scenes/scene*.png /tmp/pv/ || true
-          gh release create "preview-${{ github.run_id }}" /tmp/pv/* --draft --title "preview-${{ github.run_id }}" --notes preview --target "$GITHUB_SHA"
+          git config user.name mashmash-bot; git config user.email bot@users.noreply.github.com
+          git checkout -q -b "preview-${{ github.run_id }}"
+          mkdir -p preview && cp /tmp/pv/* preview/ && git add -f preview && git commit -qm "preview ${{ github.run_id }}" && git push -q origin "preview-${{ github.run_id }}"
           echo "preview ready; waiting for go-${{ github.run_id }} / nogo-${{ github.run_id }}"
           for i in $(seq 1 270); do
             if gh api repos/${{ github.repository }}/git/ref/tags/go-${{ github.run_id }} >/dev/null 2>&1; then echo GO; exit 0; fi
