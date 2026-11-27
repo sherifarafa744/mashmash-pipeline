@@ -135,7 +135,7 @@ def add_to_playlist(vid: str, tok: str) -> None:
     pl = state.get("playlist_id")
     story = state.get("story")
     if not pl and story:
-        body = json.dumps({"snippet": {"title": f"بسبوسة و{story} 🗺️ | الموسم 1",
+        body = json.dumps({"snippet": {"title": f"حكاية {story} | حكايات بسبوسة | الموسم 1",
                                         "description": f"كل أجزاء حكاية {story} من حكايات بسبوسة"},
                            "status": {"privacyStatus": "public"}}).encode()
         req = urllib.request.Request("https://www.googleapis.com/youtube/v3/playlists?part=snippet,status",

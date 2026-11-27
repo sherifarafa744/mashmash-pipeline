@@ -47,7 +47,7 @@ def main() -> None:
             headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"]})
         runs = json.load(urllib.request.urlopen(req, timeout=60)).get("workflow_runs", [])
         for r in runs:
-            if r["conclusion"] == "success" and r["id"] != me and parse(r["created_at"]) >= parse(SINCE) and target(parse(r["created_at"])) == want:
+            if r["conclusion"] == "success" and r.get("event") != "workflow_dispatch" and r["id"] != me and parse(r["created_at"]) >= parse(SINCE) and target(parse(r["created_at"])) == want:
                 print("skip")
                 return
         print("run")
