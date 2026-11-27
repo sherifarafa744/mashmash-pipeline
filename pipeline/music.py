@@ -16,6 +16,15 @@ def tracks() -> list:
 def pick(key: int):
     """Return (path or None, title)."""
     t = tracks()
+    try:  # config music_force: use one named track (keeps the rotation of other episodes unchanged)
+        want = json.loads((ROOT / "config.json").read_text()).get("music_force")
+    except Exception:
+        want = None
+    if want:
+        for e in t:
+            if e["title"] == want:
+                return ROOT / e["file"], e["title"]
+    t = [e for e in t if e["title"] != "Curse of the Scarab"]  # rotation unchanged: the new track is used only via music_force
     if not t:
         legacy = ROOT / "music.mp3"
         return (legacy if legacy.exists() else None), DEFAULT_TITLE

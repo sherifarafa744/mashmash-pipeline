@@ -35,6 +35,11 @@ TAIL = 0.35 if _C.get("tight_cut") else 1.2
 NO_TOP_HOOK = bool(_C.get("no_top_hook"))
 FADE_A = 0.3 if _C.get("tight_cut") else 0.9
 FADE_V = 0.3 if _C.get("tight_cut") else 0.7
+LOOP_END = bool(_C.get("loop_end"))
+MUSIC_GAP = bool(_C.get("music_gap"))
+if LOOP_END:
+    FADE_V = 0.0  # hard end on the last frame (no fade to black) so it flows back into frame 1
+    FADE_A = 0.08
 
 
 def main() -> None:
@@ -118,7 +123,8 @@ def main() -> None:
             cap_events = None
             ep["caption_style"] = "v1_sentence"
     subs = build_ass(ep, durs, fade, cap_events)
-    fx.append(f"[{prev}]subtitles={subs}:fontsdir={FONTDIR},fade=t=out:st={total - FADE_V:.2f}:d={FADE_V}[vout]")
+    _fv = f",fade=t=out:st={total - FADE_V:.2f}:d={FADE_V}" if FADE_V > 0 else ""
+    fx.append(f"[{prev}]subtitles={subs}:fontsdir={FONTDIR}{_fv}[vout]")
     cmd = ["ffmpeg", "-y", "-v", "error"]
     for i in range(1, n + 1):
         cmd += ["-i", str(ROOT / f"seg{i}.mp4")]
@@ -158,7 +164,11 @@ def main() -> None:
                 mx = "[mx]"
             # Music ducks under the voice (sidechain), lower base level than the
             # old constant 0.05 mix; music comes back up in the pauses.
-            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1][vo2];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume=0.062[mus];"
+            gap = ""
+            if MUSIC_GAP and beat is not None and beat > 1.5:
+                gap = f",volume=0:enable='between(t,{beat-0.7:.2f},{beat-0.1:.2f})'"  # silence beat before the tension moment
+                ep["music_gap"] = True
+            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1][vo2];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume=0.062{gap}[mus];"
                     f"[mus][vo1]sidechaincompress=threshold=0.02:ratio=10:attack=15:release=400:makeup=1[mduck];"
                     f"{last};{mx}apad,atrim=0:{total:.2f},afade=t=out:st={total - FADE_A:.2f}:d={FADE_A},loudnorm=I=-14:TP=-1.5[aout]",
                     "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}"]
@@ -173,6 +183,7 @@ def main() -> None:
     subprocess.run(cmd, check=True)
     if TAIL < 1.0: ep["tight_cut"] = True
     if NO_TOP_HOOK: ep["no_top_hook"] = True
+    if LOOP_END: ep["loop_end"] = True
     ep["duration_s"] = round(total, 1)
     (ROOT / "episode.json").write_text(json.dumps(ep, ensure_ascii=False, indent=2))
     st_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")

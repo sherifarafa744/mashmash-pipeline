@@ -1,0 +1,35 @@
+name: loop-test
+on:
+  workflow_dispatch:
+    inputs:
+      arc:
+        default: '1'
+permissions:
+  contents: read
+concurrency:
+  group: loop-test
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    env:
+      ARC_DIR: arc${{ github.event.inputs.arc }}
+      STORY_STATE: story_state_arc${{ github.event.inputs.arc }}.json
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
+      - name: test config (NON-PUBLISHING: no upload, no commit)
+        run: |
+          jq '. + {danger_first:true, opening_sfx:true, tight_cut:true, no_top_hook:true, loop_end:true, music_gap:true, music_force:"Curse of the Scarab", build_tag:"loop_test"}' config.json > /tmp/c.json && cp /tmp/c.json config.json
+          cat config.json
+      - run: |
+          export PUBLISH_AT=$(date -u -d '+8 hours' +%Y-%m-%dT%H:%M:%S.000Z)
+          for s in gen_script gen_voice gen_images assemble loop_check; do echo "== $s"; python pipeline/$s.py; done
+          jq '{title,part,music,loop_end,music_gap,loop_ok,loop_ssim,loop_luma_diff,loop_audio_end_db,loop_audio_start_db,duration_s,format_issues}' episode.json
+          mkdir -p out && cp episode_final.mp4 episode.json out/ && cp -r loopcheck out/ && cp scenes/scene1.png out/s1.png && cp scenes/scene*.png out/ 
+      - uses: actions/upload-artifact@v4
+        with: { name: loop-test, path: out }

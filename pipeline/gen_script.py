@@ -16,6 +16,7 @@ except Exception:
     _CFG = {}
 VOTE_ON = _CFG.get("vote", True)
 DANGER_FIRST = bool(_CFG.get("danger_first"))
+LOOP_END = bool(_CFG.get("loop_end"))
 HOOK_Q = _CFG.get("hook_mode") == "known_char_question"  # experiment B (from 2026-11-28)
 
 SYSTEM = """You write Egyptian-Arabic narration for a vertical YouTube Shorts
@@ -243,6 +244,10 @@ def main() -> None:
         user += ("\nSCENE 1 DANGER RULE: the danger/creature named in the first narration sentence and hook_text (for example the golden scorpion) "
                  "MUST be clearly visible, large and central, in the scene 1 image_prompt from the very first frame, with Basbusa (the small orange cat with the blue scarf) in the same frame as the main character. "
                  "No calm shot, no close-up of another character alone, no setting-only shot in scene 1.")
+    if LOOP_END:
+        user += ("\nLOOP RULE: the LAST scene image_prompt must reuse the SAME location, camera framing, lighting and Basbusa pose/position as the scene 1 image_prompt, "
+                 "so the final frame looks almost like the first frame; the only change is a new hint of the cliffhanger (a shadow, an eye, a glow) in the background. "
+                 "The last narration still ends with the cliffhanger and \"انتظروا الجزء\" + the next ordinal.")
     if HOOK_Q:
         user += ("\nHOOK EXPERIMENT (overrides the hook-variety rules above for the hook only): the FIRST narration sentence MUST be a shocking QUESTION of at most 7 words, "
                  "hook_style shocking_question, that names a KNOWN recurring character (بسبوسة or the companion in state.companion) and asks about something strange or dangerous happening to them right now, "
@@ -308,6 +313,7 @@ def main() -> None:
         episode["script_model"] = "cloudflare:" + used_model
     if _CFG.get("build_tag"): episode["build_tag"] = _CFG["build_tag"]
     if DANGER_FIRST: episode["danger_first"] = True
+    if LOOP_END: episode["loop_end"] = True
     episode["hook_mode"] = "known_char_question" if HOOK_Q else "default"
     episode["part"] = part  # story_type comes straight from the model output
     (ROOT / "episode.json").write_text(json.dumps(episode, ensure_ascii=False, indent=2))
