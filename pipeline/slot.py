@@ -12,6 +12,7 @@ import datetime as dt, json, os, sys, urllib.request
 SLOT_HOURS = (9, 12, 15, 18)
 BUFFER = 2 * 3600  # target = first slot more than 2h away; builds start ~4h ahead
 # Runs before the build-ahead switch served slots in the old way; ignore them.
+PAUSE_UNTIL = "2026-11-28T10:00:00Z"
 SINCE = "2026-11-25T23:11:00Z"
 
 def target(now: dt.datetime) -> dt.datetime:
@@ -36,6 +37,9 @@ def main() -> None:
         now = parse(sys.argv[2]) if len(sys.argv) > 2 else dt.datetime.now(dt.timezone.utc)
         print(iso(target(now)))
     elif cmd == "guard":
+        if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and dt.datetime.now(dt.timezone.utc) < parse(PAUSE_UNTIL):
+            print("skip")  # scheduled builds paused until the Gemini/Cloudflare quotas reset (user decision)
+            return
         if os.environ.get("FORCE") == "1":
             print("run")
             return

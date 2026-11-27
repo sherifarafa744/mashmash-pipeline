@@ -16,6 +16,9 @@ on:
       upload_mode:
         description: 'hold (default) = upload PRIVATE with no schedule right after the build, a job in the run flips it public at the slot (same as part 6); direct = wait for the slot then upload public; scheduled = YouTube publishAt'
         default: ''
+      gate:
+        description: 'Set 1 to pause before upload for a manual check (preview branch, go-/nogo- tag)'
+        default: ''
       force:
         description: 'Set 1 to rebuild a slot the guard already served'
         default: ''
@@ -99,6 +102,8 @@ jobs:
           ARC_DIR: arc${{ steps.arc.outputs.arc }}
           PUBLISH_AT: ${{ steps.arc.outputs.publish_at }}
           UPLOAD_MODE: ${{ github.event.inputs.upload_mode || 'hold' }}
+          GATE: ${{ github.event.inputs.gate }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
