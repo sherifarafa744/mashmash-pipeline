@@ -16,6 +16,9 @@ on:
       upload_mode:
         description: 'hold (default) = upload PRIVATE with no schedule right after the build, a job in the run flips it public at the slot (same as part 6); direct = wait for the slot then upload public; scheduled = YouTube publishAt'
         default: ''
+      publish_at:
+        description: 'Optional slot override, ISO UTC like 2026-11-28T09:00:00.000Z (a normal slot hour)'
+        default: ''
       gate:
         description: 'Set 1 to pause before upload for a manual check (preview branch, go-/nogo- tag)'
         default: ''
@@ -52,6 +55,7 @@ jobs:
       - id: arc
         run: |
           PUBLISH_AT=$(python3 pipeline/slot.py target)
+          if [ -n "${{ github.event.inputs.publish_at }}" ]; then PUBLISH_AT="${{ github.event.inputs.publish_at }}"; fi
           H=$(date -u -d "$PUBLISH_AT" +%H)
           if [ -n "$ARC" ]; then arc="$ARC"; else
             case $H in 09|15) arc=1;; 12|18) arc=2;; *) arc=1;; esac
