@@ -12,12 +12,14 @@ while True:
     tok = d.get("nextPageToken")
     if not tok: break
 print("TOTAL", len(ids))
+import time; time.sleep(20)
 BAD = "قصص اطفال"
 for i in range(0, len(ids), 50):
     for v in get(B + "videos?part=snippet,status&id=" + ",".join(ids[i:i+50]))["items"]:
         sn = v["snippet"]; tags = sn.get("tags", [])
         if BAD not in tags:
             print("OK-NOTAG", v["id"], v["status"]["privacyStatus"]); continue
+        print("STILL", v["id"]); continue
         sn["tags"] = [t for t in tags if t != BAD] + ([] if "حكايات" in tags else ["حكايات"])
         body = json.dumps({"id": v["id"], "snippet": {k: sn[k] for k in ("title", "description", "categoryId", "tags", "defaultLanguage", "defaultAudioLanguage") if k in sn}}).encode()
         try:
