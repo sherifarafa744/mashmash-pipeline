@@ -13,5 +13,8 @@
   "loop_reuse_first": true,
   "music_gap": true,
   "music_force": "Curse of the Scarab",
-  "build_tag": "full_flags_part7_2026-11-28"
+  "build_tag": "full_flags_part7_2026-11-28",
+  "finale": {
+    "arc2": 6
+  }
 }

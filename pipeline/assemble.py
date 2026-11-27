@@ -35,6 +35,7 @@ TAIL = 0.35 if _C.get("tight_cut") else 1.2
 NO_TOP_HOOK = bool(_C.get("no_top_hook"))
 FADE_A = 0.3 if _C.get("tight_cut") else 0.9
 FADE_V = 0.3 if _C.get("tight_cut") else 0.7
+_FIN = (_C.get("finale") or {}).get(os.environ.get("ARC_DIR", ""))  # finale part number for this arc: no loop, normal fade out
 LOOP_END = bool(_C.get("loop_end"))
 LOOP_REUSE = bool(_C.get("loop_reuse_first"))
 MUSIC_GAP = bool(_C.get("music_gap"))
@@ -44,7 +45,12 @@ if LOOP_END:
 
 
 def main() -> None:
+    global LOOP_END, LOOP_REUSE, FADE_V, FADE_A
     ep = json.loads((ROOT / "episode.json").read_text())
+    if _FIN and _FIN == ep.get("part"):
+        LOOP_END = LOOP_REUSE = False
+        FADE_V, FADE_A = (0.3, 0.9) if not _C.get("tight_cut") else (0.3, 0.3)
+        ep["finale"] = True
     scenes = [ROOT / "scenes" / f"scene{i}.png" for i in range(1, len(ep["scenes"]) + 1)]  # exactly the episode's scenes, never stale extras
     assert all(x.exists() for x in scenes), "missing scene image"
     if LOOP_REUSE and len(scenes) > 2:

@@ -245,7 +245,7 @@ def main() -> None:
                  "MUST be clearly visible, large and central, in the scene 1 image_prompt from the very first frame, with Basbusa (the small orange cat with the blue scarf) in the same frame as the main character. "
                  "No calm shot, no close-up of another character alone, no setting-only shot in scene 1.")
     user += "\nSTORY CLARITY RULES (apply to every episode): (a) ONE goal, ONE obstacle, ONE reveal. The first 2 narration sentences must make the situation understandable to a viewer who skipped earlier parts: who wants what, and what stands in the way (name the object/place). (b) No plot drift: the main object or goal from state.next stays the same object (do not turn a lamp into a map or change the quest); a new object may only appear as a clearly named consequence. (c) Payoff: the episode resolves its own small question (Basbusa succeeds, fails or pays a price) before the cliffhanger, with rising tension in scenes 2-4 (a visible danger getting closer, a ticking cost) and one twist at the beat scene. (d) Characters stay visibly distinct: in every image_prompt describe each non-Basbusa character by fixed color, size and accessory (never orange, never a blue scarf, never an eye patch on Basbusa); each line names who acts, so the viewer never confuses two characters.\n"
-    if LOOP_END:
+    if LOOP_END and not (_CFG.get("finale") or {}).get(os.environ.get("ARC_DIR", "")) == part:
         user += ("\nLOOP RULE: the LAST scene image_prompt must reuse the SAME location, camera framing, lighting and Basbusa pose/position as the scene 1 image_prompt, "
                  "so the final frame looks almost like the first frame; the only change is a new hint of the cliffhanger (a shadow, an eye, a glow) in the background. "
                  "The last narration still ends with the cliffhanger and \"انتظروا الجزء\" + the next ordinal.")
@@ -253,7 +253,15 @@ def main() -> None:
         user += ("\nHOOK EXPERIMENT (overrides the hook-variety rules above for the hook only): the FIRST narration sentence MUST be a shocking QUESTION of at most 7 words, "
                  "hook_style shocking_question, that names a KNOWN recurring character (بسبوسة or the companion in state.companion) and asks about something strange or dangerous happening to them right now, "
                  "in the style of: \"ليه بندق طار في الهواء فجأة؟\". hook_text says the same question. Keep the title variety rule.")
-    user += f"\nThis is part {part}. The closing line MUST name the next part: \"انتظروا الجزء {nxt}!\""
+    FINALE = (_CFG.get("finale") or {}).get(os.environ.get("ARC_DIR", "")) == part
+    if FINALE:
+        user += (f"\nSTORY FINALE: this is part {part}, the LAST episode of this storyline. Resolve the main goal and the main danger from state in a satisfying, warm, clear ending "
+                 "(the reveal pays off what earlier parts set up; no new mystery, no cliffhanger, no vote, no question to viewers). "
+                 "Do NOT say \"انتظروا الجزء\" and do NOT name a next part. The last narration thanks the viewers warmly in one short sentence and says the story is over (the end), "
+                 "in different words from the opening. Ignore every instruction above about the cliffhanger, the next-part naming, the vote and the loop-to-the-opening echo. "
+                 "Keep the title with the part number and the word 'الخاتمة'.")
+    else:
+        user += f"\nThis is part {part}. The closing line MUST name the next part: \"انتظروا الجزء {nxt}!\""
     body = json.dumps({
         "system_instruction": {"parts": [{"text": SYSTEM}]},
         "contents": [{"role": "user", "parts": [{"text": user}]}],
