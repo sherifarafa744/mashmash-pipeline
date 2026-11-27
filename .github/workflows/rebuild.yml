@@ -8,7 +8,7 @@ permissions:
   contents: write
   actions: write
 concurrency:
-  group: rebuild-gated
+  group: rebuild-gated-${{ github.run_id }}
 jobs:
   r:
     runs-on: ubuntu-latest
