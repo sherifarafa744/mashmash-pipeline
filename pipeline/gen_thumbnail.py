@@ -10,7 +10,14 @@ FONTDIR = "/usr/share/fonts/truetype/noto"
 
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
-    scene1 = sorted((ROOT / "scenes").glob("scene*.png"))[0]
+    # Thumbnail frame: the shock-beat scene (clear single moment), else scene 2. Scene 1 is
+    # a busy opening (danger plus several characters) and read as confusing.
+    n = len(ep.get("scenes", [])) or 5
+    idx = ep.get("beat_scene")
+    idx = idx if isinstance(idx, int) and 2 <= idx <= n else min(2, n)
+    scene1 = ROOT / "scenes" / f"scene{idx}.png"
+    if not scene1.exists():
+        scene1 = ROOT / "scenes" / "scene1.png"
     import re
     # Emoji render as tofu boxes in Noto Naskh Arabic - strip them from the burned title.
     title = re.sub(r"[^0-9A-Za-z\u0600-\u06FF\u0750-\u077F\s?!.،:؛\-]", "", ep["title"].replace(" | بسبوسة", "")).strip()
