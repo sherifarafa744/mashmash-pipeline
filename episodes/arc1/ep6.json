@@ -1,0 +1,100 @@
+{
+  "title": "بسبوسة ومفتاح التمثال الفرعوني.. سر مرعب! 🗝️😱",
+  "hook_text": "ليه بندق طار في الهواء؟",
+  "hook_style": "shocking_question",
+  "opening_line": "ليه بندق طار في الهواء فجأة",
+  "beat_scene": 4,
+  "scenes": [
+    {
+      "narration": "ليه بندق طار في الهواء فجأة؟",
+      "image_prompt": "A sleek cartoon female cat named Basbusa wearing a bright blue scarf, looking up in complete shock inside a dimly lit pharaonic crypt, as a sly brown street cat with a black eye patch and a silver bell on his collar floats in mid-air surrounded by glowing blue hieroglyphics."
+    },
+    {
+      "narration": "بسبوسة سابت الصندوق وطلعت الخريطة السحرية من ايد بندق عشان تنقذه.",
+      "image_prompt": "Basbusa the cartoon cat wearing a blue scarf bravely reaching up to snatch an ancient glowing map from a sly brown street cat with a black eye patch and a silver bell on his collar as he hovers in the air."
+    },
+    {
+      "narration": "النقوش الفرعونية نورت الخريطة وانفتح باب سري تحته مفتاح ذهبي بيلمع.",
+      "image_prompt": "Inside the ancient stone crypt, illuminated glowing blue pharaonic symbols on the map beam light at a wall, uncovering a hidden secret compartment containing a shiny ancient golden key."
+    },
+    {
+      "narration": "بسبوسة مسكت المفتاح الذهبي واكتشفت إنه مش لفتح الصندوق ده للتمثال!",
+      "image_prompt": "Basbusa the cartoon cat with her blue scarf holding a glowing ancient golden key, realizing with wide eyes that the keyhole is hidden on a giant ancient Egyptian cat statue."
+    },
+    {
+      "narration": "وفجأة اتحرك تمثال القط الحجري وظهرت تحته فوهة بركانية زرقة! انتظروا الجزء السابع! هو بندق ايه اللي رفعه في الجو اصلاً؟",
+      "image_prompt": "The giant stone cat statue slides back with ancient dust, revealing a mysterious glowing blue vortex underneath, while Basbusa steps back in total shock."
+    }
+  ],
+  "cliffhanger": "تحرك تمثال القط الحجري وظهور فوهة بركانية زرقة تحت الأرض",
+  "story_type": "superpower",
+  "state": {
+    "location": "سرداب التابوت الذهبي داخل المعبد",
+    "goal": "حل لغز مفتاح تمثال القط الفرعوني",
+    "danger": "الفوهة السحرية البركانية وظواهر المعبد الخارقة",
+    "story": "كنز جزيرة التونة الذهبية",
+    "setting": "سرداب التابوت الذهبي",
+    "conflict_type": "mystery",
+    "ending_structure": "twist reveal",
+    "companion": {
+      "name": "بندق",
+      "role": "rival",
+      "description": "a sly brown street cat with a black eye patch and a silver bell on his collar"
+    },
+    "used": {
+      "settings": [
+        "سوق السمك القديم",
+        "النيل",
+        "معبد فرعوني قديم",
+        "سطح بيت قديم",
+        "سرداب التابوت الذهبي"
+      ],
+      "conflicts": [
+        "chase",
+        "bargain",
+        "secret",
+        "rival",
+        "mystery"
+      ],
+      "endings": [
+        "danger revealed",
+        "choice forced",
+        "question cliffhanger",
+        "twist reveal"
+      ],
+      "types": [
+        "adventure",
+        "action-chase",
+        "mystery",
+        "rival-conflict",
+        "superpower"
+      ],
+      "hook_styles": [
+        "danger_warning",
+        "surprising_fact",
+        "surprise",
+        "shocking_question"
+      ]
+    }
+  },
+  "format_issues": [],
+  "part": 6,
+  "voice_style": "v1_plain_original",
+  "voice_name": "Charon",
+  "voice_tempo": 1.0,
+  "voice_s": 27.5,
+  "motion_style": "v2_cuts_pan_sfx",
+  "caption_style": "v3_sentence_timed",
+  "caption_sentence_starts": [
+    0.0,
+    2.04,
+    6.72,
+    12.5,
+    18.0,
+    23.63,
+    25.44
+  ],
+  "music": "Sneaky Snitch",
+  "sfx_at_s": 12.5,
+  "duration_s": 28.7
+}
