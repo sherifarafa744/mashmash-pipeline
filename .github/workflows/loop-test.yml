@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-noto-core
-      - name: test config (NON-PUBLISHING: no upload, no commit)
+      - name: test config, NON-PUBLISHING (no upload, no commit)
         run: |
           jq '. + {danger_first:true, opening_sfx:true, tight_cut:true, no_top_hook:true, loop_end:true, music_gap:true, music_force:"Curse of the Scarab", build_tag:"loop_test"}' config.json > /tmp/c.json && cp /tmp/c.json config.json
           cat config.json
