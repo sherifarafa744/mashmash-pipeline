@@ -1,56 +1,56 @@
 {
-  "episode": 6,
-  "next": "تحرك تمثال القط الحجري وظهور فوهة بركانية زرقة تحت الأرض",
-  "location": "سرداب التابوت الذهبي داخل المعبد",
-  "goal": "حل لغز مفتاح تمثال القط الفرعوني",
-  "danger": "الفوهة السحرية البركانية وظواهر المعبد الخارقة",
-  "story": "كنز جزيرة التونة الذهبية",
-  "setting": "سرداب التابوت الذهبي",
-  "conflict_type": "mystery",
-  "ending_structure": "twist reveal",
-  "companion": {
-    "name": "بندق",
-    "role": "rival",
-    "description": "a sly brown street cat with a black eye patch and a silver bell on his collar"
-  },
-  "used": {
-    "settings": [
-      "سوق السمك القديم",
-      "النيل",
-      "معبد فرعوني قديم",
-      "سطح بيت قديم",
-      "سرداب التابوت الذهبي"
-    ],
-    "conflicts": [
-      "chase",
-      "bargain",
-      "secret",
-      "rival",
-      "mystery"
-    ],
-    "endings": [
-      "danger revealed",
-      "choice forced",
-      "question cliffhanger",
-      "twist reveal"
-    ],
-    "types": [
-      "adventure",
-      "action-chase",
-      "mystery",
-      "rival-conflict",
-      "superpower"
-    ],
-    "hook_styles": [
-      "danger_warning",
-      "surprising_fact",
-      "surprise",
-      "shocking_question"
-    ]
-  },
-  "playlist_id": "PLFeKx89Tl-dg",
-  "last_duration_s": 28.7,
-  "last_story_type": "superpower",
-  "last_hook_style": "shocking_question",
-  "last_video_id": "LRbVtHteJ0g"
+ "episode": 6,
+ "next": "تحرك تمثال القط الحجري وظهور فوهة بركانية زرقة تحت الأرض",
+ "location": "سرداب التابوت الذهبي داخل المعبد",
+ "goal": "حل لغز مفتاح تمثال القط الفرعوني",
+ "danger": "الفوهة السحرية البركانية وظواهر المعبد الخارقة",
+ "story": "كنز جزيرة التونة الذهبية",
+ "setting": "سرداب التابوت الذهبي",
+ "conflict_type": "mystery",
+ "ending_structure": "twist reveal",
+ "companion": {
+  "name": "بندق",
+  "role": "rival",
+  "description": "a lean dark-brown street cat, taller than Basbusa, with a black patch over his left eye and a silver bell on his collar, no scarf"
+ },
+ "used": {
+  "settings": [
+   "سوق السمك القديم",
+   "النيل",
+   "معبد فرعوني قديم",
+   "سطح بيت قديم",
+   "سرداب التابوت الذهبي"
+  ],
+  "conflicts": [
+   "chase",
+   "bargain",
+   "secret",
+   "rival",
+   "mystery"
+  ],
+  "endings": [
+   "danger revealed",
+   "choice forced",
+   "question cliffhanger",
+   "twist reveal"
+  ],
+  "types": [
+   "adventure",
+   "action-chase",
+   "mystery",
+   "rival-conflict",
+   "superpower"
+  ],
+  "hook_styles": [
+   "danger_warning",
+   "surprising_fact",
+   "surprise",
+   "shocking_question"
+  ]
+ },
+ "playlist_id": "PLFeKx89Tl-dg",
+ "last_duration_s": 28.7,
+ "last_story_type": "superpower",
+ "last_hook_style": "shocking_question",
+ "last_video_id": "LRbVtHteJ0g"
 }

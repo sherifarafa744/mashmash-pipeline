@@ -1,53 +1,53 @@
 {
-  "episode": 4,
-  "next": "الهروب من الوحش الجديد وقراءة سر الخريطة الحمراء",
-  "location": "مقبرة فرعونية تحت الأرض",
-  "goal": "الهروب من الوحش الجديد وفك رمز الخريطة الحمراء",
-  "danger": "الوحش المجهول تحت الأرض",
-  "story": "مصباح بسبوسة السحري",
-  "setting": "pharaoh's tomb",
-  "conflict_type": "secret",
-  "ending_structure": "new_character_appears",
-  "companion": {
-    "name": "القط زيكو",
-    "role": "rival",
-    "description": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya"
-  },
-  "used": {
-    "settings": [
-      "old Cairo attic",
-      "old Cairo alley",
-      "underground tunnel",
-      "pharaoh's tomb"
-    ],
-    "conflicts": [
-      "mystery",
-      "bargain",
-      "chase",
-      "secret"
-    ],
-    "endings": [
-      "choice_forced",
-      "twist_reveal",
-      "danger_revealed",
-      "new_character_appears"
-    ],
-    "types": [
-      "superpower",
-      "rival-conflict",
-      "action-chase",
-      "mystery"
-    ],
-    "hook_styles": [
-      "surprising_fact",
-      "danger_warning",
-      "cry_for_help",
-      "shocking_question"
-    ]
-  },
-  "playlist_id": "PLM9buLI-Epxo",
-  "last_duration_s": 26.9,
-  "last_story_type": "mystery",
-  "last_hook_style": "shocking_question",
-  "last_video_id": "qx0gmmxgi2E"
+ "episode": 4,
+ "next": "الهروب من الوحش الجديد وقراءة سر الخريطة الحمراء",
+ "location": "مقبرة فرعونية تحت الأرض",
+ "goal": "الهروب من الوحش الجديد وفك رمز الخريطة الحمراء",
+ "danger": "الوحش المجهول تحت الأرض",
+ "story": "مصباح بسبوسة السحري",
+ "setting": "pharaoh's tomb",
+ "conflict_type": "secret",
+ "ending_structure": "new_character_appears",
+ "companion": {
+  "name": "القط زيكو",
+  "role": "rival",
+  "description": "a very tall slim charcoal-black one-eyed cat spirit with one glowing green eye, twice Basbusa's height, wearing a long white Egyptian galabiya, no scarf"
+ },
+ "used": {
+  "settings": [
+   "old Cairo attic",
+   "old Cairo alley",
+   "underground tunnel",
+   "pharaoh's tomb"
+  ],
+  "conflicts": [
+   "mystery",
+   "bargain",
+   "chase",
+   "secret"
+  ],
+  "endings": [
+   "choice_forced",
+   "twist_reveal",
+   "danger_revealed",
+   "new_character_appears"
+  ],
+  "types": [
+   "superpower",
+   "rival-conflict",
+   "action-chase",
+   "mystery"
+  ],
+  "hook_styles": [
+   "surprising_fact",
+   "danger_warning",
+   "cry_for_help",
+   "shocking_question"
+  ]
+ },
+ "playlist_id": "PLM9buLI-Epxo",
+ "last_duration_s": 26.9,
+ "last_story_type": "mystery",
+ "last_hook_style": "shocking_question",
+ "last_video_id": "qx0gmmxgi2E"
 }
