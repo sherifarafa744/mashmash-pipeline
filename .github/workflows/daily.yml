@@ -130,7 +130,7 @@ jobs:
             mkdir -p episodes/celebrations
             cp episode.json "episodes/celebrations/$(date -u +%F-%H%M).json"
             git rm -q milestone.json
-            git add -A episode.json episodes/ milestone.json
+            git add -A episode.json episodes/ episode_log.jsonl
             git commit -m "milestone celebration $(date -u +%F-%H%M)" || true
           else
             mkdir -p "episodes/$ARC_DIR"
