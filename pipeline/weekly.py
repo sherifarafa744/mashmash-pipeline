@@ -238,7 +238,7 @@ def main() -> None:
                             + ep.get("cliffhanger", "") + music_lib.attribution(music_title) +
                             "\n#بسبوسة #قصص_قطط #حكايات_بسبوسة #قصص_مصورة"),
             "categoryId": "24",
-            "tags": ["بسبوسة", "حكايات بسبوسة", "قصص قطط", "قصص مصورة", "قصص اطفال", "حكايات"]},
+            "tags": ["بسبوسة", "حكايات بسبوسة", "قصص قطط", "قصص مصورة", "حكايات", "قصص قصيرة"]},
         "status": ({"privacyStatus": "private", "publishAt": os.environ["PUBLISH_AT"],
                     "selfDeclaredMadeForKids": False} if os.environ.get("PUBLISH_AT")
                    else {"privacyStatus": "public", "selfDeclaredMadeForKids": False})}).encode()

@@ -48,12 +48,17 @@ def main() -> None:
         title = f"{ep['title']} | بسبوسة"
         desc = "بسبوسة بتحتفل معاكم وتشكركم على حبكم! 🎉\n"
     else:
-        title = f"{ep['title']} | الجزء {ep.get('part', 1)} | بسبوسة"
+        part = int(ep.get("part", 1) or 1)
+        # Rotate the title suffix so titles do not all share one template.
+        key = part + (3 if os.environ.get("ARC_DIR") == "arc2" else 0)
+        fmt = [f"{{t}} | الجزء {part} | بسبوسة", f"{{t}} | بسبوسة - ج{part}", f"{{t}} - الجزء {part}",
+               f"بسبوسة | {{t}} | ج{part}", f"{{t}} | حكايات بسبوسة {part}"][key % 5]
+        title = fmt.format(t=ep["title"])
         desc = f"الجزء {ep.get('part', 1)} من حكايات بسبوسة\n" + ep.get("cliffhanger", "") + "\n"
     meta = json.dumps({"snippet": {
             "title": title,
             "description": desc + music_lib.attribution(ep.get("music") or music_lib.DEFAULT_TITLE) + "\n#Shorts #بسبوسة #قصص_قطط #شورتس #قصص_حيوانات",
-            "categoryId": "24", "tags": ["بسبوسة","قصص قطط","حكايات بسبوسة","قطط","قصص اطفال","شورتس","Shorts","قصص مصورة"]},
+            "categoryId": "24", "tags": ["بسبوسة","قصص قطط","حكايات بسبوسة","قطط","حكايات","شورتس","Shorts","قصص مصورة"]},
         "status": status_block()}).encode()
     tok = access_token()
     init = urllib.request.Request(

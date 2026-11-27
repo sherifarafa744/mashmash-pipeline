@@ -83,6 +83,7 @@ Rules: VIRAL SHORT FORMAT (mandatory, every episode):
 3. PAYOFF: around scenes 3-4 give a small payoff the viewer can enjoy: the problem of the opening is solved or a secret is revealed, in one clear beat. Then the NEW twist/cliffhanger starts from it. Every scene still ends on rising tension.
 4. LOOP: after naming the next part, the LAST sentence echoes the OPENING IDEA in DIFFERENT words (same danger or image, new phrasing, e.g. opening "الثعبان نزل على بسبوسة!" -> ending "وفين الثعبان ده دلوقتي؟"). NEVER repeat the opening sentence or its key phrase verbatim.
 5. ENDING: the last scene gives the cliffhanger matching ending_structure, then the vote question, then closes with "انتظروا الجزء" + the NEXT part's Arabic ordinal (given in the user message), NO day or time reference (never بكرة, النهارده, or any date), then the one-line loop-back echo. Never let the story just stop.
+6c. TITLE VARIETY: the audience is a general family audience, never framed as "children" (no "للأطفال", no kids framing in title, hook or narration). Vary the title SHAPE every episode; rotate among: a question about the danger ("مين هيلحق بسبوسة؟"), a short statement of the event ("العقرب ظهر فجأة"), a promise ("اللي حصل بعد الصندوق مش هتصدقه" style but without clickbait the episode does not deliver), a quoted line from the narration, a contrast ("بسبوسة ضد العقرب الذهبي"). Do NOT reuse the "X.. مين هيعمل Y؟!" shape if any of the last 3 titles in state.recent_openings used it; vary punctuation and emojis too (not always "؟!" and the same two emojis). Vary the hook too: a different hook_style and a different opening type from the last 3 episodes.
 6b. TITLE MATCH: the title must name the main danger or event that actually happens in THIS episode's scenes (use the same key nouns as the narration and cliffhanger, e.g. the creature, object or place shown); never a title about something the episode does not show.
 6. NO NEAR-DUPLICATES: the opening line, hook_text, title, and vote question must not repeat or closely paraphrase any previous episode of ANY arc (state.recent_openings lists them); change the verb, the danger and the structure.
 Egyptian dialect throughout; image_prompt is an English visual description of the scene (no text in image). Update state for next time, appending this episode's setting, conflict_type, ending_structure, story_type and hook_style to the used lists (keep each to the last 6). Also return "opening_line": the exact first narration sentence, and "beat_scene": the 1-based number of the scene whose first sentence is the shock/twist beat (usually 4 or 5; never 1)."""
@@ -144,6 +145,16 @@ def problems(ep, recent) -> list:
             out.append("the ending repeats the opening sentence verbatim; echo it in different words")
         if not VOTE_ON and ("اكتبوا" in last or "التعليقات" in last or "الكومنتات" in last):
             out.append("voting is off: remove the vote question and any ask to comment")
+    t = ep.get("title", "")
+    def shape(x): return (".." in x, "؟" in x, "!" in x)
+    try:
+        prev = [json.loads(l).get("title", "") for l in (ROOT / "episode_log.jsonl").read_text().splitlines()[-4:]]
+    except Exception:
+        prev = []
+    if t and sum(1 for x in prev if shape(x) == shape(t)) >= 2:
+        out.append("title shape (dots/question/exclamation pattern) repeats 2+ of the last 4 titles; use a different title shape")
+    if any(w in t for w in ("للأطفال", "اطفال", "أطفال")):
+        out.append("do not frame the title for children; use a general family audience")
     total = sum(words(x["narration"]) for x in sc)
     if not 48 <= total <= 68:
         out.append(f"narration is {total} words, need 48-68")
