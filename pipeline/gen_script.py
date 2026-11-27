@@ -275,6 +275,10 @@ def main() -> None:
             except Exception as e:  # 503 high demand, 429 quota, etc.
                 last = e
                 print(f"{model} failed: {e}", flush=True)
+                try:
+                    print("  body:", e.read().decode()[:700].replace(chr(10), " "), flush=True)
+                except Exception:
+                    pass
                 time.sleep(15)
         raise RuntimeError(f"all Gemini script models failed: {last}")
 
