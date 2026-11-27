@@ -1,41 +1,43 @@
 {
-  "title": "سر الصندوق الذهبي يهدد بسبوسة وزيكو! 🦂✨",
-  "hook_text": "مين يهرب من العقرب الذهبي",
+  "title": "العقرب الذهبي يهاجم بسبوسة والصندوق يتفتح! 🦂🗝️",
+  "hook_text": "مين يقدر يوقف العقرب الذهبي ده",
   "hook_style": "shocking_question",
-  "opening_line": "مين يقدر يهرب من العقرب الذهبي",
+  "opening_line": "مين يقدر يوقف العقرب الذهبي ده",
   "beat_scene": 4,
   "scenes": [
     {
-      "narration": "مين يقدر يهرب من العقرب الذهبي؟",
-      "image_prompt": "A cartoon female Egyptian cat with a vibrant blue scarf around her neck and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya, panicking inside a dimly lit ancient Egyptian pharaoh tomb as a huge glowing golden scorpion lunges at them with its stinger raised."
+      "narration": "مين يقدر يوقف العقرب الذهبي ده؟",
+      "image_prompt": "A small cute orange female cartoon cat named Basbusa wearing a blue scarf, trapped in a dark underground tunnel, looking terrified as a giant glowing golden scorpion with sharp pincers attacks her."
     },
     {
-      "narration": "بسبوسة رشت شرار المصباح السحري في عين العقرب فعمته وجريت.",
-      "image_prompt": "A cartoon female Egyptian cat with a vibrant blue scarf around her neck shines a glowing magic lamp emitting brilliant blue sparks directly into the eyes of a gigantic glowing golden scorpion inside an ancient pharaoh tomb."
+      "narration": "القط زيكو استخدم سحره وضارب العقرب بشرار أزرق قاسي.",
+      "image_prompt": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya shooting bright blue magical sparks from his eye at the giant glowing golden scorpion in the dark tunnel, while Basbusa watches."
     },
     {
-      "narration": "القط زيكو انتهز الفرصة وخطف الصندوق الذهبي وركض بيه.",
-      "image_prompt": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya greedily snatches an ornate glowing golden treasure chest and runs through a dark ancient tomb corridor."
+      "narration": "بسبوسة استغلت الفرصة وفتحت الصندوق الذهبي بالمفتاح السحري فجأة.",
+      "image_prompt": "Basbusa the small orange female cartoon cat with a blue scarf opening a glowing ancient golden chest with a glowing key inside the dark tunnel."
     },
     {
-      "narration": "فجأة الصندوق اتفتح وسمعوا همس غامض بيكشف سر المصباح المرعب!",
-      "image_prompt": "An ornate golden chest bursts open on a stone altar, revealing a glowing magical papyrus map emitting eerie purple smoke and spectral hieroglyphic symbols floating in the air."
+      "narration": "الصندوق ما طلعش فيه دهب لكن خريطة بتشع نور أحمر!",
+      "image_prompt": "Inside the open golden chest, a magical glowing red ancient map floats into the air, illuminating Basbusa the small orange cat with a blue scarf and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya with bright red light."
     },
     {
-      "narration": "الصوت قال إن المصباح بيحمي العالم من وحش أكبر! انتظروا الجزء الخامس! ومين هيقدر يقف قدام العقرب المرعب ده؟",
-      "image_prompt": "A cartoon female Egyptian cat with a vibrant blue scarf around her neck and A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya freeze in shock as a giant shadow with glowing red eyes looms behind the golden scorpion in the pharaoh tomb."
+      "narration": "وفجأة الأرض اتشققت وتحت رجلين بسبوسة ظهر وحش أضخم! انتظروا الجزء الخامس! ويا ترى العقرب المرعب ده اختفى فين؟",
+      "image_prompt": "The ground beneath Basbusa fractures into glowing underground tomb ruins, and a gigantic shadowy beast silhouette with glowing yellow eyes emerges from the dark abyss."
     }
   ],
-  "cliffhanger": "سماع همس مرعب يؤكد أن المصباح يحبس وحشًا أكبر تحت الأرض",
+  "cliffhanger": "انشقاق الأرض وظهور وحش جديد أضخم تحت رجلين بسبوسة وزيكو",
   "story_type": "mystery",
   "state": {
-    "location": "مقبرة فرعونية سحرية",
-    "goal": "فك لغز الخريطة المشعة داخل الصندوق",
-    "danger": "الهمس المرعب والوحش الأكبر المحبوس",
+    "episode": 4,
+    "next": "الهروب من الوحش الجديد وقراءة سر الخريطة الحمراء",
+    "location": "مقبرة فرعونية تحت الأرض",
+    "goal": "الهروب من الوحش الجديد وفك رمز الخريطة الحمراء",
+    "danger": "الوحش المجهول تحت الأرض",
     "story": "مصباح بسبوسة السحري",
     "setting": "pharaoh's tomb",
-    "conflict_type": "theft",
-    "ending_structure": "secret_overheard",
+    "conflict_type": "secret",
+    "ending_structure": "new_character_appears",
     "companion": {
       "name": "القط زيكو",
       "role": "rival",
@@ -52,13 +54,13 @@
         "mystery",
         "bargain",
         "chase",
-        "theft"
+        "secret"
       ],
       "endings": [
         "choice_forced",
         "twist_reveal",
         "danger_revealed",
-        "secret_overheard"
+        "new_character_appears"
       ],
       "types": [
         "superpower",
@@ -75,24 +77,29 @@
     }
   },
   "format_issues": [],
+  "build_tag": "multi_change_top_build_2026-11-27",
+  "danger_first": true,
   "hook_mode": "default",
   "part": 4,
   "voice_style": "v1_plain_original",
   "voice_name": "Charon",
   "voice_tempo": 1.0,
-  "voice_s": 26.8,
+  "voice_s": 26.6,
   "motion_style": "v2_cuts_pan_sfx",
   "caption_style": "v3_sentence_timed",
   "caption_sentence_starts": [
     0.0,
-    3.14,
-    8.27,
-    12.62,
-    18.24,
-    22.52,
-    24.33
+    2.67,
+    7.41,
+    12.49,
+    16.72,
+    21.83,
+    23.67
   ],
   "music": "Sneaky Adventure",
-  "sfx_at_s": 12.62,
-  "duration_s": 28.0
+  "sfx_at_s": 12.49,
+  "opening_sfx": true,
+  "tight_cut": true,
+  "no_top_hook": true,
+  "duration_s": 26.9
 }
