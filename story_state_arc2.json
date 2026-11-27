@@ -1,13 +1,13 @@
 {
-  "episode": 2,
-  "next": "انكشاف سر قديم من قاع المصباح المكسور بيهدد حارة بسبوسة كلها",
-  "location": "حارة قديمة بالقاهرة",
-  "goal": "النجاة من فخ زيكو وكشف سر المصباح",
-  "danger": "الدوامة السحرية للمصباح المكسور",
+  "episode": 3,
+  "next": "مواجهة العقرب الذهبي وكشف السر داخل الصندوق الغامض",
+  "location": "نفق قديم تحت الأرض",
+  "goal": "الهروب من العقرب وفتح الصندوق الذهبي",
+  "danger": "العقرب الذهبي الضخم",
   "story": "مصباح بسبوسة السحري",
-  "setting": "old Cairo alley",
-  "conflict_type": "bargain",
-  "ending_structure": "twist_reveal",
+  "setting": "underground tunnel",
+  "conflict_type": "chase",
+  "ending_structure": "danger_revealed",
   "companion": {
     "name": "القط زيكو",
     "role": "rival",
@@ -16,28 +16,33 @@
   "used": {
     "settings": [
       "old Cairo attic",
-      "old Cairo alley"
+      "old Cairo alley",
+      "underground tunnel"
     ],
     "conflicts": [
       "mystery",
-      "bargain"
+      "bargain",
+      "chase"
     ],
     "endings": [
       "choice_forced",
-      "twist_reveal"
+      "twist_reveal",
+      "danger_revealed"
     ],
     "types": [
       "superpower",
-      "rival-conflict"
+      "rival-conflict",
+      "action-chase"
     ],
     "hook_styles": [
       "surprising_fact",
-      "danger_warning"
+      "danger_warning",
+      "cry_for_help"
     ]
   },
   "playlist_id": "PLM9buLI-Epxo",
-  "last_duration_s": 31.6,
-  "last_story_type": "rival-conflict",
-  "last_hook_style": "danger_warning",
-  "last_video_id": "M-sD5cW0zqI"
+  "last_duration_s": 29.2,
+  "last_story_type": "action-chase",
+  "last_hook_style": "cry_for_help",
+  "last_video_id": "g5LH-Zz_Lu4"
 }

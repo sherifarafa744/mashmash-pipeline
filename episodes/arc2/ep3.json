@@ -1,0 +1,96 @@
+{
+  "title": "بسبوسة والدوامة السحرية.. مين هينقذ الحارة؟! 🌀😱",
+  "hook_text": "أنقذوني! الدوامة تبتلع بسبوسة الآن!",
+  "hook_style": "cry_for_help",
+  "scenes": [
+    {
+      "narration": "أنقذوني! الدوامة تبتلع بسبوسة الآن!",
+      "image_prompt": "A cute cartoon female cat with a bright blue scarf being pulled into a glowing purple magical vortex spinning wildly in an ancient alleyway."
+    },
+    {
+      "narration": "القط زيكو يضحك بشر ويسحب المصباح السحري نحو قاع الدوامة.",
+      "image_prompt": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya standing near the magic vortex laughing sinisterly."
+    },
+    {
+      "narration": "بسبوسة قفزت شجاعة وتمسكت بحبل ونطت داخل نفق مظلم.",
+      "image_prompt": "A cartoon female cat with a blue scarf bravely grabbing a thick hanging rope and dropping into a hidden stone underground tunnel."
+    },
+    {
+      "narration": "توقفت الدوامة وظهر صندوق ذهبي غامض يخبئ السر المرعب!",
+      "image_prompt": "Inside a dim ancient underground tunnel, a glowing golden chest rests on a stone pedestal covered in mystical symbols as the vortex fades."
+    },
+    {
+      "narration": "وفجأة خرج عقرب ذهبي ضخم يهاجم بسبوسة في الظلام! انتظروا الجزء الرابع! وهل تنجو بسبوسة من هذا الخطر السريع؟",
+      "image_prompt": "A giant glowing golden scorpion with sharp claws rising out of the shadows, threatening a small cartoon cat with a blue scarf in the dark tunnel."
+    }
+  ],
+  "cliffhanger": "عقرب ذهبي ضخم يخرج من الظلام ويهدد بسبوسة داخل النفق السري",
+  "story_type": "action-chase",
+  "opening_line": "أنقذوني",
+  "beat_scene": 4,
+  "state": {
+    "episode": 3,
+    "next": "مواجهة العقرب الذهبي وكشف السر داخل الصندوق الغامض",
+    "location": "نفق قديم تحت الأرض",
+    "goal": "الهروب من العقرب وفتح الصندوق الذهبي",
+    "danger": "العقرب الذهبي الضخم",
+    "story": "مصباح بسبوسة السحري",
+    "setting": "underground tunnel",
+    "conflict_type": "chase",
+    "ending_structure": "danger_revealed",
+    "companion": {
+      "name": "القط زيكو",
+      "role": "rival",
+      "description": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya"
+    },
+    "used": {
+      "settings": [
+        "old Cairo attic",
+        "old Cairo alley",
+        "underground tunnel"
+      ],
+      "conflicts": [
+        "mystery",
+        "bargain",
+        "chase"
+      ],
+      "endings": [
+        "choice_forced",
+        "twist_reveal",
+        "danger_revealed"
+      ],
+      "types": [
+        "superpower",
+        "rival-conflict",
+        "action-chase"
+      ],
+      "hook_styles": [
+        "surprising_fact",
+        "danger_warning",
+        "cry_for_help"
+      ]
+    }
+  },
+  "format_issues": [],
+  "language_style": "v2_simple_pan_arab",
+  "part": 3,
+  "voice_style": "v2_expressive_ducked",
+  "voice_name": "Charon",
+  "voice_tempo": 1.0,
+  "voice_s": 28.0,
+  "motion_style": "v2_cuts_pan_sfx",
+  "caption_style": "v3_sentence_timed",
+  "caption_sentence_starts": [
+    0.0,
+    0.8,
+    3.31,
+    8.56,
+    13.13,
+    18.04,
+    22.38,
+    24.43
+  ],
+  "music": "Sneaky Snitch",
+  "sfx_at_s": 13.13,
+  "duration_s": 29.2
+}
