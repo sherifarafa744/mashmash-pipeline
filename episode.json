@@ -1,96 +1,106 @@
 {
-  "title": "بسبوسة والدوامة السحرية.. مين هينقذ الحارة؟! 🌀😱",
-  "hook_text": "أنقذوني! الدوامة تبتلع بسبوسة الآن!",
-  "hook_style": "cry_for_help",
+  "title": "بسبوسة ومفتاح الكنز.. مين هيسبق الثاني؟! 🗝️😱",
+  "hook_text": "سر المفتاح الذهبي الغامض",
+  "hook_style": "mystery",
+  "opening_line": "ما السر المخفي داخل الجدار الفرعوني",
+  "beat_scene": 4,
   "scenes": [
     {
-      "narration": "أنقذوني! الدوامة تبتلع بسبوسة الآن!",
-      "image_prompt": "A cute cartoon female cat with a bright blue scarf being pulled into a glowing purple magical vortex spinning wildly in an ancient alleyway."
+      "narration": "ما السر المخفي داخل الجدار الفرعوني؟",
+      "image_prompt": "Vertical 9:16 cartoon animation. Basbusa, a cute female cartoon cat wearing a bright blue scarf, standing wide-eyed inside a dimly lit ancient Egyptian tomb chamber, staring at a mysterious glowing symbol carved into the stone wall."
     },
     {
-      "narration": "القط زيكو يضحك بشر ويسحب المصباح السحري نحو قاع الدوامة.",
-      "image_prompt": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya standing near the magic vortex laughing sinisterly."
+      "narration": "قررت بسبوسة فتح الصندوق السري قبل أن يسبقها بندق.",
+      "image_prompt": "Vertical 9:16 cartoon animation. Basbusa, a cute female cartoon cat wearing a bright blue scarf, carefully reaching her paws to open an ornate ancient wooden treasure chest sitting on a stone pedestal inside the tomb."
     },
     {
-      "narration": "بسبوسة قفزت شجاعة وتمسكت بحبل ونطت داخل نفق مظلم.",
-      "image_prompt": "A cartoon female cat with a blue scarf bravely grabbing a thick hanging rope and dropping into a hidden stone underground tunnel."
+      "narration": "وفجأة فتح الصندوق وظهر منه مفتاح ينير المكان!",
+      "image_prompt": "Vertical 9:16 cartoon animation. A dazzling golden key floating out of the open ancient treasure chest, emitting bright magical blue light that illuminates the stone chamber and Basbusa's surprised face."
     },
     {
-      "narration": "توقفت الدوامة وظهر صندوق ذهبي غامض يخبئ السر المرعب!",
-      "image_prompt": "Inside a dim ancient underground tunnel, a glowing golden chest rests on a stone pedestal covered in mystical symbols as the vortex fades."
+      "narration": "لكن القط بندق قفز فجأة وخطف المفتاح من يدها!",
+      "image_prompt": "Vertical 9:16 cartoon animation. A sly brown street cat with a black eye patch and a silver bell on his collar leaping dynamically through the air, snatching the glowing golden key mid-air away from Basbusa."
     },
     {
-      "narration": "وفجأة خرج عقرب ذهبي ضخم يهاجم بسبوسة في الظلام! انتظروا الجزء الرابع! وهل تنجو بسبوسة من هذا الخطر السريع؟",
-      "image_prompt": "A giant glowing golden scorpion with sharp claws rising out of the shadows, threatening a small cartoon cat with a blue scarf in the dark tunnel."
+      "narration": "اهتزت الأرض وسقطت الحجارة لتقفل مخرج الغرفة بالكامل!",
+      "image_prompt": "Vertical 9:16 cartoon animation. The ancient stone tomb shaking violently, large dust clouds rising as heavy carved stones fall from the ceiling and block the arched doorway of the chamber."
+    },
+    {
+      "narration": "كيف ستخرج بسبوسة من هذا السجن الحجري؟ انتظروا الجزء السابع! وما الذي يختبئ خلف الجدار الغريب؟",
+      "image_prompt": "Vertical 9:16 cartoon animation. Basbusa, a cute female cartoon cat wearing a bright blue scarf, trapped inside the dark stone room, looking up in shock at the blocked exit while glowing hieroglyphics pulse on the wall behind her."
     }
   ],
-  "cliffhanger": "عقرب ذهبي ضخم يخرج من الظلام ويهدد بسبوسة داخل النفق السري",
-  "story_type": "action-chase",
-  "opening_line": "أنقذوني",
-  "beat_scene": 4,
+  "cliffhanger": "بسبوسة محاصرة داخل سرداب المعبد المغلق بعد أن سرق بندق المفتاح الذهبي",
+  "story_type": "superpower",
   "state": {
-    "episode": 3,
-    "next": "مواجهة العقرب الذهبي وكشف السر داخل الصندوق الغامض",
-    "location": "نفق قديم تحت الأرض",
-    "goal": "الهروب من العقرب وفتح الصندوق الذهبي",
-    "danger": "العقرب الذهبي الضخم",
-    "story": "مصباح بسبوسة السحري",
-    "setting": "underground tunnel",
-    "conflict_type": "chase",
-    "ending_structure": "danger_revealed",
+    "location": "سرداب المعبد الفرعوني القديم",
+    "goal": "الخروج من السرداب المغلق واستعادة المفتاح من بندق",
+    "danger": "انهيار السرداب واختفاء بندق بالمفتاح",
+    "story": "كنز جزيرة التونة الذهبية",
+    "setting": "سرداب المعبد القديم",
+    "conflict_type": "theft",
+    "ending_structure": "twist reveal",
     "companion": {
-      "name": "القط زيكو",
+      "name": "بندق",
       "role": "rival",
-      "description": "A large magical one-eyed cat spirit wearing a traditional Egyptian galabiya"
+      "description": "a sly brown street cat with a black eye patch and a silver bell on his collar"
     },
     "used": {
       "settings": [
-        "old Cairo attic",
-        "old Cairo alley",
-        "underground tunnel"
+        "سوق السمك القديم",
+        "النيل",
+        "معبد فرعوني قديم",
+        "سطح بيت قديم",
+        "سرداب المعبد القديم"
       ],
       "conflicts": [
-        "mystery",
+        "chase",
         "bargain",
-        "chase"
+        "secret",
+        "rival",
+        "theft"
       ],
       "endings": [
-        "choice_forced",
-        "twist_reveal",
-        "danger_revealed"
+        "danger revealed",
+        "choice forced",
+        "question cliffhanger",
+        "twist reveal"
       ],
       "types": [
-        "superpower",
+        "adventure",
+        "action-chase",
+        "mystery",
         "rival-conflict",
-        "action-chase"
+        "superpower"
       ],
       "hook_styles": [
-        "surprising_fact",
         "danger_warning",
-        "cry_for_help"
+        "surprising_fact",
+        "surprise",
+        "mystery"
       ]
     }
   },
   "format_issues": [],
   "language_style": "v2_simple_pan_arab",
-  "part": 3,
+  "part": 6,
   "voice_style": "v2_expressive_ducked",
   "voice_name": "Charon",
   "voice_tempo": 1.0,
-  "voice_s": 28.0,
+  "voice_s": 32.3,
   "motion_style": "v2_cuts_pan_sfx",
   "caption_style": "v3_sentence_timed",
   "caption_sentence_starts": [
     0.0,
-    0.8,
-    3.31,
-    8.56,
-    13.13,
-    18.04,
-    22.38,
-    24.43
+    4.24,
+    9.43,
+    14.48,
+    19.04,
+    24.34,
+    27.43,
+    29.3
   ],
   "music": "Sneaky Snitch",
-  "sfx_at_s": 13.13,
-  "duration_s": 29.2
+  "sfx_at_s": 14.48,
+  "duration_s": 33.5
 }

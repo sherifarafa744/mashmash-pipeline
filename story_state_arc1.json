@@ -1,13 +1,13 @@
 {
-  "episode": 5,
-  "next": "بسبوسة محتارة بين استعادة الخريطة من بندق أو فتح صندوق الكنز السري",
-  "location": "معبد فرعوني قديم على شط النيل",
-  "goal": "فك رموز الخريطة وإيجاد المفتاح الذهبي",
-  "danger": "فخاخ المعبد المغلقة وغدر القط بندق",
+  "episode": 6,
+  "next": "بسبوسة محاصرة داخل سرداب المعبد المغلق بعد أن سرق بندق المفتاح الذهبي",
+  "location": "سرداب المعبد الفرعوني القديم",
+  "goal": "الخروج من السرداب المغلق واستعادة المفتاح من بندق",
+  "danger": "انهيار السرداب واختفاء بندق بالمفتاح",
   "story": "كنز جزيرة التونة الذهبية",
-  "setting": "معبد فرعوني قديم",
-  "conflict_type": "secret",
-  "ending_structure": "question cliffhanger",
+  "setting": "سرداب المعبد القديم",
+  "conflict_type": "theft",
+  "ending_structure": "twist reveal",
   "companion": {
     "name": "بندق",
     "role": "rival",
@@ -18,39 +18,39 @@
       "سوق السمك القديم",
       "النيل",
       "معبد فرعوني قديم",
-      "سطح بيت قديم"
+      "سطح بيت قديم",
+      "سرداب المعبد القديم"
     ],
     "conflicts": [
       "chase",
       "bargain",
       "secret",
-      "rival"
+      "rival",
+      "theft"
     ],
     "endings": [
       "danger revealed",
       "choice forced",
-      "question cliffhanger"
+      "question cliffhanger",
+      "twist reveal"
     ],
     "types": [
       "adventure",
       "action-chase",
       "mystery",
-      "rival-conflict"
+      "rival-conflict",
+      "superpower"
     ],
     "hook_styles": [
       "danger_warning",
       "surprising_fact",
-      "surprise"
+      "surprise",
+      "mystery"
     ]
   },
-  "vote": {
-    "question": "تفتكروا بسبوسة هتعمل إيه جوه الغرفة السرية؟",
-    "option_a": "تحارب بندق",
-    "option_b": "تبحث عن المفتاح"
-  },
   "playlist_id": "PLFeKx89Tl-dg",
-  "last_duration_s": 32.0,
-  "last_story_type": "rival-conflict",
-  "last_hook_style": "surprise",
-  "last_video_id": "BPIrGaXe_O4"
+  "last_duration_s": 33.5,
+  "last_story_type": "superpower",
+  "last_hook_style": "mystery",
+  "last_video_id": "aq4mFe844F0"
 }
