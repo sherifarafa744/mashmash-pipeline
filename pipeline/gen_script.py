@@ -15,6 +15,7 @@ try:
 except Exception:
     _CFG = {}
 VOTE_ON = _CFG.get("vote", True)
+DANGER_FIRST = bool(_CFG.get("danger_first"))
 HOOK_Q = _CFG.get("hook_mode") == "known_char_question"  # experiment B (from 2026-11-28)
 
 SYSTEM = """You write Egyptian-Arabic narration for a vertical YouTube Shorts
@@ -237,6 +238,10 @@ def main() -> None:
     if not VOTE_ON:
         user += ("\nVOTING IS OFF for this test: do NOT include any vote question, any options, any line asking viewers to answer or comment, "
                  "and return NO vote object. Ignore every vote instruction above and state.vote_result. The last scene is: cliffhanger, then the next-part naming, then the different-words echo of the opening.")
+    if DANGER_FIRST:
+        user += ("\nSCENE 1 DANGER RULE: the danger/creature named in the first narration sentence and hook_text (for example the golden scorpion) "
+                 "MUST be clearly visible, large and central, in the scene 1 image_prompt from the very first frame, with Basbusa (the small orange cat with the blue scarf) in the same frame as the main character. "
+                 "No calm shot, no close-up of another character alone, no setting-only shot in scene 1.")
     if HOOK_Q:
         user += ("\nHOOK EXPERIMENT (overrides the hook-variety rules above for the hook only): the FIRST narration sentence MUST be a shocking QUESTION of at most 7 words, "
                  "hook_style shocking_question, that names a KNOWN recurring character (بسبوسة or the companion in state.companion) and asks about something strange or dangerous happening to them right now, "

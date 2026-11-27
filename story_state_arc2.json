@@ -1,13 +1,13 @@
 {
-  "episode": 4,
-  "next": "سماع همس مرعب يؤكد أن المصباح يحبس وحشًا أكبر تحت الأرض",
-  "location": "مقبرة فرعونية سحرية",
-  "goal": "فك لغز الخريطة المشعة داخل الصندوق",
-  "danger": "الهمس المرعب والوحش الأكبر المحبوس",
+  "episode": 3,
+  "next": "مواجهة العقرب الذهبي وكشف السر داخل الصندوق الغامض",
+  "location": "نفق قديم تحت الأرض",
+  "goal": "الهروب من العقرب وفتح الصندوق الذهبي",
+  "danger": "العقرب الذهبي الضخم",
   "story": "مصباح بسبوسة السحري",
-  "setting": "pharaoh's tomb",
-  "conflict_type": "theft",
-  "ending_structure": "secret_overheard",
+  "setting": "underground tunnel",
+  "conflict_type": "chase",
+  "ending_structure": "danger_revealed",
   "companion": {
     "name": "القط زيكو",
     "role": "rival",
@@ -17,37 +17,32 @@
     "settings": [
       "old Cairo attic",
       "old Cairo alley",
-      "underground tunnel",
-      "pharaoh's tomb"
+      "underground tunnel"
     ],
     "conflicts": [
       "mystery",
       "bargain",
-      "chase",
-      "theft"
+      "chase"
     ],
     "endings": [
       "choice_forced",
       "twist_reveal",
-      "danger_revealed",
-      "secret_overheard"
+      "danger_revealed"
     ],
     "types": [
       "superpower",
       "rival-conflict",
-      "action-chase",
-      "mystery"
+      "action-chase"
     ],
     "hook_styles": [
       "surprising_fact",
       "danger_warning",
-      "cry_for_help",
-      "shocking_question"
+      "cry_for_help"
     ]
   },
   "playlist_id": "PLM9buLI-Epxo",
-  "last_duration_s": 28.0,
-  "last_story_type": "mystery",
-  "last_hook_style": "shocking_question",
-  "last_video_id": "tyxgV1mJmP0"
+  "last_duration_s": 29.2,
+  "last_story_type": "action-chase",
+  "last_hook_style": "cry_for_help",
+  "last_video_id": "g5LH-Zz_Lu4"
 }
