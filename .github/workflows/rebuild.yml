@@ -66,6 +66,7 @@ jobs:
       - name: release kit and commit state
         run: |
           git config user.name "mashmash-bot"; git config user.email "bot@users.noreply.github.com"
+          git checkout -q -B main origin/main 2>/dev/null || git checkout -q main
           mkdir -p "episodes/$ARC_DIR"
           cp episode.json "episodes/$ARC_DIR/ep$(jq -r .part episode.json).json"
           grep -v '"arc": "arc2", "part": 4,' episode_log.jsonl > /tmp/log.jsonl || true; cp /tmp/log.jsonl episode_log.jsonl
