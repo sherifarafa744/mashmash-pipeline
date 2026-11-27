@@ -36,6 +36,7 @@ NO_TOP_HOOK = bool(_C.get("no_top_hook"))
 FADE_A = 0.3 if _C.get("tight_cut") else 0.9
 FADE_V = 0.3 if _C.get("tight_cut") else 0.7
 LOOP_END = bool(_C.get("loop_end"))
+LOOP_REUSE = bool(_C.get("loop_reuse_first"))
 MUSIC_GAP = bool(_C.get("music_gap"))
 if LOOP_END:
     FADE_V = 0.0  # hard end on the last frame (no fade to black) so it flows back into frame 1
@@ -46,6 +47,8 @@ def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
     scenes = [ROOT / "scenes" / f"scene{i}.png" for i in range(1, len(ep["scenes"]) + 1)]  # exactly the episode's scenes, never stale extras
     assert all(x.exists() for x in scenes), "missing scene image"
+    if LOOP_REUSE and len(scenes) > 2:
+        scenes[-1] = scenes[0]  # loop: the last shot is the opening shot again (same composition as frame 1)
     n = len(scenes)
     # Retention: scene 1 is SHORTER with a fast punch-in zoom - the first 3
     # seconds decide whether the viewer stays, so the opening moves fast.
@@ -150,7 +153,7 @@ def main() -> None:
                 print("sfx skipped:", e)
                 beat = None
             mix_sfx = ""
-            last = "[vo2][mduck]amix=inputs=2:duration=first:normalize=0:weights=1 1[mx]"
+            last = "[vo2][mduck]amix=inputs=2:duration=longest:normalize=0:weights=1 1[mx]"  # music keeps playing to the very end (no silent tail)
             if beat is not None:
                 ms = max(0, int((beat - 0.3) * 1000))
                 last += f";[{n+2}:a]adelay={ms}|{ms},volume=0.4[sx];[mx][sx]amix=inputs=2:duration=first:normalize=0:weights=1 1[mx2]"
@@ -185,6 +188,7 @@ def main() -> None:
     if TAIL < 1.0: ep["tight_cut"] = True
     if NO_TOP_HOOK: ep["no_top_hook"] = True
     if LOOP_END: ep["loop_end"] = True
+    if LOOP_REUSE: ep["loop_reuse_first"] = True
     ep["duration_s"] = round(total, 1)
     (ROOT / "episode.json").write_text(json.dumps(ep, ensure_ascii=False, indent=2))
     st_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
