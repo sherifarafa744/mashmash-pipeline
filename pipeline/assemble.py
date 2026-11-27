@@ -82,7 +82,11 @@ def main() -> None:
         prev = out
     cap_events = None
     ep["caption_style"] = "v1_sentence"
-    if voice_dur:
+    try:
+        cap_mode = json.loads((ROOT / "config.json").read_text()).get("captions", "sentence")
+    except Exception:
+        cap_mode = "sentence"
+    if voice_dur and cap_mode == "karaoke":
         try:
             sys.path.insert(0, str(pathlib.Path(__file__).parent))
             import captions
