@@ -30,6 +30,6 @@ jobs:
           export PUBLISH_AT=$(date -u -d '+8 hours' +%Y-%m-%dT%H:%M:%S.000Z)
           for s in gen_script gen_voice gen_images assemble loop_check; do echo "== $s"; python pipeline/$s.py; done
           jq '{title,part,music,loop_end,music_gap,loop_ok,loop_ssim,loop_luma_diff,loop_audio_end_db,loop_audio_start_db,duration_s,format_issues}' episode.json
-          mkdir -p out && cp episode_final.mp4 episode.json out/ && cp -r loopcheck out/ && cp scenes/scene1.png out/s1.png && cp scenes/scene*.png out/ 
+          mkdir -p out && cp episode_final.mp4 episode.json out/ && cp -r loopcheck out/ && cp scenes/scene*.png out/; python3 pipeline/gen_thumbnail.py && cp thumb.jpg out/ 
       - uses: actions/upload-artifact@v4
         with: { name: loop-test, path: out }
