@@ -31,6 +31,10 @@ try:
 except Exception:
     _C = {}
 OPEN_SFX = bool(_C.get("opening_sfx"))
+TAIL = 0.35 if _C.get("tight_cut") else 1.2
+NO_TOP_HOOK = bool(_C.get("no_top_hook"))
+FADE_A = 0.3 if _C.get("tight_cut") else 0.9
+FADE_V = 0.3 if _C.get("tight_cut") else 0.7
 
 
 def main() -> None:
@@ -47,11 +51,11 @@ def main() -> None:
     durs = [seg1] + [seg] * (n - 1)
     if voice_dur and n > 1:
         # Viral Short length 28-36s: spread scenes evenly over the voice.
-        target = voice_dur + 1.2
+        target = voice_dur + TAIL
         rest = max(3.5, (target - seg1 + (n - 1) * fade) / (n - 1))
         durs = [seg1] + [rest] * (n - 1)
     base = sum(durs) - (n - 1) * fade
-    last_extra = max(0.0, voice_dur + 1.2 - base)  # 1.2s outro hold
+    last_extra = max(0.0, voice_dur + TAIL - base)  # outro hold (1.2s default, 0.35s with tight_cut)
     for i, img in enumerate(scenes, 1):
         d = durs[i - 1] + (last_extra if i == n else 0.0)
         total_frames = int(round(d * 30)) + 1
@@ -114,7 +118,7 @@ def main() -> None:
             cap_events = None
             ep["caption_style"] = "v1_sentence"
     subs = build_ass(ep, durs, fade, cap_events)
-    fx.append(f"[{prev}]subtitles={subs}:fontsdir={FONTDIR},fade=t=out:st={total - 0.7:.2f}:d=0.7[vout]")
+    fx.append(f"[{prev}]subtitles={subs}:fontsdir={FONTDIR},fade=t=out:st={total - FADE_V:.2f}:d={FADE_V}[vout]")
     cmd = ["ffmpeg", "-y", "-v", "error"]
     for i in range(1, n + 1):
         cmd += ["-i", str(ROOT / f"seg{i}.mp4")]
@@ -156,10 +160,10 @@ def main() -> None:
             # old constant 0.05 mix; music comes back up in the pauses.
             cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1][vo2];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume=0.045[mus];"
                     f"[mus][vo1]sidechaincompress=threshold=0.02:ratio=10:attack=15:release=400:makeup=1[mduck];"
-                    f"{last};{mx}apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",
+                    f"{last};{mx}apad,atrim=0:{total:.2f},afade=t=out:st={total - FADE_A:.2f}:d={FADE_A},loudnorm=I=-14:TP=-1.5[aout]",
                     "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}"]
         else:
-            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]apad,atrim=0:{total:.2f},afade=t=out:st={total - 0.9:.2f}:d=0.9,loudnorm=I=-14:TP=-1.5[aout]",
+            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]apad,atrim=0:{total:.2f},afade=t=out:st={total - FADE_A:.2f}:d={FADE_A},loudnorm=I=-14:TP=-1.5[aout]",
                     "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}"]
     else:
         cmd += ["-filter_complex", ";".join(fx), "-map", "[vout]"]
@@ -167,6 +171,8 @@ def main() -> None:
             "-c:a", "aac", "-b:a", "128k", "-pix_fmt", "yuv420p",
             "-movflags", "+faststart", str(ROOT / "episode_final.mp4")]
     subprocess.run(cmd, check=True)
+    if TAIL < 1.0: ep["tight_cut"] = True
+    if NO_TOP_HOOK: ep["no_top_hook"] = True
     ep["duration_s"] = round(total, 1)
     (ROOT / "episode.json").write_text(json.dumps(ep, ensure_ascii=False, indent=2))
     st_path = ROOT / os.environ.get("STORY_STATE", "story_state.json")
@@ -187,7 +193,7 @@ def build_ass(ep, durs, fade, cap_events=None) -> str:
              "[Events]",
              "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
     hook = ep.get("hook_text")
-    if hook:
+    if hook and not NO_TOP_HOOK:
         # On screen from frame 0 through the punch-in (the 3-second decision window).
         lines.append(f"Dialogue: 1,{ts(0.0)},{ts(2.60)},Hook,,0,0,0,,{hook}")
     if cap_events:
