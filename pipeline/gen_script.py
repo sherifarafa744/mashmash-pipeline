@@ -305,6 +305,8 @@ def main() -> None:
     episode["opening_line"] = first_sentence(episode["scenes"][0]["narration"])
     if used_model:
         episode["script_model"] = "cloudflare:" + used_model
+    if _CFG.get("build_tag"): episode["build_tag"] = _CFG["build_tag"]
+    if DANGER_FIRST: episode["danger_first"] = True
     episode["hook_mode"] = "known_char_question" if HOOK_Q else "default"
     episode["part"] = part  # story_type comes straight from the model output
     (ROOT / "episode.json").write_text(json.dumps(episode, ensure_ascii=False, indent=2))

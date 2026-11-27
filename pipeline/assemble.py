@@ -26,6 +26,13 @@ def wav_duration(path: pathlib.Path) -> float:
                           "-of", "csv=p=0", str(path)], capture_output=True, text=True)
     return float(out.stdout.strip())
 
+try:
+    _C = json.loads((ROOT / "config.json").read_text())
+except Exception:
+    _C = {}
+OPEN_SFX = bool(_C.get("opening_sfx"))
+
+
 def main() -> None:
     ep = json.loads((ROOT / "episode.json").read_text())
     scenes = sorted((ROOT / "scenes").glob("scene*.png"))
@@ -126,6 +133,8 @@ def main() -> None:
                 if beat is not None:
                     sfx.make(ROOT / "sfx_hit.wav")
                     cmd += ["-i", str(ROOT / "sfx_hit.wav")]
+                    if OPEN_SFX:
+                        cmd += ["-i", str(ROOT / "sfx_hit.wav")]
             except Exception as e:
                 print("sfx skipped:", e)
                 beat = None
@@ -136,6 +145,11 @@ def main() -> None:
                 last += f";[{n+2}:a]adelay={ms}|{ms},volume=0.4[sx];[mx][sx]amix=inputs=2:duration=first:normalize=0:weights=1 1[mx2]"
                 mx = "[mx2]"
                 ep["sfx_at_s"] = round(beat, 2)
+                if OPEN_SFX:
+                    # Impact at the very start (first frame), same synthesized hit.
+                    last += f";[{n+3}:a]atrim=start=0.22,asetpts=PTS-STARTPTS,volume=0.35[so];[mx2][so]amix=inputs=2:duration=first:normalize=0:weights=1 1[mx3]"
+                    mx = "[mx3]"
+                    ep["opening_sfx"] = True
             else:
                 mx = "[mx]"
             # Music ducks under the voice (sidechain), lower base level than the
