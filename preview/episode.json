@@ -1,0 +1,122 @@
+{
+  "title": "تمثال القط الحجري ولعنة البركان.. مين يهرب؟! 🌋",
+  "hook_text": "ليه تمثال القط بيتحرك لوحده دلوقتي؟",
+  "hook_style": "shocking_question",
+  "scenes": [
+    {
+      "narration": "ليه تمثال القط بيتحرك لوحده دلوقتي؟",
+      "image_prompt": "Inside the golden coffin crypt, a small orange female cat cartoon character wearing a blue scarf named Basbusa stands terrified as a massive stone cat statue begins to move, accompanied by a lean dark-brown street cat, taller than Basbusa, with a black patch over his left eye and a silver bell on his collar, no scarf named بندق, dramatic lighting, vertical composition"
+    },
+    {
+      "narration": "الأرض بتتهز جامد تحت رجلينا جوه السرداب!",
+      "image_prompt": "Basbusa the small orange cat with the blue scarf and بندق the lean dark-brown cat with a black eye patch and silver bell try to keep their balance as the stone floor of the golden coffin crypt cracks open, vertical composition"
+    },
+    {
+      "narration": "وفجأة ظهرت فوهة بركانية زرقة تحت الأرض! شعاع ناري بيطلع منها!",
+      "image_prompt": "A glowing blue volcanic crater erupts from beneath the crypt floor, casting eerie blue light on Basbusa the small orange cat with the blue scarf and بندق the lean dark-brown cat with an eye patch, vertical composition"
+    },
+    {
+      "narration": "الحرارة بتزيد والبخار الأزرق بيملى المكان كله بسرعة!",
+      "image_prompt": "Thick blue steam fills the golden coffin crypt as Basbusa the small orange cat with the blue scarf backs away from the glowing volcanic fissure, with بندق the lean dark-brown cat with an eye patch watching closely, vertical composition"
+    },
+    {
+      "narration": "طريق الهروب اتقفل والنار بتقرب مننا أكتر!",
+      "image_prompt": "A wall of blue fire blocks the exit of the golden coffin crypt, trapping Basbusa the small orange cat with the blue scarf and بندق the lean dark-brown cat with an eye patch, vertical composition"
+    },
+    {
+      "narration": "يا ترى البركان الأزرق ده هيخبي إيه ورا النيران؟ انتظروا الجزء التامن! وفين تمثال القط الحجري دلوقتي؟",
+      "image_prompt": "Inside the golden coffin crypt, the small orange female cat cartoon character wearing a blue scarf named Basbusa stands terrified as a massive stone cat statue begins to move, accompanied by a lean dark-brown street cat, taller than Basbusa, with a black patch over his left eye and a silver bell on his collar, no scarf named بندق, dramatic lighting, vertical composition, faint blue volcanic glow in the background"
+    }
+  ],
+  "cliffhanger": "ظهور فوهة بركانية زرقاء مسدودة بالنار داخل السرداب",
+  "story_type": "mystery",
+  "state": {
+    "location": "سرداب التابوت الذهبي داخل المعبد",
+    "goal": "الهروب من الفوهة البركانية السحرية",
+    "danger": "الحمم الزرقاء المشتعلة وحركة التماثيل",
+    "story": "كنز جزيرة التونة الذهبية",
+    "setting": "سرداب التابوت الذهبي",
+    "conflict_type": "mystery",
+    "ending_structure": "danger revealed",
+    "companion": {
+      "name": "بندق",
+      "role": "rival",
+      "description": "a lean dark-brown street cat, taller than Basbusa, with a black patch over his left eye and a silver bell on his collar, no scarf"
+    },
+    "used": {
+      "settings": [
+        "سوق السمك القديم",
+        "النيل",
+        "معبد فرعوني قديم",
+        "سطح بيت قديم",
+        "سرداب التابوت الذهبي"
+      ],
+      "conflicts": [
+        "chase",
+        "bargain",
+        "secret",
+        "rival",
+        "mystery"
+      ],
+      "endings": [
+        "danger revealed",
+        "choice forced",
+        "question cliffhanger",
+        "twist reveal"
+      ],
+      "types": [
+        "adventure",
+        "action-chase",
+        "mystery",
+        "rival-conflict",
+        "superpower"
+      ],
+      "hook_styles": [
+        "danger_warning",
+        "surprising_fact",
+        "surprise",
+        "shocking_question"
+      ]
+    }
+  },
+  "opening_line": "ليه تمثال القط بيتحرك لوحده دلوقتي",
+  "beat_scene": 3,
+  "format_issues": [
+    "hook experiment: the first sentence must be a shocking question naming a known character"
+  ],
+  "build_tag": "full_flags_part7_2026-11-28",
+  "danger_first": true,
+  "loop_end": true,
+  "hook_mode": "known_char_question",
+  "part": 7,
+  "voice_style": "v1_plain_original",
+  "voice_name": "Charon",
+  "voice_tempo": 1.0,
+  "voice_s": 24.3,
+  "motion_style": "v2_cuts_pan_sfx",
+  "caption_style": "v3_sentence_timed",
+  "caption_sentence_starts": [
+    0.0,
+    2.72,
+    5.85,
+    6.68,
+    10.98,
+    14.26,
+    17.09,
+    20.18,
+    21.88
+  ],
+  "music": "Curse of the Scarab",
+  "sfx_at_s": 5.85,
+  "opening_sfx": true,
+  "music_gap": true,
+  "tight_cut": true,
+  "no_top_hook": true,
+  "loop_reuse_first": true,
+  "duration_s": 24.7,
+  "loop_ssim": 0.442,
+  "loop_luma_diff": 0.5,
+  "loop_audio_end_db": -91.0,
+  "loop_audio_start_db": -14.6,
+  "loop_ok": false
+}
