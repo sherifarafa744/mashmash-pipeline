@@ -1,0 +1,122 @@
+{
+  "title": "الفوهة البركانية تسحب بسبوسة فجأة 🔥😱",
+  "hook_text": "ليه الأرض اتفتحت تحت بسبوسة فجأة؟",
+  "hook_style": "shocking_question",
+  "opening_line": "ليه الأرض اتفتحت تحت بسبوسة فجأة",
+  "beat_scene": 4,
+  "scenes": [
+    {
+      "narration": "ليه الأرض اتفتحت تحت بسبوسة فجأة؟",
+      "image_prompt": "Wide dynamic action shot inside an ancient underground pharaonic crypt, a glowing blue volcanic crater opens on the stone floor right beneath Basbusa, a small cute orange cartoon cat with a bright blue scarf around her neck, hanging onto the edge in alarm, intense blue flame light from below, dramatic cinematic atmosphere, digital cartoon animation style."
+    },
+    {
+      "narration": "الفوهة البركانية الزرقاء بدأت تسحب مفتاح تمثال القط الذهبي لأسفل.",
+      "image_prompt": "Inside the underground crypt, the ancient golden cat key is sliding down the glowing blue volcanic stone edge toward the crater, Basbusa the orange cartoon cat with blue scarf reaches out desperately to grab it, Bondok, a lean dark-brown street cat, taller than Basbusa, with a black patch over his left eye and a silver bell on his collar, no scarf watches from behind."
+    },
+    {
+      "narration": "بسبوسة اتماسك في الحافة وحاولت توصل للمفتاح بسرعة قبل ما يضيع.",
+      "image_prompt": "Basbusa the small orange cartoon cat wearing a blue scarf holds tight to the crumbling stone edge with one paw, stretching out her other paw toward the glowing golden key lying near the blue fiery opening."
+    },
+    {
+      "narration": "بندق مد إيده وسحب بسبوسة والمفتاح في آخر لحظة بذكاء!",
+      "image_prompt": "Bondok, a lean dark-brown street cat, taller than Basbusa, with a black patch over his left eye and a silver bell on his collar, no scarf pulls Basbusa the small orange cat with blue scarf up to safety, the golden cat key safe in her paws, blue crater glowing behind them."
+    },
+    {
+      "narration": "وفجأة ظهر حارس حجري ضخم من وسط الدخان الأزرق! انتظروا الجزء التامن! وهي الأرض فتحت كده ليه من الأساس؟",
+      "image_prompt": "Wide dynamic action shot inside an ancient underground pharaonic crypt, a glowing blue volcanic crater opens on the stone floor right beneath Basbusa, a small cute orange cartoon cat with a bright blue scarf around her neck, hanging onto the edge in alarm, intense blue flame light from below, with a giant stone guardian shadow emerging from the blue smoke in the background, dramatic cinematic atmosphere, digital cartoon animation style."
+    }
+  ],
+  "cliffhanger": "ظهور حارس حجري ضخم من الدخان الأزرق",
+  "story_type": "kind-moral",
+  "state": {
+    "episode": 7,
+    "next": "مواجهة الحارس الحجري الضخم ومفتاح القط الذهبي",
+    "location": "غرفة البركان المنسية",
+    "goal": "حل لغز مفتاح تمثال القط الفرعوني",
+    "danger": "الحارس الحجري الضخم والفوهة البركانية",
+    "story": "كنز جزيرة التونة الذهبية",
+    "setting": "غرفة البركان المنسية",
+    "conflict_type": "rescue",
+    "ending_structure": "new character appears",
+    "companion": {
+      "name": "بندق",
+      "role": "rival",
+      "description": "a lean dark-brown street cat, taller than Basbusa, with a black patch over his left eye and a silver bell on his collar, no scarf"
+    },
+    "used": {
+      "settings": [
+        "سوق السمك القديم",
+        "النيل",
+        "معبد فرعوني قديم",
+        "سطح بيت قديم",
+        "سرداب التابوت الذهبي",
+        "غرفة البركان المنسية"
+      ],
+      "conflicts": [
+        "chase",
+        "bargain",
+        "secret",
+        "rival",
+        "mystery",
+        "rescue"
+      ],
+      "endings": [
+        "danger revealed",
+        "choice forced",
+        "question cliffhanger",
+        "twist reveal",
+        "new character appears"
+      ],
+      "types": [
+        "adventure",
+        "action-chase",
+        "mystery",
+        "rival-conflict",
+        "superpower",
+        "kind-moral"
+      ],
+      "hook_styles": [
+        "danger_warning",
+        "surprising_fact",
+        "surprise",
+        "shocking_question"
+      ]
+    }
+  },
+  "format_issues": [
+    "hook experiment: the first sentence must be a shocking question naming a known character"
+  ],
+  "build_tag": "full_flags_part7_2026-11-28",
+  "danger_first": true,
+  "loop_end": true,
+  "hook_mode": "known_char_question",
+  "part": 7,
+  "voice_style": "v1_plain_original",
+  "voice_name": "Charon",
+  "voice_tempo": 1.0,
+  "voice_s": 23.6,
+  "motion_style": "v2_cuts_pan_sfx",
+  "caption_style": "v3_sentence_timed",
+  "caption_sentence_starts": [
+    0.0,
+    3.01,
+    7.96,
+    11.48,
+    12.61,
+    16.36,
+    17.08
+  ],
+  "music": "Curse of the Scarab",
+  "sfx_at_s": 11.48,
+  "opening_sfx": true,
+  "music_gap": true,
+  "tight_cut": true,
+  "no_top_hook": true,
+  "loop_reuse_first": true,
+  "duration_s": 23.9,
+  "loop_ssim": 0.907,
+  "loop_luma_diff": 0.2,
+  "loop_audio_end_db": -51.7,
+  "loop_audio_start_db": -12.3,
+  "loop_ok": false
+}
