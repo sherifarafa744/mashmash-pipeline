@@ -6,7 +6,7 @@ allocation is allowed under Cloudflare's Self-Serve Subscription Agreement.
 Character consistency: every prompt carries the same CHARACTER+STYLE block
 (flux-1-schnell on Workers AI is text-only; no reference input).
 """
-import base64, json, os, pathlib, sys, urllib.request
+import base64, json, os, pathlib, sys, urllib.error, urllib.request
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from character import image_prompt
 
@@ -27,8 +27,20 @@ def main() -> None:
             f"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT}/ai/run/@cf/black-forest-labs/flux-1-schnell",
             data=body, headers={"Authorization": f"Bearer {TOKEN}",
                                 "Content-Type": "application/json"})
-        with urllib.request.urlopen(req, timeout=180) as r:
-            out = json.load(r)
+        out = None
+        import time
+        for attempt in range(8):  # 429 = rate/quota: log the body, wait and retry (up to ~25 min per image)
+            try:
+                with urllib.request.urlopen(req, timeout=180) as r:
+                    out = json.load(r)
+                break
+            except urllib.error.HTTPError as e:
+                print(f"scene {i} attempt {attempt + 1}: HTTP {e.code} {e.read().decode()[:300]}", flush=True)
+                if e.code not in (429, 500, 502, 503, 504):
+                    raise
+                time.sleep(min(60 * (attempt + 1), 300))
+        if out is None:
+            raise SystemExit(f"image generation kept failing for scene {i}")
         (ROOT / "scenes" / f"scene{i}.png").write_bytes(
             base64.b64decode(out["result"]["image"]))
         print("scene", i, "ok")
