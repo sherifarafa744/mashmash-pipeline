@@ -180,7 +180,7 @@ def main() -> None:
             if MUSIC_GAP and beat is not None and beat > 1.5:
                 gap = f",volume=0:enable='between(t,{beat-0.7:.2f},{beat-0.1:.2f})'"  # silence beat before the tension moment
                 ep["music_gap"] = True
-            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1x][vo2];[vo1x]apad[vo1];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume={MIX_VOL}{gap}[mus];"
+            cmd += ["-filter_complex", ";".join(fx) + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo1x][vo2];[vo1x]anull[vo1];[{n+1}:a]aresample=44100,aformat=channel_layouts=stereo,volume={MIX_VOL}{gap}[mus];"
                     f"[mus][vo1]sidechaincompress=threshold={MIX_THR}:ratio={MIX_RATIO}:attack=15:release=400:makeup=1[mduck];"
                     f"{last};{mx}apad,atrim=0:{total:.2f},afade=t=out:st={total - FADE_A:.2f}:d={FADE_A},loudnorm=I=-14:TP=-1.5[aout]",
                     "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}"]
